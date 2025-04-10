@@ -76,10 +76,6 @@ function App() {
         return <div>Загрузка...</div>;
     }
 
-    if (role === null || role === "") {
-        return <RoleSelectionPage onRoleChange={handleRoleChange} />;
-    }
-
     return (
         <Router>
             <div>
