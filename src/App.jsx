@@ -6,6 +6,7 @@ function App() {
     const [role, setRole] = useState(localStorage.getItem('userRole') || null);
     const [isTelegramReady, setIsTelegramReady] = useState(false);
     const [telegramId, setTelegramId] = useState(null);
+    const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
     useEffect(() => {
         // Проверяем, что Telegram Web App API доступен и вызываем ready()
@@ -34,7 +35,7 @@ function App() {
 
     const fetchUser = async () => {
         try {
-            const response = await fetch(`${process.env.API_BASE_URL}/User/GetUser?telegramId=${telegramId}`);
+            const response = await fetch(`${apiUrl}/User/GetUser?telegramId=${telegramId}`);
             const data = await response.json();
             setRole(data.role);
             localStorage.setItem('userRole', data.role);
@@ -45,7 +46,7 @@ function App() {
 
     const handleRoleChange = async (newRole) => {
         try {
-            const response = await fetch(`${process.env.API_BASE_URL}/User/ChangeRole?telegramId=${telegramId}&newRole=${newRole}`, {
+            const response = await fetch(`${apiUrl}/User/ChangeRole?telegramId=${telegramId}&newRole=${newRole}`, {
                 method: 'POST',
             });
             const data = await response.json();
