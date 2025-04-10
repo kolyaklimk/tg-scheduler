@@ -15,8 +15,7 @@ function Navbar({ role, onLogout }) {
 
     return (
         <nav className="navbar">
-            <select className="menu-select" onChange={handleChange}>
-                <option value="">МЕНЮ</option>
+            <select className="menu-select" onChange={handleChange}>                
                 <option value="/change-role">Сменить роль</option>
                 {role === 'specialist' ? (
                     <>
