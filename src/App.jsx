@@ -6,7 +6,7 @@ function App() {
     const [role, setRole] = useState(localStorage.getItem('userRole') || null);
     const [isTelegramReady, setIsTelegramReady] = useState(false);
     const [telegramId, setTelegramId] = useState(null);
-    const apiUrl = import.meta.env.VITE_API_BASE_URL;
+    const apiUrl = import.meta.env.API_BASE_URL;
 
     useEffect(() => {
         // Проверяем, что Telegram Web App API доступен и вызываем ready()
