@@ -1,35 +1,77 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+﻿import React, { useState, useEffect } from 'react';
+import RoleSelectionPage from './RoleSelectionPage'; // Создайте этот компонент
+import HomePage from './HomePage'; // Создайте этот компонент
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [role, setRole] = useState(localStorage.getItem('userRole') || null);
+    const [isTelegramReady, setIsTelegramReady] = useState(false);
+    const [telegramId, setTelegramId] = useState(null);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    useEffect(() => {
+        // Проверяем, что Telegram Web App API доступен и вызываем ready()
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            setIsTelegramReady(true);
+        }
+        else {
+            alert("error Telegram.WebApp.ready()")
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isTelegramReady) {
+            const id = window.Telegram.WebApp.initDataUnsafe?.user?.id;
+            setTelegramId(id);
+        }
+    }, [isTelegramReady]);
+
+
+    useEffect(() => {
+        if (isTelegramReady && telegramId) {
+            fetchUser();
+        }
+    }, [isTelegramReady, telegramId]);
+
+    const fetchUser = async () => {
+        try {
+            const response = await fetch(`${process.env.API_BASE_URL}/User/GetUser?telegramId=${telegramId}`);
+            const data = await response.json();
+            setRole(data.role);
+            localStorage.setItem('userRole', data.role);
+        } catch (error) {
+            console.error("Error fetching user:", error);
+        }
+    };
+
+    const handleRoleChange = async (newRole) => {
+        try {
+            const response = await fetch(`${process.env.API_BASE_URL}/User/ChangeRole?telegramId=${telegramId}&newRole=${newRole}`, {
+                method: 'POST',
+            });
+            const data = await response.json();
+            setRole(data.role);
+            localStorage.setItem('userRole', data.role);
+        } catch (error) {
+            console.error("Error changing role:", error);
+        }
+    };
+
+    const handleLogout = () => {
+        setRole(null);
+        localStorage.removeItem('userRole');
+    };
+
+    if (!isTelegramReady) {
+        return <div>Загрузка...</div>; // Или любой другой индикатор загрузки
+    }
+
+    if (role === null || role === "") {
+        return <RoleSelectionPage onRoleChange={handleRoleChange} />;
+    }
+
+    return (
+        <HomePage role={role} onLogout={handleLogout} />
+    );
 }
 
-export default App
+export default App;
