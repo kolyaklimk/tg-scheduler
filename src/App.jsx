@@ -1,6 +1,15 @@
 ﻿import React, { useState, useEffect } from 'react';
-import RoleSelectionPage from './pages/RoleSelection'; // Создайте этот компонент
-import HomePage from './pages/Home'; // Создайте этот компонент
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import RoleSelectionPage from './Pages/RoleSelectionPage'; // Создайте этот компонент
+import HomePage from './Pages/HomePage'; // Создайте этот компонент
+import Menu from './Menu';
+import BookAppointmentPage from './Pages/Client/BookAppointmentPage';
+import ProfilePage from './Pages/Specialist/ProfilePage';
+import SchedulePage from './Pages/Specialist/SchedulePage';
+import AppointmentsPage from './Pages/Specialist/AppointmentsPage';
+import SubscriptionPage from './Pages/Specialist/SubscriptionPage';
+import ProfileLinkPage from './Pages/Specialist/ProfileLinkPage';
+import ArchivePage from './Pages/ArchivePage';
 
 function App() {
     const [role, setRole] = useState(localStorage.getItem('userRole') || null);
@@ -63,7 +72,7 @@ function App() {
     };
 
     if (!isTelegramReady) {
-        return <div>Загрузка...</div>; // Или любой другой индикатор загрузки
+        return <div>Загрузка...</div>;
     }
 
     if (role === null || role === "") {
@@ -71,7 +80,30 @@ function App() {
     }
 
     return (
-        <HomePage role={role} onLogout={handleLogout} />
+        <Router>
+            <div>
+                <Menu role={role} />
+                <Routes>
+                    <Route path="/" element={<HomePage role={role} />} />
+                    <Route path="/change-role" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
+                    <Route path="/archive" element={<ArchivePage />} />
+
+                    {role === 'client' && (
+                        <Route path="/book-appointment" element={<BookAppointmentPage />} />
+                    )}
+
+                    {role === 'specialist' && (
+                        <>
+                            <Route path="/profile" element={<ProfilePage />} />
+                            <Route path="/schedule" element={<SchedulePage />} />
+                            <Route path="/appointments" element={<AppointmentsPage />} />
+                            <Route path="/subscription" element={<SubscriptionPage />} />
+                            <Route path="/profile-link" element={<ProfileLinkPage />} />
+                        </>
+                    )}
+                </Routes>
+            </div>
+        </Router>
     );
 }
 
