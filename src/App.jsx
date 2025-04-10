@@ -61,15 +61,16 @@ function App() {
             const data = await response.json();
             setRole(data.role);
             localStorage.setItem('userRole', data.role);
+            navigate('/');
         } catch (error) {
             console.error("Error changing role:", error);
         }
     };
 
-    const handleLogout = () => {
-        setRole(null);
-        localStorage.removeItem('userRole');
-    };
+    //const handleLogout = () => {
+    //    setRole(null);
+    //    localStorage.removeItem('userRole');
+    //};
 
     if (!isTelegramReady) {
         return <div>Загрузка...</div>;
