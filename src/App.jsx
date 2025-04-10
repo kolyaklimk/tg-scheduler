@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
-import RoleSelectionPage from './RoleSelectionPage'; // Создайте этот компонент
-import HomePage from './HomePage'; // Создайте этот компонент
+import RoleSelectionPage from './pages/RoleSelection'; // Создайте этот компонент
+import HomePage from './pages/Home'; // Создайте этот компонент
 
 function App() {
     const [role, setRole] = useState(localStorage.getItem('userRole') || null);
