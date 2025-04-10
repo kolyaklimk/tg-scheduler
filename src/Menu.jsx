@@ -5,7 +5,7 @@ function Menu({ role }) {
     return (
         <nav>
             <ul>
-                <li><Link to="/">Поменять роль</Link></li>
+                <li><Link to="/change-role">Поменять роль</Link></li>
                 {role === 'specialist' ? (
                     <>
                         <li><Link to="/profile">Профиль</Link></li>
