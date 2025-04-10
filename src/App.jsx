@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import RoleSelectionPage from './Pages/RoleSelectionPage'; 
+import RoleSelectionPage from './Pages/RoleSelectionPage';
 import HomePage from './Pages/HomePage';
 import Navbar from './Navbar';
 import BookAppointmentPage from './Pages/Client/BookAppointmentPage';
@@ -19,7 +19,6 @@ function App() {
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
     useEffect(() => {
-        // Проверяем, что Telegram Web App API доступен и вызываем ready()
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
             setIsTelegramReady(true);
@@ -79,7 +78,7 @@ function App() {
     return (
         <Router>
             <div>
-                <Navbar role={role} onLogout={handleLogout} /> 
+                {role && <Navbar role={role} onLogout={handleLogout} />}
                 <Routes>
                     {role === null || role === "" ? (
                         <Route path="/" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
