@@ -1,0 +1,46 @@
+/* src/components/Navbar.css */
+.navbar {
+    background-color: #f0f0f0;
+    padding: 10px;
+    width: 100%;
+    position: relative;
+}
+
+.menu-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 100%;
+    z-index: 1;
+}
+
+    .menu-dropdown ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .menu-dropdown li {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+        .menu-dropdown li:last-child {
+            border-bottom: none;
+        }
+
+    .menu-dropdown a {
+        text-decoration: none;
+        color: #333;
+    }

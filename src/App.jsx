@@ -1,8 +1,8 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import RoleSelectionPage from './Pages/RoleSelectionPage'; // Создайте этот компонент
-import HomePage from './Pages/HomePage'; // Создайте этот компонент
-import Menu from './Menu';
+import RoleSelectionPage from './Pages/RoleSelectionPage'; 
+import HomePage from './Pages/HomePage';
+import Navbar from './Navbar';
 import BookAppointmentPage from './Pages/Client/BookAppointmentPage';
 import ProfilePage from './Pages/Specialist/ProfilePage';
 import SchedulePage from './Pages/Specialist/SchedulePage';
@@ -10,6 +10,7 @@ import AppointmentsPage from './Pages/Specialist/AppointmentsPage';
 import SubscriptionPage from './Pages/Specialist/SubscriptionPage';
 import ProfileLinkPage from './Pages/Specialist/ProfileLinkPage';
 import ArchivePage from './Pages/ArchivePage';
+import './Navbar.css';
 
 function App() {
     const [role, setRole] = useState(localStorage.getItem('userRole') || null);
@@ -82,7 +83,7 @@ function App() {
     return (
         <Router>
             <div>
-                <Menu role={role} />
+                <Navbar role={role} onLogout={handleLogout} />
                 <Routes>
                     <Route path="/" element={<HomePage role={role} />} />
                     <Route path="/change-role" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
