@@ -83,9 +83,14 @@ function App() {
     return (
         <Router>
             <div>
-                <Navbar role={role} onLogout={handleLogout} />
+                <Menu role={role} />
                 <Routes>
-                    <Route path="/" element={<HomePage role={role} />} />
+                    {role === null || role === "" ? (
+                        <Route path="/" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
+                    ) : (
+                        <Route path="/" element={<HomePage role={role} />} />
+                    )}
+
                     <Route path="/change-role" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
                     <Route path="/archive" element={<ArchivePage />} />
 
