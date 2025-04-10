@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import RoleSelectionPage from './Pages/RoleSelectionPage'; 
 import HomePage from './Pages/HomePage';
 import Navbar from './Navbar';
@@ -17,6 +17,7 @@ function App() {
     const [isTelegramReady, setIsTelegramReady] = useState(false);
     const [telegramId, setTelegramId] = useState(null);
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
+    const navigate = useNavigate(); // Используем useNavigate
 
     useEffect(() => {
         // Проверяем, что Telegram Web App API доступен и вызываем ready()
@@ -62,6 +63,7 @@ function App() {
             const data = await response.json();
             setRole(data.role);
             localStorage.setItem('userRole', data.role);
+            navigate("/");
         } catch (error) {
             console.error("Error changing role:", error);
         }
