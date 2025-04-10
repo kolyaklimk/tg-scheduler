@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate, Link } from 'react-router-dom';
 import RoleSelectionPage from './Pages/RoleSelectionPage'; // Создайте этот компонент
 import HomePage from './Pages/HomePage'; // Создайте этот компонент
 import Menu from './Menu';
@@ -16,6 +16,7 @@ function App() {
     const [isTelegramReady, setIsTelegramReady] = useState(false);
     const [telegramId, setTelegramId] = useState(null);
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Проверяем, что Telegram Web App API доступен и вызываем ready()
