@@ -79,7 +79,7 @@ function App() {
     return (
         <Router>
             <div>
-                <Menu role={role} />
+                <Navbar role={role} onLogout={handleLogout} /> 
                 <Routes>
                     {role === null || role === "" ? (
                         <Route path="/" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
