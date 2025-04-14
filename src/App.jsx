@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate, Link } from 'react-router-dom';
 import RoleSelectionPage from './Pages/RoleSelectionPage';
 import HomePage from './Pages/HomePage';
 import Navbar from './Navbar';
@@ -17,6 +17,7 @@ function App() {
     const [isTelegramReady, setIsTelegramReady] = useState(false);
     const [telegramId, setTelegramId] = useState(null);
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (window.Telegram && window.Telegram.WebApp) {
@@ -71,6 +72,7 @@ function App() {
     const handleLogout = () => {
         setRole(null);
         localStorage.removeItem('userRole');
+        navigate("/");
     };
 
     if (!isTelegramReady) {
