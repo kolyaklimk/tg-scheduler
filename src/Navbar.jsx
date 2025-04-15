@@ -1,17 +1,22 @@
 ﻿import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function Navbar({ role }) {
     const navigate = useNavigate();
+    const location = useLocation(); 
 
     const handleChange = (event) => {
-        const value = event.target.value;       
+        const value = event.target.value;
         navigate(value);
     };
 
     return (
         <nav className="navbar">
-            <select className="menu-select" onChange={handleChange}>     
+            <select
+                className="menu-select"
+                onChange={handleChange}
+                value={location.pathname} 
+            >
                 <option value="">МЕНЮ</option>
                 <option value="/change-role">Сменить роль</option>
                 {role === 'specialist' ? (
