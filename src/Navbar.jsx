@@ -23,7 +23,6 @@ function Navbar({ role }) {
                         <option value="/subscription">Подписка</option>
                         <option value="/profile-link">Ссылка на профиль</option>
                     </>
-                    </>
                 ) : (
                     <>
                         <option value="/book-appointment">Записаться</option>
