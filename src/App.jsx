@@ -69,12 +69,6 @@ function App() {
         }
     };
 
-    const handleLogout = () => {
-        setRole(null);
-        localStorage.removeItem('userRole');
-        navigate("/");
-    };
-
     if (!isTelegramReady) {
         return <div>Загрузка...</div>;
     }
@@ -82,7 +76,7 @@ function App() {
     return (
         <Router>
             <div>
-                {role && <Navbar role={role} onLogout={handleLogout} />}
+                {role && <Navbar role={role}/>}
                 <Routes>
                     {role === null || role === "" ? (
                         <Route path="/" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />

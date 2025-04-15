@@ -1,16 +1,12 @@
 ﻿import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Navbar({ role, onLogout }) {
+function Navbar({ role }) {
     const navigate = useNavigate();
 
     const handleChange = (event) => {
-        const value = event.target.value;
-        if (value === "logout") {
-            onLogout();
-        } else {
-            navigate(value);
-        }
+        const value = event.target.value;       
+        navigate(value);
     };
 
     return (
@@ -27,13 +23,13 @@ function Navbar({ role, onLogout }) {
                         <option value="/subscription">Подписка</option>
                         <option value="/profile-link">Ссылка на профиль</option>
                     </>
+                    </>
                 ) : (
                     <>
                         <option value="/book-appointment">Записаться</option>
                         <option value="/archive">Архив</option>
                     </>
                 )}
-                <option value="logout">Выйти</option>
             </select>
         </nav>
     );
