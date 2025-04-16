@@ -53,21 +53,25 @@ function App() {
             const specialistTelegramId = startAppValue.substring("specialist-".length);
             setSpecialistId(specialistTelegramId);
 
-            try {
-                const response = await fetch(`${apiUrl}/User/UpdateUserAndSetClientRole?telegramId=${telegramId}`, {
-                    method: 'POST',
-                });
-                const data = await response.json();
-                setRole(data.role);
-                localStorage.setItem('userRole', data.role);
-
-                navigate(`/profile/${specialistTelegramId}`);
-
-            } catch (error) {
-                console.error("Error fetching user:", error);
-            }
+            updateUserAndNavigate(telegramId, specialistTelegramId);
         }
     }, [location, isTelegramReady, telegramId, navigate]);
+
+    const updateUserAndNavigate = async (userTelegramId, specialistTelegramId) => {
+        try {
+            const response = await fetch(`${apiUrl}/User/UpdateUserAndSetClientRole?telegramId=${userTelegramId}`, {
+                method: 'POST',
+            });
+            const data = await response.json();
+            setRole(data.role);
+            localStorage.setItem('userRole', data.role);
+
+            navigate(`/profile/${specialistTelegramId}`);
+
+        } catch (error) {
+            console.error("Error fetching user:", error);
+        }
+    };
 
     const fetchUser = async () => {
         try {
