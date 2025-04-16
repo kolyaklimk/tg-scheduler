@@ -11,7 +11,7 @@ import SubscriptionPage from './Pages/Specialist/SubscriptionPage';
 import ProfileLinkPage from './Pages/Specialist/ProfileLinkPage';
 import ArchivePage from './Pages/ArchivePage';
 import './Navbar.css';
-import { UserProvider } from './context/UserContext';
+import { UserProvider } from './Context/UserContext';
 
 function App() {
     const [role, setRole] = useState(localStorage.getItem('userRole') || null);
