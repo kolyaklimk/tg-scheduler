@@ -6,8 +6,8 @@ import BookAppointmentPage from "./Pages/Client/BookAppointmentPage";
 import ProfilePage from "./Pages/Specialist/ProfilePage";
 import SchedulePage from "./Pages/Specialist/SchedulePage";
 import AppointmentsPage from "./Pages/Specialist/AppointmentsPage";
-import SubscriptionPage from "./Specialist/SubscriptionPage";
-import ProfileLinkPage from "./ProfileLinkPage";
+import SubscriptionPage from "./Pages/Specialist/SubscriptionPage";
+import ProfileLinkPage from "./Pages/Specialist/ProfileLinkPage";
 import ArchivePage from "./Pages/ArchivePage";
 import { UserContext } from "./Context/UserContext";
 
