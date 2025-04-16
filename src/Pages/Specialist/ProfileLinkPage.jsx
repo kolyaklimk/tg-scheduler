@@ -1,10 +1,11 @@
 ﻿import React from 'react';
 
-function ProfileLinkPage() {
+function ProfileLinkPage({ profileLink }) {
     return (
         <div>
             <h1>Ссылка на профиль</h1>
-            {/* Здесь будет контент для отображения ссылки на профиль */}
+            <p>Поделитесь этой ссылкой, чтобы привлекать новых клиентов:</p>
+            <input type="text" value={profileLink} readOnly />
         </div>
     );
 }

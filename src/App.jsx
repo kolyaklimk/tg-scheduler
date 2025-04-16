@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import RoleSelectionPage from './Pages/RoleSelectionPage';
 import HomePage from './Pages/HomePage';
 import Navbar from './Navbar';
@@ -11,22 +11,23 @@ import SubscriptionPage from './Pages/Specialist/SubscriptionPage';
 import ProfileLinkPage from './Pages/Specialist/ProfileLinkPage';
 import ArchivePage from './Pages/ArchivePage';
 import './Navbar.css';
+import { UserProvider } from './context/UserContext';
 
 function App() {
     const [role, setRole] = useState(localStorage.getItem('userRole') || null);
     const [isTelegramReady, setIsTelegramReady] = useState(false);
     const [telegramId, setTelegramId] = useState(null);
+    const [specialistId, setSpecialistId] = useState(null);
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
+    const navigate = useNavigate();
+    const location = useLocation();
+    const profileLink = `https://t.me/${import.meta.env.TG_BOT_NAME}?startapp=specialist-${telegramId}`;
 
     useEffect(() => {
         if (window.Telegram && window.Telegram.WebApp) {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.disableVerticalSwipes();
             setIsTelegramReady(true);
-            console.log("tg ready");
-        }
-        else {
-            alert("error Telegram.WebApp.ready()")
         }
     }, []);
 
@@ -43,6 +44,30 @@ function App() {
             fetchUser();
         }
     }, [isTelegramReady, telegramId]);
+
+    useEffect(() => {
+        const parsedQuery = qs.parse(location.search);
+        const startAppValue = parsedQuery.startapp;
+
+        if (startAppValue && startAppValue.startsWith("specialist-")) {
+            const specialistTelegramId = startAppValue.substring("specialist-".length);
+            setSpecialistId(specialistTelegramId);
+
+            try {
+                const response = await fetch(`${apiUrl}/User/UpdateUserAndSetClientRole?telegramId=${telegramId}`, {
+                    method: 'POST',
+                });
+                const data = await response.json();
+                setRole(data.role);
+                localStorage.setItem('userRole', data.role);
+
+                navigate(`/profile/${specialistTelegramId}`);
+
+            } catch (error) {
+                console.error("Error fetching user:", error);
+            }
+        }
+    }, [location, isTelegramReady, telegramId, navigate]);
 
     const fetchUser = async () => {
         try {
@@ -74,33 +99,35 @@ function App() {
 
     return (
         <Router>
-            <div>
-                {role && <Navbar role={role}/>}
-                <Routes>
-                    {role === null || role === "" ? (
-                        <Route path="/" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
-                    ) : (
-                        <Route path="/" element={<HomePage role={role} />} />
-                    )}
+            <UserProvider initialRole={role}>
+                <div>
+                    {role && <Navbar role={role} />}
+                    <Routes>
+                        {role === null || role === "" ? (
+                            <Route path="/" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
+                        ) : (
+                            <Route path="/" element={<HomePage role={role} />} />
+                        )}
 
-                    <Route path="/change-role" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
-                    <Route path="/archive" element={<ArchivePage />} />
+                        <Route path="/change-role" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
+                        <Route path="/archive" element={<ArchivePage />} />
 
-                    {role === 'client' && (
-                        <Route path="/book-appointment" element={<BookAppointmentPage />} />
-                    )}
+                        {role === 'client' && (
+                            <Route path="/book-appointment" element={<BookAppointmentPage />} />
+                        )}
 
-                    {role === 'specialist' && (
-                        <>
-                            <Route path="/profile" element={<ProfilePage />} />
-                            <Route path="/schedule" element={<SchedulePage />} />
-                            <Route path="/appointments" element={<AppointmentsPage />} />
-                            <Route path="/subscription" element={<SubscriptionPage />} />
-                            <Route path="/profile-link" element={<ProfileLinkPage />} />
-                        </>
-                    )}
-                </Routes>
-            </div>
+                        {role === 'specialist' && (
+                            <>
+                                <Route path="/profile" element={<ProfilePage />} />
+                                <Route path="/schedule" element={<SchedulePage />} />
+                                <Route path="/appointments" element={<AppointmentsPage />} />
+                                <Route path="/subscription" element={<SubscriptionPage />} />
+                                <Route path="/profile-link" element={<ProfileLinkPage profileLink={profileLink} />} />
+                            </>
+                        )}
+                    </Routes>
+                </div>
+            </UserProvider>
         </Router>
     );
 }
