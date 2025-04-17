@@ -29,14 +29,14 @@ function App() {
             const id = window.Telegram.WebApp.initDataUnsafe?.user?.id;
             setTelegramId(id);
         }
-    }, []);
+    }, [isTelegramReady]);
 
 
     useEffect(() => {
         if (isTelegramReady && telegramId) {
             fetchUser();
         }
-    }, []);
+    }, [isTelegramReady, telegramId]);
 
     const fetchUser = async () => {
         try {
