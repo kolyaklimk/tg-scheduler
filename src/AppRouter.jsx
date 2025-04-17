@@ -38,8 +38,9 @@ function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profil
             const data = await response.json();
             setRole(data.role);
             localStorage.setItem('userRole', data.role);
-
-            navigate(`/profile/${specialistTelegramId}`);
+            alert(specialistTelegramId);
+            console(specialistTelegramId);
+            navigate(`/profile`);
 
         } catch (error) {
             console.error("Error fetching user:", error);
