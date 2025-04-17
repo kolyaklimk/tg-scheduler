@@ -66,7 +66,7 @@ function App() {
     return (
         <Router>
             <div>
-                {role && <Navbar role={role} />}
+                {role && <Navbar role={role} telegramId={telegramId} />}
                 <AppRouter telegramId={telegramId}
                     isTelegramReady={isTelegramReady}
                     handleRoleChange={handleRoleChange}
