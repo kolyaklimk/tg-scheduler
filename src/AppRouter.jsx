@@ -13,7 +13,7 @@ import { UserContext } from "./Context/UserContext";
 import qs from 'query-string';
 
 
-function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl }) {
+function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl, isFetchReady }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { setRole } = useContext(UserContext);
@@ -26,11 +26,11 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl }) 
         const parsedQuery = qs.parse(location.search);
         const startAppValue = parsedQuery.tgWebAppStartParam;
 
-        if (telegramId && startAppValue && startAppValue.startsWith("specialist-")) {
+        if (isFetchReady && startAppValue && startAppValue.startsWith("specialist-")) {
             specialistTelegramId = startAppValue.substring("specialist-".length);
             updateUserAndNavigate(telegramId, specialistTelegramId);
         }
-    }, [telegramId]);
+    }, [isFetchReady]);
 
     const updateUserAndNavigate = async (userTelegramId, specialistTelegramId) => {
         try {
@@ -44,7 +44,7 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl }) 
             setRole(data.role);
             console.log(data.role);
             localStorage.setItem('userRole', data.role);
-            navigate(`/profile/${123}`);
+            navigate(`/profile/${specialistTelegramId}`);
 
         } catch (error) {
             console.error("Error fetching user:", error);

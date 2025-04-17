@@ -8,6 +8,7 @@ import AppRouter from "./AppRouter";
 function App() {
     const [role, setRole] = useState(localStorage.getItem('userRole') || null);
     const [isTelegramReady, setIsTelegramReady] = useState(false);
+    const [isFetchReady, setIsFetchReady] = useState(false);
     const [telegramId, setTelegramId] = useState(null);
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -44,6 +45,7 @@ function App() {
             const data = await response.json();
             setRole(data.role);
             localStorage.setItem('userRole', data.role);
+            setIsFetchReady(true);
         } catch (error) {
             console.error("Error fetching user:", error);
         }
