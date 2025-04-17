@@ -1,4 +1,5 @@
 ﻿import React, { useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import { UserContext } from '../../Context/UserContext';
 
 function ProfilePage() {
