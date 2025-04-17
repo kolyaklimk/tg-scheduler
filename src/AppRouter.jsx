@@ -20,7 +20,9 @@ function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profil
     let specialistTelegramId = null;
 
     useEffect(() => {
+        console.log("3");
         console.log(telegramId);
+        console.log("3");
         const parsedQuery = qs.parse(location.search);
         const startAppValue = parsedQuery.tgWebAppStartParam;
 
