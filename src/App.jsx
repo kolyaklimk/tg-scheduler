@@ -39,6 +39,7 @@ function App() {
             fetchUser();
             console.log("2");
             console.log(telegramId);
+            console.log("2");
         }
     }, [isTelegramReady, telegramId]);
 
