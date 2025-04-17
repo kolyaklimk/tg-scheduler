@@ -37,6 +37,7 @@ function App() {
         if (isTelegramReady && telegramId) {
             fetchUser();
             console.log("2");
+            console.log(telegramId);
         }
     }, [isTelegramReady, telegramId]);
 
