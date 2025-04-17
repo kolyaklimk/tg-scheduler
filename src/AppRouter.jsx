@@ -42,6 +42,7 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl }) 
             console.log("4");
             const data = await response.json();
             setRole(data.role);
+            console.log(data.role);
             localStorage.setItem('userRole', data.role);
             navigate(`/profile`);
 
