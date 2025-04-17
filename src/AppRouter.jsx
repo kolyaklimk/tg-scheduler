@@ -34,11 +34,10 @@ function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profil
             const response = await fetch(`${apiUrl}/User/UpdateUserAndSetClientRole?telegramId=${userTelegramId}`, {
                 method: 'POST',
             });
-
+            console.log(telegramId);
             const data = await response.json();
             setRole(data.role);
             localStorage.setItem('userRole', data.role);
-            alert(specialistTelegramId);
             navigate(`/profile`);
 
         } catch (error) {
