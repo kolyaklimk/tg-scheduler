@@ -23,6 +23,9 @@ function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profil
         const parsedQuery = qs.parse(location.search);
         const startAppValue = parsedQuery.startapp;
 
+        console.log(parsedQuery.startapp);
+        console.log(startAppValue);
+        console.log(parsedQuery);
         if (startAppValue && startAppValue.startsWith("specialist-")) {
             specialistTelegramId = startAppValue.substring("specialist-".length);
             updateUserAndNavigate(telegramId, specialistTelegramId);
