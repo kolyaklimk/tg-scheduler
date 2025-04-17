@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Navbar from './Navbar';
 import './Navbar.css';
 import { UserProvider } from './Context/UserContext';
-import AppRouter from "./AppRouter"; 
+import AppRouter from "./AppRouter";
 
 function App() {
     const [role, setRole] = useState(localStorage.getItem('userRole') || null);
@@ -11,7 +11,7 @@ function App() {
     const [telegramId, setTelegramId] = useState(null);
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
-    const profileLink = `https://t.me/${import.meta.env.VITE_TG_BOT_NAME}?startapp=specialist-${telegramId}`; 
+    const profileLink = `https://t.me/${import.meta.env.VITE_TG_BOT_NAME}?startapp=specialist-${telegramId}`;
 
     useEffect(() => {
         if (window.Telegram && window.Telegram.WebApp) {
@@ -71,7 +71,8 @@ function App() {
                         isTelegramReady={isTelegramReady}
                         handleRoleChange={handleRoleChange}
                         role={role}
-                        profileLink={profileLink} /> 
+                        profileLink={profileLink}
+                        apiUrl={apiUrl} />
                 </div>
             </UserProvider>
         </Router>
