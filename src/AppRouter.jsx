@@ -44,7 +44,7 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl }) 
             setRole(data.role);
             console.log(data.role);
             localStorage.setItem('userRole', data.role);
-            navigate(`/profile/${specialistTelegramId}`);
+            navigate(`/profile/${123}`);
 
         } catch (error) {
             console.error("Error fetching user:", error);
@@ -62,7 +62,7 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl }) 
             <Route path="/change-role" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
             <Route path="/archive" element={<ArchivePage />} />
             <Route path="/book-appointment" element={<BookAppointmentPage />} />
-            <Route path="/profile/:telegramId" element={<ProfilePage specialistTelegramId={specialistTelegramId} telegramId={telegramId} />} />
+            <Route path="/profile/:telegramId" element={<ProfilePage />} />
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/appointments" element={<AppointmentsPage />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
