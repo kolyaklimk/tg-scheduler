@@ -17,15 +17,14 @@ function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profil
     const navigate = useNavigate();
     const location = useLocation();
     const { setRole } = useContext(UserContext);
+    let specialistTelegramId = null;
 
     useEffect(() => {
         const parsedQuery = qs.parse(location.search);
         const startAppValue = parsedQuery.startapp;
 
         if (startAppValue && startAppValue.startsWith("specialist-")) {
-            const specialistTelegramId = startAppValue.substring("specialist-".length);
-            alert(specialistTelegramId);
-            console(specialistTelegramId);
+            specialistTelegramId = startAppValue.substring("specialist-".length);
             updateUserAndNavigate(telegramId, specialistTelegramId);
         }
     }, [location, isTelegramReady, telegramId, navigate]);
