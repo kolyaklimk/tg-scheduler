@@ -48,12 +48,11 @@ function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profil
     };
 
     return (
-
         <Routes>
             {role === null || role === "" ? (
                 <Route path="/" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
             ) : (
-                <Route path="/" element={<HomePage />} />
+                <Route path="/" element={<HomePage role={role} />} />
             )}
 
             <Route path="/change-role" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
