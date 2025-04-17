@@ -39,7 +39,7 @@ function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profil
             setRole(data.role);
             localStorage.setItem('userRole', data.role);
             alert(specialistTelegramId);
-            console(specialistTelegramId);
+            console.log(specialistTelegramId);
             navigate(`/profile`);
 
         } catch (error) {
