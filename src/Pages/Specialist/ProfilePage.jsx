@@ -1,7 +1,7 @@
 ﻿import React, { useContext } from 'react';
 import { UserContext } from '../../Context/UserContext';
 
-function ProfilePage({ telegramId, specialistTelegramId = null }) {
+function ProfilePage({ telegramId, specialistTelegramId }) {
     const { role } = useContext(UserContext);
 
     // Логика для получения данных о специалисте (например, через API)
