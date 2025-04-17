@@ -21,11 +21,8 @@ function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profil
 
     useEffect(() => {
         const parsedQuery = qs.parse(location.search);
-        const startAppValue = parsedQuery.startapp;
+        const startAppValue = parsedQuery.tgWebAppStartParam;
 
-        console.log(parsedQuery.startapp);
-        console.log(startAppValue);
-        console.log(parsedQuery);
         if (startAppValue && startAppValue.startsWith("specialist-")) {
             specialistTelegramId = startAppValue.substring("specialist-".length);
             updateUserAndNavigate(telegramId, specialistTelegramId);
@@ -42,7 +39,6 @@ function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profil
             setRole(data.role);
             localStorage.setItem('userRole', data.role);
             alert(specialistTelegramId);
-            console.log(specialistTelegramId);
             navigate(`/profile`);
 
         } catch (error) {
