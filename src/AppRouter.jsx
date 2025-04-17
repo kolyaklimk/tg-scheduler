@@ -13,7 +13,7 @@ import { UserContext } from "./Context/UserContext";
 import qs from 'query-string';
 
 
-function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profileLink, apiUrl }) {
+function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { setRole } = useContext(UserContext);
