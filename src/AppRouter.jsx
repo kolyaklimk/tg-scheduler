@@ -10,6 +10,7 @@ import SubscriptionPage from "./Pages/Specialist/SubscriptionPage";
 import ProfileLinkPage from "./Pages/Specialist/ProfileLinkPage";
 import ArchivePage from "./Pages/ArchivePage";
 import { UserContext } from "./Context/UserContext";
+import qs from 'query-string';
 
 
 function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profileLink }) {
