@@ -24,6 +24,8 @@ function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profil
 
         if (startAppValue && startAppValue.startsWith("specialist-")) {
             const specialistTelegramId = startAppValue.substring("specialist-".length);
+            alert(specialistTelegramId);
+            console(specialistTelegramId);
             updateUserAndNavigate(telegramId, specialistTelegramId);
         }
     }, [location, isTelegramReady, telegramId, navigate]);
