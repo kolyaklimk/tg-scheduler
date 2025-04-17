@@ -20,15 +20,17 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl, is
     let specialistTelegramId = null;
 
     useEffect(() => {
-        console.log("3");
-        console.log(telegramId);
-        console.log("3");
-        const parsedQuery = qs.parse(location.search);
-        const startAppValue = parsedQuery.tgWebAppStartParam;
+        if (isFetchReady) {
+            console.log("3");
+            console.log(telegramId);
+            console.log("3");
+            const parsedQuery = qs.parse(location.search);
+            const startAppValue = parsedQuery.tgWebAppStartParam;
 
-        if (isFetchReady && startAppValue && startAppValue.startsWith("specialist-")) {
-            specialistTelegramId = startAppValue.substring("specialist-".length);
-            updateUserAndNavigate(telegramId, specialistTelegramId);
+            if (startAppValue && startAppValue.startsWith("specialist-")) {
+                specialistTelegramId = startAppValue.substring("specialist-".length);
+                updateUserAndNavigate(telegramId, specialistTelegramId);
+            }
         }
     }, [isFetchReady]);
 

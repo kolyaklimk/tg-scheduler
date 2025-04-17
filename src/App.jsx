@@ -74,7 +74,8 @@ function App() {
                         handleRoleChange={handleRoleChange}
                         role={role}
                         profileLink={profileLink}
-                        apiUrl={apiUrl} />
+                        apiUrl={apiUrl}
+                        isFetchReady={isFetchReady} />
                 </div>
             </UserProvider>
         </Router>
