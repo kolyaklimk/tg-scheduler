@@ -30,7 +30,7 @@ function AppRouter({ telegramId, isTelegramReady, handleRoleChange, role, profil
             specialistTelegramId = startAppValue.substring("specialist-".length);
             updateUserAndNavigate(telegramId, specialistTelegramId);
         }
-    }, []);
+    }, [location, telegramId, navigate]);
 
     const updateUserAndNavigate = async (userTelegramId, specialistTelegramId) => {
         try {
