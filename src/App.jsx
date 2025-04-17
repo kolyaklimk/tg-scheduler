@@ -20,9 +20,6 @@ function App() {
             setIsTelegramReady(true);
             console.log("0");
         }
-        else {
-            alert("error Telegram.WebApp.ready()")
-        }
     }, []);
 
     useEffect(() => {
@@ -37,8 +34,6 @@ function App() {
     useEffect(() => {
         if (isTelegramReady && telegramId) {
             fetchUser();
-            console.log("2");
-            console.log(telegramId);
             console.log("2");
         }
     }, [isTelegramReady, telegramId]);
