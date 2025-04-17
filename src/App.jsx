@@ -18,6 +18,7 @@ function App() {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.disableVerticalSwipes();
             setIsTelegramReady(true);
+            console.log("0");
         }
         else {
             alert("error Telegram.WebApp.ready()")
