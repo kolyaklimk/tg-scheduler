@@ -1,8 +1,9 @@
-﻿import React, { useContext } from 'react';
+﻿import React from 'react';
 import { useParams } from 'react-router-dom';
 
-function ProfilePage(role) {
+function ProfilePage() {
     const { telegramId } = useParams();
+    const role = localStorage.getItem('userRole')
 
     // Логика для получения данных о специалисте (например, через API)
     // ...

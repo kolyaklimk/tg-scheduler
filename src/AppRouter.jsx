@@ -62,7 +62,7 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl, is
             <Route path="/change-role" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
             <Route path="/archive" element={<ArchivePage />} />
             <Route path="/book-appointment" element={<BookAppointmentPage />} />
-            <Route path="/profile/:telegramId" element={<ProfilePage role={role} />} />
+            <Route path="/profile/:telegramId" element={<ProfilePage />} />
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/appointments" element={<AppointmentsPage />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
