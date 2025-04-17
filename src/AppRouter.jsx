@@ -26,7 +26,7 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl }) 
         const parsedQuery = qs.parse(location.search);
         const startAppValue = parsedQuery.tgWebAppStartParam;
 
-        if (startAppValue && startAppValue.startsWith("specialist-")) {
+        if (telegramId && startAppValue && startAppValue.startsWith("specialist-")) {
             specialistTelegramId = startAppValue.substring("specialist-".length);
             updateUserAndNavigate(telegramId, specialistTelegramId);
         }
@@ -37,7 +37,9 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl }) 
             const response = await fetch(`${apiUrl}/User/UpdateUserAndSetClientRole?telegramId=${userTelegramId}`, {
                 method: 'POST',
             });
+            console.log("4");
             console.log(telegramId);
+            console.log("4");
             const data = await response.json();
             setRole(data.role);
             localStorage.setItem('userRole', data.role);
