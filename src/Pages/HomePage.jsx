@@ -1,6 +1,8 @@
-﻿import React from 'react';
+﻿import React, { useContext } from 'react';
 
 function HomePage({ role }) {
+    const { role } = useContext(UserContext);
+
     return (
         <div>
             <h1>Главная страница</h1>
