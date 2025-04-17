@@ -31,9 +31,9 @@ function App() {
     }, [isTelegramReady]);
 
 
-    useEffect(() => {
+    useEffect(async () => {
         if (isTelegramReady && telegramId) {
-            fetchUser();
+            await fetchUser();
             console.log("2");
         }
     }, [isTelegramReady, telegramId]);

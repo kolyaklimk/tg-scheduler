@@ -19,7 +19,7 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl }) 
     const { setRole } = useContext(UserContext);
     let specialistTelegramId = null;
 
-    useEffect(() => {
+    useEffect(async () => {
         console.log("3");
         console.log(telegramId);
         console.log("3");
@@ -28,7 +28,7 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl }) 
 
         if (telegramId && startAppValue && startAppValue.startsWith("specialist-")) {
             specialistTelegramId = startAppValue.substring("specialist-".length);
-            updateUserAndNavigate(telegramId, specialistTelegramId);
+            await updateUserAndNavigate(telegramId, specialistTelegramId);
         }
     }, [telegramId]);
 
