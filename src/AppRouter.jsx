@@ -34,18 +34,25 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl, is
 
     const updateUserAndNavigate = async (userTelegramId, specialistTelegramId) => {
         try {
-            const response = await fetch(`${apiUrl}/User/UpdateUserAndSetClientRole?telegramId=${userTelegramId}`, {
-                method: 'POST',
-            });
-            console.log("4");
-            console.log(telegramId);
-            console.log("4");
+            const response = await fetch(`${apiUrl}/User/CheckSpecialist?telegramId=${specialistTelegramId}`);
             const data = await response.json();
-            setRole(data.role);
-            console.log(data.role);
-            localStorage.setItem('userRole', data.role);
-            navigate(`/profile/${specialistTelegramId}`);
 
+            if (data) {
+                const response = await fetch(`${apiUrl}/User/UpdateUserAndSetClientRole?telegramId=${userTelegramId}`, {
+                    method: 'POST',
+                });
+                console.log("4");
+                console.log(telegramId);
+                console.log("4");
+                const data = await response.json();
+                setRole(data.role);
+                console.log(data.role);
+                localStorage.setItem('userRole', data.role);
+                navigate(`/profile/${specialistTelegramId}`);
+            }
+            else {
+                alert("Специалист не найден!");
+            }
         } catch (error) {
             console.error("Error fetching user:", error);
         }
