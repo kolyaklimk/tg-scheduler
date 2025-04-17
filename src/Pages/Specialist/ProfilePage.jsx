@@ -1,9 +1,7 @@
 ﻿import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { UserContext } from '../../Context/UserContext';
 
-function ProfilePage() {
-    const { role } = useContext(UserContext);
+function ProfilePage(role) {
     const { telegramId } = useParams();
 
     // Логика для получения данных о специалисте (например, через API)

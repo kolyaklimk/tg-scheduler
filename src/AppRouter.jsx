@@ -9,14 +9,12 @@ import AppointmentsPage from "./Pages/Specialist/AppointmentsPage";
 import SubscriptionPage from "./Pages/Specialist/SubscriptionPage";
 import ProfileLinkPage from "./Pages/Specialist/ProfileLinkPage";
 import ArchivePage from "./Pages/ArchivePage";
-import { UserContext } from "./Context/UserContext";
 import qs from 'query-string';
 
 
-function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl, isFetchReady }) {
+function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl, isFetchReady, setRole }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const { setRole } = useContext(UserContext);
     let specialistTelegramId = null;
 
     useEffect(() => {
@@ -64,7 +62,7 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl, is
             <Route path="/change-role" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
             <Route path="/archive" element={<ArchivePage />} />
             <Route path="/book-appointment" element={<BookAppointmentPage />} />
-            <Route path="/profile/:telegramId" element={<ProfilePage />} />
+            <Route path="/profile/:telegramId" element={<ProfilePage role={role} />} />
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/appointments" element={<AppointmentsPage />} />
             <Route path="/subscription" element={<SubscriptionPage />} />

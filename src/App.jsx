@@ -2,7 +2,6 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 import Navbar from './Navbar';
 import './Navbar.css';
-import { UserProvider } from './Context/UserContext';
 import AppRouter from "./AppRouter";
 
 function App() {
@@ -66,18 +65,17 @@ function App() {
 
     return (
         <Router>
-            <UserProvider initialRole={role}>
-                <div>
-                    {role && <Navbar role={role} />}
-                    <AppRouter telegramId={telegramId}
-                        isTelegramReady={isTelegramReady}
-                        handleRoleChange={handleRoleChange}
-                        role={role}
-                        profileLink={profileLink}
-                        apiUrl={apiUrl}
-                        isFetchReady={isFetchReady} />
-                </div>
-            </UserProvider>
+            <div>
+                {role && <Navbar role={role} />}
+                <AppRouter telegramId={telegramId}
+                    isTelegramReady={isTelegramReady}
+                    handleRoleChange={handleRoleChange}
+                    role={role}
+                    profileLink={profileLink}
+                    apiUrl={apiUrl}
+                    isFetchReady={isFetchReady}
+                    setRole={setRole} />
+            </div>
         </Router>
     );
 }
