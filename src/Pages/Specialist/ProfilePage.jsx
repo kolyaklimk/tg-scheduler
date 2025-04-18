@@ -31,9 +31,8 @@ function ProfilePage() {
             }
         };
 
-        if (telegramId && role === 'specialist') {
-            fetchSpecialist();
-        }
+        fetchSpecialist();
+
     }, [telegramId, role, apiUrl]);
 
     const handleContactInfoChange = (e) => {
@@ -139,7 +138,17 @@ function ProfilePage() {
         return (
             <div>
                 <h1>Профиль специалиста {telegramId}</h1>
-                <p>Информация о специалисте</p>
+                <p>Контакты: {contactInfo}</p>
+                <p>Портфолио: <a href={portfolioLink}>{portfolioLink}</a></p>
+                <p>Местоположение: {location}</p>
+                <h2>Услуги:</h2>
+                <ul>
+                    {Object.entries(services).map(([name, price]) => (
+                        <li key={name}>
+                            {name} - {price}
+                        </li>
+                    ))}
+                </ul>
             </div>
         );
     } else {
