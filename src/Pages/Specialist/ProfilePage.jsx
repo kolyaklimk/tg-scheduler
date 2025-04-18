@@ -77,6 +77,11 @@ function ProfilePage() {
             return;
         }
 
+        if (services.hasOwnProperty(newServiceName)) {
+            alert("Услуга с таким названием уже существует!");
+            return;
+        }
+
         const price = Number(newServicePrice);
         if (isNaN(price) || price < 0) {
             alert("Пожалуйста, введите корректную цену (число больше или равно 0).");
