@@ -1,6 +1,8 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import './ProfilePage.css'
+import './ProfilePage.css';
+import CustomPrompt from '../../components/CustomPrompt';
+
 function ProfilePage() {
     const { telegramId } = useParams();
     const role = localStorage.getItem('userRole');
@@ -11,6 +13,10 @@ function ProfilePage() {
     const [location, setLocation] = useState('');
     const [services, setServices] = useState({});
     const [working, setWorking] = useState(false);
+
+    const [isNamePromptOpen, setIsNamePromptOpen] = useState(false);
+    const [isPricePromptOpen, setIsPricePromptOpen] = useState(false);
+    const [currentServiceName, setCurrentServiceName] = useState('');
 
     useEffect(() => {
         const fetchSpecialist = async () => {
@@ -50,7 +56,10 @@ function ProfilePage() {
             alert("Цена должна быть числом!");
             return;
         }
-        setServices({ ...services, [name]: price });
+        setServices(prevServices => ({
+            ...prevServices,
+            [name]: price,
+        }));
     };
 
     const handleRemoveService = (name) => {
@@ -60,16 +69,36 @@ function ProfilePage() {
     };
 
     const handleAddService = () => {
-        const newServiceName = prompt("Введите название новой услуги:");
-        if (!newServiceName) {
-            return;
+        setIsNamePromptOpen(true);
+    };
+
+    const handleNamePromptClose = () => {
+        setIsNamePromptOpen(false);
+        setTempServiceName(''); //Сбрасываем временное имя
+    };
+
+    const handleNamePromptConfirm = (newServiceName) => {
+        if (newServiceName) {
+            setCurrentServiceName(newServiceName);
+            setIsPricePromptOpen(true); //Открываем запрос цены
         }
-        const newServicePrice = prompt("Введите цену новой услуги:");
-        if (!newServicePrice || isNaN(newServicePrice)) {
-            alert("Неверная цена");
-            return;
+        setIsNamePromptOpen(false);
+    };
+
+    const handlePricePromptClose = () => {
+        setIsPricePromptOpen(false);
+    };
+
+    const handlePricePromptConfirm = (newServicePrice) => {
+        if (!isNaN(newServicePrice) && newServicePrice >= 0) {
+            setServices(prevServices => ({ ...prevServices, [currentServiceName]: Number(newServicePrice) }));
+        } else {
+            alert("Пожалуйста, введите корректную цену (число больше или равно 0).");
         }
-        setServices(prevServices => ({ ...prevServices, [newServiceName]: Number(newServicePrice) })); // Устанавливаем цену по умолчанию 0
+        setIsPricePromptOpen(false); //Закрываем запрос цены
+    };
+    const handleWorkingChange = (event) => {
+        setWorking(event.target.checked);
     };
 
 
@@ -107,10 +136,6 @@ function ProfilePage() {
             console.error("Error saving specialist data:", error);
             alert("Произошла ошибка при сохранении профиля.");
         }
-    };
-
-    const handleWorkingChange = (event) => {
-        setWorking(event.target.checked);
     };
 
     if (role === 'client') {
@@ -170,6 +195,19 @@ function ProfilePage() {
                         </div>
                     ))}
                     <button onClick={handleAddService}>Добавить услугу</button>
+                    <CustomPrompt
+                        isOpen={isNamePromptOpen}
+                        onClose={handleNamePromptClose}
+                        onConfirm={handleNamePromptConfirm}
+                        message="Введите название новой услуги:"
+                    />
+                    <CustomPrompt
+                        isOpen={isPricePromptOpen}
+                        onClose={handlePricePromptClose}
+                        onConfirm={handlePricePromptConfirm}
+                        message="Введите цену новой услуги:"
+                        type="number"
+                    />
                 </div>
             </div>
         );
