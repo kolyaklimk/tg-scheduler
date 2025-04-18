@@ -151,7 +151,7 @@ function ProfilePage() {
                 </ul>
             </div>
         );
-    } else {
+    } else if (role === 'specialist') {
         // Отображаем свой профиль для специалиста (с возможностью редактирования)
         return (
             <div>
