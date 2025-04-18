@@ -154,25 +154,12 @@ function ProfilePage() {
                     <h2>Местоположение</h2>
                     <input type="text" value={location} onChange={handleLocationChange} />
                 </div>
-                <div>
-                    <h2>Работает:</h2>
-                    <input
-                        type="checkbox"
-                        checked={working}
-                        onChange={handleWorkingChange}
-                    />
-                </div>
 
                 <div>
                     <h2>Услуги</h2>
                     {Object.entries(services).map(([name, price]) => (
                         <div key={name}>
-                            <input
-                                type="text"
-                                placeholder="Название услуги"
-                                value={name}
-                                onChange={(e) => handleServiceChange(name, e.target.value)}
-                            />
+                            <span>{name}</span>
                             <input
                                 type="number"
                                 placeholder="Цена"
