@@ -1,7 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './ProfilePage.css';
-import CustomPrompt from '../../components/CustomPrompt';
 
 function ProfilePage() {
     const { telegramId } = useParams();
@@ -14,9 +13,8 @@ function ProfilePage() {
     const [services, setServices] = useState({});
     const [working, setWorking] = useState(false);
 
-    const [isNamePromptOpen, setIsNamePromptOpen] = useState(false);
-    const [isPricePromptOpen, setIsPricePromptOpen] = useState(false);
-    const [currentServiceName, setCurrentServiceName] = useState('');
+    const [newServiceName, setNewServiceName] = useState('');
+    const [newServicePrice, setNewServicePrice] = useState('');
 
     useEffect(() => {
         const fetchSpecialist = async () => {
@@ -56,10 +54,7 @@ function ProfilePage() {
             alert("Цена должна быть числом!");
             return;
         }
-        setServices(prevServices => ({
-            ...prevServices,
-            [name]: price,
-        }));
+        setServices({ ...services, [name]: price });
     };
 
     const handleRemoveService = (name) => {
@@ -68,39 +63,35 @@ function ProfilePage() {
         setServices(newServices);
     };
 
+    const handleServiceNameChange = (e) => {
+        setNewServiceName(e.target.value);
+    };
+
+    const handleServicePriceChange = (e) => {
+        setNewServicePrice(e.target.value);
+    };
+
     const handleAddService = () => {
-        setIsNamePromptOpen(true);
-    };
-
-    const handleNamePromptClose = () => {
-        setIsNamePromptOpen(false);
-        setTempServiceName(''); //Сбрасываем временное имя
-    };
-
-    const handleNamePromptConfirm = (newServiceName) => {
-        if (newServiceName) {
-            setCurrentServiceName(newServiceName);
-            setIsPricePromptOpen(true); //Открываем запрос цены
+        if (!newServiceName) {
+            alert("Пожалуйста, введите название услуги.");
+            return;
         }
-        setIsNamePromptOpen(false);
-    };
 
-    const handlePricePromptClose = () => {
-        setIsPricePromptOpen(false);
-    };
-
-    const handlePricePromptConfirm = (newServicePrice) => {
-        if (!isNaN(newServicePrice) && newServicePrice >= 0) {
-            setServices(prevServices => ({ ...prevServices, [currentServiceName]: Number(newServicePrice) }));
-        } else {
+        const price = Number(newServicePrice);
+        if (isNaN(price) || price < 0) {
             alert("Пожалуйста, введите корректную цену (число больше или равно 0).");
+            return;
         }
-        setIsPricePromptOpen(false); //Закрываем запрос цены
+
+        setServices(prevServices => ({ ...prevServices, [newServiceName]: price }));
+        setNewServiceName('');
+        setNewServicePrice('');
     };
+
+
     const handleWorkingChange = (event) => {
         setWorking(event.target.checked);
     };
-
 
     const handleSubmit = async () => {
         try {
@@ -182,6 +173,21 @@ function ProfilePage() {
 
                 <div>
                     <h2>Услуги</h2>
+                    <div>
+                        <input
+                            type="text"
+                            placeholder="Название новой услуги"
+                            value={newServiceName}
+                            onChange={handleServiceNameChange}
+                        />
+                        <input
+                            type="number"
+                            placeholder="Цена новой услуги"
+                            value={newServicePrice}
+                            onChange={handleServicePriceChange}
+                        />
+                        <button onClick={handleAddService}>Добавить услугу</button>
+                    </div>
                     {Object.entries(services).map(([name, price]) => (
                         <div key={name}>
                             <span>{name}</span>
@@ -194,20 +200,6 @@ function ProfilePage() {
                             <button onClick={() => handleRemoveService(name)}>Удалить</button>
                         </div>
                     ))}
-                    <button onClick={handleAddService}>Добавить услугу</button>
-                    <CustomPrompt
-                        isOpen={isNamePromptOpen}
-                        onClose={handleNamePromptClose}
-                        onConfirm={handleNamePromptConfirm}
-                        message="Введите название новой услуги:"
-                    />
-                    <CustomPrompt
-                        isOpen={isPricePromptOpen}
-                        onClose={handlePricePromptClose}
-                        onConfirm={handlePricePromptConfirm}
-                        message="Введите цену новой услуги:"
-                        type="number"
-                    />
                 </div>
             </div>
         );
