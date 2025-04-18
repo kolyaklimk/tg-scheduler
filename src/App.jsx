@@ -40,7 +40,7 @@ function App() {
 
     const fetchUser = async () => {
         try {
-            const response = await fetch(`${apiUrl}/User/GetUser?telegramId=${telegramId}`);
+            const response = await fetch(`${apiUrl}/User/GetUser?telegramId=${telegramId}&createNew=true`);
             const data = await response.json();
             setRole(data.role);
             localStorage.setItem('userRole', data.role);
