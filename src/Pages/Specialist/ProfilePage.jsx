@@ -14,6 +14,7 @@ function ProfilePage() {
     const [working, setWorking] = useState(false);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [profileImageUrl, setProfileImageUrl] = useState('');
 
     const [newServiceName, setNewServiceName] = useState('');
     const [newServicePrice, setNewServicePrice] = useState('');
@@ -77,6 +78,29 @@ function ProfilePage() {
         setNewServiceDuration('');
     };
 
+    const handleImageUpload = async (event) => {
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+            const response = await fetch(`${apiUrl}/User/UploadImage`, {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setProfileImageUrl(data.imageUrl); 
+            } else {
+                console.error("Error uploading image:", response.status);
+                alert("Произошла ошибка при загрузке изображения.");
+            }
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            alert("Произошла ошибка при загрузке изображения.");
+        }
+    };
 
     const handleSubmit = async () => {
         try {
@@ -103,7 +127,8 @@ function ProfilePage() {
                 location: location,
                 name: name,
                 description: description,
-                services: services
+                services: services,
+                profileImageUrl: profileImageUrl
             };
 
             const response = await fetch(`${apiUrl}/User/SaveSpecialist`, {
@@ -166,6 +191,11 @@ function ProfilePage() {
                 <div>
                     <h2>Имя:</h2>
                     <textarea value={name} onChange={(e) => setName(e.target.value)} />
+                </div>
+                <div>
+                    <h2>Аватарка:</h2>
+                    <input type="file" accept="image/*" onChange={handleImageUpload} />
+                    {profileImageUrl && <img src={profileImageUrl} alt="Аватарка" />}
                 </div>
                 <div>
                     <h2>Описание</h2>
