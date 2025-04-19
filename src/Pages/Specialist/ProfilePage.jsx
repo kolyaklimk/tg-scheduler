@@ -29,6 +29,8 @@ function ProfilePage() {
                 setLocation(data.location || '');
                 setServices(data.services || {});
                 setWorking(data.working || false);
+                setName(data.name || '');
+                setDescription(data.description || '');
             } catch (error) {
                 console.error("Error fetching specialist:", error);
             }
