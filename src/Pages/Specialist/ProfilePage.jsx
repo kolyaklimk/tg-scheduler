@@ -80,6 +80,17 @@ function ProfilePage() {
         setNewServiceDuration('');
     };
 
+    const handleServiceDetailChange = (name, field, value) => {
+        setServices(prevServices => {
+            const updatedServices = { ...prevServices };
+            if (!updatedServices[name]) {
+                updatedServices[name] = {};
+            }
+            updatedServices[name][field] = value;
+            return updatedServices;
+        });
+    };
+
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -258,7 +269,20 @@ function ProfilePage() {
                     {Object.entries(services).map(([name, details]) => (
                         <div key={name}>
                             <span>{name}</span>
-                            <span> - Цена: {details.price} -  Длительность : {details.duration} </span>
+
+                            Цена:<input
+                                type="number"
+                                placeholder="Цена"
+                                value={details.price}
+                                onChange={(e) => handleServiceChange(name, e.target.value)}
+                            />
+                            Длительность:<input
+                                type="number"
+                                placeholder="Длительность"
+                                value={details.duration}
+                                onChange={(e) => handleServiceChange(name, e.target.value)}
+                            />
+
                             <button onClick={() => handleRemoveService(name)}>Удалить</button>
                         </div>
                     ))}
