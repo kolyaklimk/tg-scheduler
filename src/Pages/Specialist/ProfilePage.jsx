@@ -93,13 +93,22 @@ function ProfilePage() {
                 }
             }
 
-            const response = await fetch(`${apiUrl}/User/SaveSpecialist?
-            telegramId=${telegramId}&working=${working}&contactInfo=${contactInfo}&portfolioLink=${portfolioLink}&location=${location}&name=${name}&description=${description}`, {
+            const profileData = {
+                working: working,
+                contactInfo: contactInfo,
+                portfolioLink: portfolioLink,
+                location: location,
+                name: name,
+                description: description,
+                services: services
+            };
+
+            const response = await fetch(`${apiUrl}/User/SaveSpecialist?telegramId=${telegramId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(services)
+                body: JSON.stringify(profileData)
             });
 
             if (response.ok) {
