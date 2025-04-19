@@ -209,9 +209,9 @@ function ProfilePage() {
                             <div className="loading-indicator">Загрузка...</div>
                         ) : (
                             profileImageUrl && <img src={profileImageUrl} alt="Аватарка специалиста" />
-                        )}
-                        <input type="file" accept="image/*" onChange={handleImageUpload} />
+                        )}                        
                     </div>
+                    <input type="file" accept="image/*" onChange={handleImageUpload} />
                 </div>
                 <div>
                     <h2>Описание</h2>
