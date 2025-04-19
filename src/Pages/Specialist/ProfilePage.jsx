@@ -15,6 +15,7 @@ function ProfilePage() {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [profileImageUrl, setProfileImageUrl] = useState('');
+    const [isImageLoading, setIsImageLoading] = useState(false);
 
     const [newServiceName, setNewServiceName] = useState('');
     const [newServicePrice, setNewServicePrice] = useState('');
@@ -81,6 +82,10 @@ function ProfilePage() {
 
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
+        if (!file) return;
+
+        setIsImageLoading(true);
+
         const formData = new FormData();
         formData.append("image", file);
 
@@ -94,12 +99,13 @@ function ProfilePage() {
                 const data = await response.json();
                 setProfileImageUrl(data.imageUrl); 
             } else {
-                console.error("Error uploading image:", response.status);
                 alert("Произошла ошибка при загрузке изображения.");
             }
         } catch (error) {
             console.error("Error uploading image:", error);
             alert("Произошла ошибка при загрузке изображения.");
+        } finally {
+            setIsImageLoading(false);
         }
     };
 
@@ -157,6 +163,9 @@ function ProfilePage() {
         return (
             <div>
                 <h1>Профиль специалиста {telegramId}</h1>
+                <div className="profile-image-container">
+                    {profileImageUrl && <img src={profileImageUrl} alt="Аватарка специалиста" />}
+                </div>
                 <p>Имя: {name}</p>
                 <p>Описание: {description}</p>
                 <p>Контакты: {contactInfo}</p>
@@ -195,8 +204,14 @@ function ProfilePage() {
                 </div>
                 <div>
                     <h2>Аватарка:</h2>
-                    <input type="file" accept="image/*" onChange={handleImageUpload} />
-                    {profileImageUrl && <img src={profileImageUrl} alt="Аватарка" />}
+                    <div className="profile-image-container">
+                        {isImageLoading ? (
+                            <div className="loading-indicator">Загрузка...</div>
+                        ) : (
+                            profileImageUrl && <img src={profileImageUrl} alt="Аватарка специалиста" />
+                        )}
+                        <input type="file" accept="image/*" onChange={handleImageUpload} />
+                    </div>
                 </div>
                 <div>
                     <h2>Описание</h2>
