@@ -94,6 +94,7 @@ function ProfilePage() {
             }
 
             const profileData = {
+                telegramId: telegramId,
                 working: working,
                 contactInfo: contactInfo,
                 portfolioLink: portfolioLink,
@@ -103,7 +104,7 @@ function ProfilePage() {
                 services: services
             };
 
-            const response = await fetch(`${apiUrl}/User/SaveSpecialist?telegramId=${telegramId}`, {
+            const response = await fetch(`${apiUrl}/User/SaveSpecialist`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
