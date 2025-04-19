@@ -12,6 +12,8 @@ function ProfilePage() {
     const [location, setLocation] = useState('');
     const [services, setServices] = useState({});
     const [working, setWorking] = useState(false);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
 
     const [newServiceName, setNewServiceName] = useState('');
     const [newServicePrice, setNewServicePrice] = useState('');
@@ -35,44 +37,10 @@ function ProfilePage() {
         fetchSpecialist();
     }, [telegramId, role, apiUrl]);
 
-    const handleContactInfoChange = (e) => {
-        setContactInfo(e.target.value);
-    };
-
-    const handlePortfolioLinkChange = (e) => {
-        setPortfolioLink(e.target.value);
-    };
-
-    const handleLocationChange = (e) => {
-        setLocation(e.target.value);
-    };
-
-    const handleServiceChange = (name, field, value) => {
-        setServices(prevServices => {
-            const updatedServices = { ...prevServices };
-            if (!updatedServices[name]) {
-                updatedServices[name] = {};
-            }
-            updatedServices[name][field] = value;
-            return updatedServices;
-        });
-    };
-
     const handleRemoveService = (name) => {
         const newServices = { ...services };
         delete newServices[name];
         setServices(newServices);
-    };
-
-    const handleServiceNameChange = (e) => {
-        setNewServiceName(e.target.value);
-    };
-
-    const handleServicePriceChange = (e) => {
-        setNewServicePrice(e.target.value);
-    };
-    const handleServiceDurationChange = (e) => {
-        setNewServiceDuration(e.target.value);
     };
 
     const handleAddService = () => {
@@ -107,9 +75,6 @@ function ProfilePage() {
         setNewServiceDuration('');
     };
 
-    const handleWorkingChange = (event) => {
-        setWorking(event.target.checked);
-    };
 
     const handleSubmit = async () => {
         try {
@@ -128,7 +93,8 @@ function ProfilePage() {
                 }
             }
 
-            const response = await fetch(`${apiUrl}/User/SaveSpecialist?telegramId=${telegramId}&working=${working}&contactInfo=${contactInfo}&portfolioLink=${portfolioLink}&location=${location}`, {
+            const response = await fetch(`${apiUrl}/User/SaveSpecialist?
+            telegramId=${telegramId}&working=${working}&contactInfo=${contactInfo}&portfolioLink=${portfolioLink}&location=${location}&name=${name}&description=${description}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -150,10 +116,11 @@ function ProfilePage() {
     };
 
     if (role === 'client') {
-        // Отображаем профиль специалиста для клиента
         return (
             <div>
                 <h1>Профиль специалиста {telegramId}</h1>
+                <p>Имя: {name}</p>
+                <p>Описание: {description}</p>
                 <p>Контакты: {contactInfo}</p>
                 <p>Портфолио: <a href={portfolioLink}>{portfolioLink}</a></p>
                 <p>Местоположение: {location}</p>
@@ -179,25 +146,32 @@ function ProfilePage() {
                         <input
                             type="checkbox"
                             checked={working}
-                            onChange={handleWorkingChange}
+                            onChange={(e) => setWorking(e.target.checked)}
                         />
                         <span className="toggle-slider"></span>
                     </label>
                 </div>
-
+                <div>
+                    <h2>Имя:</h2>
+                    <textarea value={name} onChange={(e) => setName(e.target.value)} />
+                </div>
+                <div>
+                    <h2>Описание</h2>
+                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+                </div>
                 <div>
                     <h2>Контакты</h2>
-                    <textarea value={contactInfo} onChange={handleContactInfoChange} />
+                    <textarea value={contactInfo} onChange={(e) => setContactInfo(e.target.value)} />
                 </div>
 
                 <div>
                     <h2>Ссылка на портфолио</h2>
-                    <input type="text" value={portfolioLink} onChange={handlePortfolioLinkChange} />
+                    <input type="text" value={portfolioLink} onChange={(e) => setPortfolioLink(e.target.value)} />
                 </div>
 
                 <div>
                     <h2>Местоположение</h2>
-                    <input type="text" value={location} onChange={handleLocationChange} />
+                    <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
                 </div>
 
                 <div>
@@ -207,19 +181,19 @@ function ProfilePage() {
                             type="text"
                             placeholder="Название новой услуги"
                             value={newServiceName}
-                            onChange={handleServiceNameChange}
+                            onChange={(e) => setNewServiceName(e.target.value)}
                         />
                         <input
                             type="number"
                             placeholder="Цена"
                             value={newServicePrice}
-                            onChange={handleServicePriceChange}
+                            onChange={(e) => setNewServicePrice(e.target.value)}
                         />
                         <input
                             type="number"
                             placeholder="Длительность"
                             value={newServiceDuration}
-                            onChange={handleServiceDurationChange}
+                            onChange={(e) => setNewServiceDuration(e.target.value)}
                         />
                         <button onClick={handleAddService}>Добавить услугу</button>
                     </div>
