@@ -81,14 +81,19 @@ function ProfilePage() {
     };
 
     const handleServiceDetailChange = (name, field, value) => {
-        setServices(prevServices => {
-            const updatedServices = { ...prevServices };
-            if (!updatedServices[name]) {
-                updatedServices[name] = {};
+        const parsedValue = field === 'price' ? Number(value) : Number(value)
+        if (isNaN(parsedValue)) {
+            alert(field === 'price' ? "Цена должна быть числом!" : "Длительность должна быть числом!")
+            return
+        }
+
+        setServices(prevServices => ({
+            ...prevServices,
+            [name]: {
+                ...prevServices[name], 
+                [field]: Number(value)
             }
-            updatedServices[name][field] = value;
-            return updatedServices;
-        });
+        }));
     };
 
     const handleImageUpload = async (event) => {
@@ -269,20 +274,22 @@ function ProfilePage() {
                     {Object.entries(services).map(([name, details]) => (
                         <div key={name}>
                             <span>{name}</span>
-
-                            Цена:<input
-                                type="number"
-                                placeholder="Цена"
-                                value={details.price}
-                                onChange={(e) => handleServiceChange(name, e.target.value)}
-                            />
-                            Длительность:<input
-                                type="number"
-                                placeholder="Длительность"
-                                value={details.duration}
-                                onChange={(e) => handleServiceChange(name, e.target.value)}
-                            />
-
+                            <span> - Цена:
+                                <input
+                                    type="number"
+                                    placeholder="Цена"
+                                    value={details.price}
+                                    onChange={(e) => handleServiceDetailChange(name, 'price', e.target.value)}
+                                />
+                            </span>
+                            <span> - Длительность :
+                                <input
+                                    type="number"
+                                    placeholder="Длительность"
+                                    value={details.duration}
+                                    onChange={(e) => handleServiceDetailChange(name, 'duration', e.target.value)}
+                                />
+                            </span>
                             <button onClick={() => handleRemoveService(name)}>Удалить</button>
                         </div>
                     ))}
