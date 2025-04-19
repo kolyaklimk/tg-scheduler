@@ -51,7 +51,7 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl, is
                 navigate(`/profile/${specialistTelegramId}`);
             }
             else {
-                alert("Специалист не найден!");
+                Telegram.WebApp.showPopup({ message: "Специалист не найден!" });
             }
         } catch (error) {
             console.error("Error fetching user:", error);
