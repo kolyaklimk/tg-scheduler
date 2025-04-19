@@ -15,6 +15,7 @@ function ProfilePage() {
 
     const [newServiceName, setNewServiceName] = useState('');
     const [newServicePrice, setNewServicePrice] = useState('');
+    const [newServiceDuration, setNewServiceDuration] = useState('');
 
     useEffect(() => {
         const fetchSpecialist = async () => {
@@ -24,7 +25,7 @@ function ProfilePage() {
                 setContactInfo(data.contactInfo || '');
                 setPortfolioLink(data.portfolioLink || '');
                 setLocation(data.location || '');
-                setServices(data.services || {}); // Получаем словарь услуг
+                setServices(data.services || {});
                 setWorking(data.working || false);
             } catch (error) {
                 console.error("Error fetching specialist:", error);
@@ -32,7 +33,6 @@ function ProfilePage() {
         };
 
         fetchSpecialist();
-
     }, [telegramId, role, apiUrl]);
 
     const handleContactInfoChange = (e) => {
@@ -47,13 +47,15 @@ function ProfilePage() {
         setLocation(e.target.value);
     };
 
-    const handleServiceChange = (name, value) => {
-        const price = Number(value);
-        if (isNaN(price)) {
-            alert("Цена должна быть числом!");
-            return;
-        }
-        setServices({ ...services, [name]: price });
+    const handleServiceChange = (name, field, value) => {
+        setServices(prevServices => {
+            const updatedServices = { ...prevServices };
+            if (!updatedServices[name]) {
+                updatedServices[name] = {};
+            }
+            updatedServices[name][field] = value;
+            return updatedServices;
+        });
     };
 
     const handleRemoveService = (name) => {
@@ -69,6 +71,9 @@ function ProfilePage() {
     const handleServicePriceChange = (e) => {
         setNewServicePrice(e.target.value);
     };
+    const handleServiceDurationChange = (e) => {
+        setNewServiceDuration(e.target.value);
+    };
 
     const handleAddService = () => {
         if (!newServiceName) {
@@ -80,18 +85,27 @@ function ProfilePage() {
             alert("Услуга с таким названием уже существует!");
             return;
         }
-
         const price = Number(newServicePrice);
+        const duration = Number(newServiceDuration);
+
         if (isNaN(price) || price < 0) {
             alert("Пожалуйста, введите корректную цену (число больше или равно 0).");
             return;
         }
 
-        setServices(prevServices => ({ ...prevServices, [newServiceName]: price }));
+        if (isNaN(duration) || duration <= 0) {
+            alert("Пожалуйста, введите корректное время (число больше нуля).");
+            return;
+        }
+
+        setServices(prevServices => ({
+            ...prevServices,
+            [newServiceName]: { price: Number(newServicePrice), duration: Number(newServiceDuration) }
+        }));
         setNewServiceName('');
         setNewServicePrice('');
+        setNewServiceDuration('');
     };
-
 
     const handleWorkingChange = (event) => {
         setWorking(event.target.checked);
@@ -99,18 +113,20 @@ function ProfilePage() {
 
     const handleSubmit = async () => {
         try {
-
             for (const name in services) {
                 if (!name) {
                     alert("Название услуги не может быть пустым!");
                     return;
                 }
-                if (services[name] < 0) {
-                    alert("Цена услуги должна быть больше или равна 0!");
+                if (isNaN(services[name].price) || services[name].price < 0) {
+                    alert("Пожалуйста, введите корректную цену (число больше или равно 0).");
+                    return;
+                }
+                if (isNaN(services[name].duration) || services[name].duration <= 0) {
+                    alert("Пожалуйста, введите корректное время (число больше 0).");
                     return;
                 }
             }
-
 
             const response = await fetch(`${apiUrl}/User/SaveSpecialist?telegramId=${telegramId}&working=${working}&contactInfo=${contactInfo}&portfolioLink=${portfolioLink}&location=${location}`, {
                 method: 'POST',
@@ -143,16 +159,15 @@ function ProfilePage() {
                 <p>Местоположение: {location}</p>
                 <h2>Услуги:</h2>
                 <ul>
-                    {Object.entries(services).map(([name, price]) => (
+                    {Object.entries(services).map(([name, details]) => (
                         <li key={name}>
-                            {name} - {price}
+                            {name} - {details.price} - {details.duration} минут
                         </li>
                     ))}
                 </ul>
             </div>
         );
     } else if (role === 'specialist') {
-        // Отображаем свой профиль для специалиста (с возможностью редактирования)
         return (
             <div>
                 <h1>Мой профиль</h1>
@@ -196,27 +211,30 @@ function ProfilePage() {
                         />
                         <input
                             type="number"
-                            placeholder="Цена новой услуги"
+                            placeholder="Цена"
                             value={newServicePrice}
                             onChange={handleServicePriceChange}
                         />
+                        <input
+                            type="number"
+                            placeholder="Длительность"
+                            value={newServiceDuration}
+                            onChange={handleServiceDurationChange}
+                        />
                         <button onClick={handleAddService}>Добавить услугу</button>
                     </div>
-                    {Object.entries(services).map(([name, price]) => (
+                    {Object.entries(services).map(([name, details]) => (
                         <div key={name}>
                             <span>{name}</span>
-                            <input
-                                type="number"
-                                placeholder="Цена"
-                                value={price}
-                                onChange={(e) => handleServiceChange(name, e.target.value)}
-                            />
+                            <span> - Цена: {details.price} -  Длительность : {details.duration} </span>
                             <button onClick={() => handleRemoveService(name)}>Удалить</button>
                         </div>
                     ))}
                 </div>
             </div>
         );
+    } else {
+        return <div>Роль не определена.</div>;
     }
 }
 
