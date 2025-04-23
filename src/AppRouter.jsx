@@ -12,7 +12,7 @@ import ArchivePage from "./Pages/ArchivePage";
 import qs from 'query-string';
 
 
-function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl, isFetchReady, setRole }) {
+function AppRouter({ telegramId, role, profileLink, apiUrl, isFetchReady, setRole }) {
     const navigate = useNavigate();
     const location = useLocation();
     let specialistTelegramId = null;
@@ -55,6 +55,19 @@ function AppRouter({ telegramId, handleRoleChange, role, profileLink, apiUrl, is
             }
         } catch (error) {
             console.error("Error fetching user:", error);
+        }
+    };
+
+    const handleRoleChange = async (newRole) => {
+        try {
+            const response = await fetch(`${apiUrl}/User/ChangeRole?telegramId=${telegramId}&newRole=${newRole}`, {
+                method: 'POST',
+            });
+            const data = await response.json();
+            setRole(data.role);
+            localStorage.setItem('userRole', data.role);
+        } catch (error) {
+            console.error("Error changing role:", error);
         }
     };
 

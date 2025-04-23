@@ -50,26 +50,12 @@ function App() {
         }
     };
 
-    const handleRoleChange = async (newRole) => {
-        try {
-            const response = await fetch(`${apiUrl}/User/ChangeRole?telegramId=${telegramId}&newRole=${newRole}`, {
-                method: 'POST',
-            });
-            const data = await response.json();
-            setRole(data.role);
-            localStorage.setItem('userRole', data.role);
-        } catch (error) {
-            console.error("Error changing role:", error);
-        }
-    };
-
     return (
         <Router>
             <div>
                 {role && <Navbar role={role} telegramId={telegramId} />}
                 <AppRouter telegramId={telegramId}
                     isTelegramReady={isTelegramReady}
-                    handleRoleChange={handleRoleChange}
                     role={role}
                     profileLink={profileLink}
                     apiUrl={apiUrl}
