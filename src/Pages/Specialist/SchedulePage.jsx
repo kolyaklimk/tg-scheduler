@@ -46,12 +46,9 @@ function SchedulePage({ telegramId, apiUrl }) {
             dayjs(scheduledDate).isSame(dayjs(date), 'day')
         );
 
-        console.log("12321");
-        console.log(scheduledDates);
-        console.log("12321");
         return (
-            <Indicator size={6} color="red" offset={-5} disabled={!hasTimeSlots}>
-                <div>{date.getDate()}</div>
+            <Indicator size={6} color="red" offset={-8} disabled={!hasTimeSlots}>
+                {date.getDate()}
             </Indicator>
         );
     };
@@ -136,9 +133,6 @@ function SchedulePage({ telegramId, apiUrl }) {
                 minDate={dayjs().toDate()}
                 maxDate={dayjs().add(365, 'days').toDate()}
                 renderDay={dayRenderer}
-                modifiers={{ scheduled: (date) => scheduledDates.some(d => d.toDateString() === date.toDateString()) }}
-                modifiersStyles={{ scheduled: { backgroundColor: '#228BE6', color: 'white' } }}
-
             />
 
             {showTimeSlotForm && (
