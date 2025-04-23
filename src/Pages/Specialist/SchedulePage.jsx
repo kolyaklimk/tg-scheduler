@@ -9,10 +9,11 @@ function SchedulePage({ telegramId, apiUrl }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [timeSlots, setTimeSlots] = useState([]);
     const [startTime, setStartTime] = useState('');
-    const [scheduledDates, setScheduledDates] = useState([]); 
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState(true);
     const [showTimeSlotForm, setShowTimeSlotForm] = useState(false);
+    const [scheduledDates, setScheduledDates] = useState([]);
+
 
     useEffect(() => {
         const fetchScheduledDates = async () => {
@@ -70,7 +71,6 @@ function SchedulePage({ telegramId, apiUrl }) {
         fetchTimeSlots()
     }, [selectedDate]);
 
-
     const handleCreateTimeSlot = async () => {
         try {
             const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
@@ -125,6 +125,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 renderDay={dayRenderer}
                 modifiers={{ scheduled: (date) => scheduledDates.some(d => d.toDateString() === date.toDateString()) }}
                 modifiersStyles={{ scheduled: { backgroundColor: '#228BE6', color: 'white' } }}
+
             />
 
             {showTimeSlotForm && (
