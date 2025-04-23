@@ -4,13 +4,23 @@ import { Button, Input, Textarea, Select } from '@mantine/core';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 dayjs.locale('ru');
+import './SchedulePage.css'
 
 function SchedulePage({ telegramId, apiUrl }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [timeSlots, setTimeSlots] = useState([]);
     const [startTime, setStartTime] = useState('');
     const [description, setDescription] = useState('');
-    const [status, setStatus] = useState(true); 
+    const [status, setStatus] = useState(true);
+    const [showTimeSlotForm, setShowTimeSlotForm] = useState(false);
+
+    const modifiers = {
+        scheduled: (date) => hasTimeSlots(date),
+    };
+
+    const modifiersStyles = {
+        scheduled: { backgroundColor: '#228BE6', color: 'white' },
+    };
 
     useEffect(() => {
         const fetchTimeSlots = async () => {
@@ -28,9 +38,12 @@ function SchedulePage({ telegramId, apiUrl }) {
                 console.error("Error fetching specialist:", error);
             }
         };
-
         fetchTimeSlots()
     }, [selectedDate, telegramId]);
+    const hasTimeSlots = (date) => {
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+        return timeSlots.some(slot => dayjs(slot.date).format('YYYY-MM-DD') === formattedDate);
+    };
 
     const handleCreateTimeSlot = async () => {
         try {
@@ -58,40 +71,51 @@ function SchedulePage({ telegramId, apiUrl }) {
         }
 
     };
+    const handleDateClick = (date) => {
+        setSelectedDate(date);
+        setShowTimeSlotForm(true);
+    };
     return (
-        <div>
+        <div className="schedule-page">
             <h1>Расписание</h1>
             <DatePicker
                 locale="ru"
                 label="Выберите дату"
                 value={selectedDate}
-                onChange={setSelectedDate}
+                onChange={(date) => {
+                    setSelectedDate(date);
+                    handleDateClick(date);
+                }}
                 minDate={dayjs().toDate()}
-                maxDate={dayjs().add(365, 'days').toDate()} 
+                maxDate={dayjs().add(365, 'days').toDate()}
+                modifiers={modifiers}
+                modifiersStyles={modifiersStyles}
             />
-
-            <h2>Добавить время</h2>
-            <Input
-                type="time"
-                placeholder="Время начала"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-            />
-            <Textarea
-                placeholder="Описание"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-            />
-            <Select
-                data={[
-                    { value: "false", label: "Свободно" },
-                    { value: "true", label: "Занято" }
-                ]}
-                value={String(status)}
-                onChange={(value) => setStatus(value === "true")}
-            />
-
-            <Button onClick={handleCreateTimeSlot}>Создать</Button>
+            {showTimeSlotForm && (
+                <div>
+                    <h2>Добавить время</h2>
+                    <Input
+                        type="time"
+                        placeholder="Время начала"
+                        value={startTime}
+                        onChange={(e) => setStartTime(e.target.value)}
+                    />
+                    <Textarea
+                        placeholder="Описание"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                    <Select
+                        data={[
+                            { value: "false", label: "Свободно" },
+                            { value: "true", label: "Занято" }
+                        ]}
+                        value={String(status)}
+                        onChange={(value) => setStatus(value === "true")}
+                    />
+                    <Button onClick={handleCreateTimeSlot}>Создать</Button>
+                </div>
+            )}
 
             <h2>Время</h2>
             <ul>

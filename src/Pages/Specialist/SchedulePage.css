@@ -1,0 +1,38 @@
+.schedule-page {
+    padding: 20px;
+    font-family: sans-serif;
+}
+
+    .schedule-page h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    .schedule-page h2 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .schedule-page .mantine-DatePicker-root {
+        margin-bottom: 20px;
+    }
+
+    .schedule-page .mantine-Input-root,
+    .schedule-page .mantine-Textarea-root,
+    .schedule-page .mantine-Select-root {
+        margin-bottom: 10px;
+    }
+
+    .schedule-page .mantine-Button-root {
+        margin-top: 10px;
+    }
+
+    .schedule-page ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .schedule-page li {
+        padding: 5px 0;
+        border-bottom: 1px solid #eee;
+    }
