@@ -31,7 +31,7 @@ function SchedulePage({ telegramId, apiUrl }) {
         if (telegramId) {
             fetchScheduledDates();
         }
-    }, [telegramId, apiUrl]);
+    }, []);
 
     const modifiers = {
         scheduled: (date) => scheduledDates.some(scheduledDate =>
@@ -62,7 +62,7 @@ function SchedulePage({ telegramId, apiUrl }) {
             }
         };
         fetchTimeSlots()
-    }, [selectedDate, telegramId]);
+    }, [selectedDate]);
 
 
     const handleCreateTimeSlot = async () => {
