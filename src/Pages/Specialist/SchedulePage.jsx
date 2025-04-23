@@ -21,11 +21,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 const response = await fetch(`${apiUrl}/Schedule/GetDatesWithTimeSlots?telegramId=${telegramId}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setScheduledDates(data.map(date => new Date(date)));
-                    console.log("data");
-                    console.log(data);
-                    console.log(ScheduledDates);
-                    console.log("data");
+                    setScheduledDates(new Set(data.map(date => dayjs(date).format('YYYY-MM-DD'))));
                 } else {
                     console.error("Error fetching scheduled dates:", response.status);
                 }
@@ -40,13 +36,9 @@ function SchedulePage({ telegramId, apiUrl }) {
     }, []);
 
     const dayRenderer = (date) => {
-        const hasTimeSlots = scheduledDates.some(scheduledDate =>
-            scheduledDate.getFullYear() === date.getFullYear() &&
-            scheduledDate.getMonth() === date.getMonth() &&
-            scheduledDate.getDate() === date.getDate()
-        );
-
         const day = date.getDate();
+        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+        const hasTimeSlots = scheduledDates.has(formattedDate);
 
         return (
             <Indicator size={6} color="red" offset={-5} disabled={!hasTimeSlots}>
