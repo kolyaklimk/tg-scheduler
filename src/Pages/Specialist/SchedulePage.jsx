@@ -38,6 +38,7 @@ function SchedulePage({ telegramId, apiUrl }) {
         };
         fetchTimeSlots()
     }, [selectedDate, telegramId]);
+
     const hasTimeSlots = (date) => {
         const formattedDate = dayjs(date).format('YYYY-MM-DD');
         return timeSlots.some(slot => dayjs(slot.date).format('YYYY-MM-DD') === formattedDate);
@@ -46,8 +47,19 @@ function SchedulePage({ telegramId, apiUrl }) {
     const handleCreateTimeSlot = async () => {
         try {
             const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
-            const response = await fetch(`${apiUrl}/Schedule/CreateTimeSlot?telegramId=${telegramId}&date=${formattedDate}&startTime=${startTime}&status=${status}&description=${description}`, {
+            const timeSlotData = {
+                startTime: startTime,
+                description: description,
+                status: status,
+                clientId: ""
+            };
+
+            const response = await fetch(`${apiUrl}/Schedule/CreateTimeSlot?telegramId=${telegramId}&date=${formattedDate}`, {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(timeSlotData)
             });
             if (response.ok) {
                 const data = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
@@ -69,10 +81,6 @@ function SchedulePage({ telegramId, apiUrl }) {
         }
 
     };
-    const handleDateClick = (date) => {
-        setSelectedDate(date);
-        setShowTimeSlotForm(true);
-    };
 
     return (
         <div className="schedule-page">
@@ -83,7 +91,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 value={selectedDate}
                 onChange={(date) => {
                     setSelectedDate(date);
-                    handleDateClick(date);
+                    setShowTimeSlotForm(true);
                 }}
                 minDate={dayjs().toDate()}
                 maxDate={dayjs().add(365, 'days').toDate()}
@@ -105,9 +113,9 @@ function SchedulePage({ telegramId, apiUrl }) {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
-                    <select value={status} onChange={(e) => setStatus(e.target.value === 'true')}>
-                        <option value="false">Свободно</option>
-                        <option value="true">Занято</option>
+                    <select value={status} onChange={(e) => setStatus(e.target.value === 'false')}>
+                        <option value="true">Свободно</option>
+                        <option value="false">Занято</option>
                     </select>
 
                     <button onClick={handleCreateTimeSlot}>Создать</button>
