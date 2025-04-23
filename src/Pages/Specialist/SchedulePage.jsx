@@ -1,10 +1,9 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { DatePicker } from '@mantine/dates';
-import { Button, Input, Textarea, Select } from '@mantine/core';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 dayjs.locale('ru');
-import './SchedulePage.css'
+import './SchedulePage.css';
 
 function SchedulePage({ telegramId, apiUrl }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -75,6 +74,7 @@ function SchedulePage({ telegramId, apiUrl }) {
         setSelectedDate(date);
         setShowTimeSlotForm(true);
     };
+
     return (
         <div className="schedule-page">
             <h1>Расписание</h1>
@@ -91,29 +91,27 @@ function SchedulePage({ telegramId, apiUrl }) {
                 modifiers={modifiers}
                 modifiersStyles={modifiersStyles}
             />
+
             {showTimeSlotForm && (
                 <div>
                     <h2>Добавить время</h2>
-                    <Input
+                    <input
                         type="time"
                         placeholder="Время начала"
                         value={startTime}
                         onChange={(e) => setStartTime(e.target.value)}
                     />
-                    <Textarea
+                    <textarea
                         placeholder="Описание"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
-                    <Select
-                        data={[
-                            { value: "false", label: "Свободно" },
-                            { value: "true", label: "Занято" }
-                        ]}
-                        value={String(status)}
-                        onChange={(value) => setStatus(value === "true")}
-                    />
-                    <Button onClick={handleCreateTimeSlot}>Создать</Button>
+                    <select value={status} onChange={(e) => setStatus(e.target.value === 'true')}>
+                        <option value="false">Свободно</option>
+                        <option value="true">Занято</option>
+                    </select>
+
+                    <button onClick={handleCreateTimeSlot}>Создать</button>
                 </div>
             )}
 
@@ -121,7 +119,7 @@ function SchedulePage({ telegramId, apiUrl }) {
             <ul>
                 {timeSlots.map((slot, index) => (
                     <li key={index}>
-                        {slot.startTime} - {slot.status} : {slot.description}
+                        {slot.startTime} - {slot.status ? 'Занято' : 'Свободно'} : {slot.description}
                     </li>
                 ))}
             </ul>

@@ -1,6 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { MantineProvider } from '@mantine/core';
 import Navbar from './Navbar';
 import './Navbar.css';
 import AppRouter from "./AppRouter";
@@ -52,20 +51,18 @@ function App() {
     };
 
     return (
-        <MantineProvider withGlobalStyles withNormalizeCSS>
-            <Router>
-                <div>
-                    {role && <Navbar role={role} telegramId={telegramId} />}
-                    <AppRouter telegramId={telegramId}
-                        isTelegramReady={isTelegramReady}
-                        role={role}
-                        profileLink={profileLink}
-                        apiUrl={apiUrl}
-                        isFetchReady={isFetchReady}
-                        setRole={setRole} />
-                </div>
-            </Router>
-        </MantineProvider>
+        <Router>
+            <div>
+                {role && <Navbar role={role} telegramId={telegramId} />}
+                <AppRouter telegramId={telegramId}
+                    isTelegramReady={isTelegramReady}
+                    role={role}
+                    profileLink={profileLink}
+                    apiUrl={apiUrl}
+                    isFetchReady={isFetchReady}
+                    setRole={setRole} />
+            </div>
+        </Router>
     );
 }
 
