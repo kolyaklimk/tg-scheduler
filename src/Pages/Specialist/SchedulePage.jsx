@@ -22,7 +22,10 @@ function SchedulePage({ telegramId, apiUrl }) {
                 if (response.ok) {
                     const data = await response.json();
                     setScheduledDates(data.map(date => new Date(date)));
+                    console.error("data");
+                    console.error(data);
                     console.error(ScheduledDates);
+                    console.error("data");
                 } else {
                     console.error("Error fetching scheduled dates:", response.status);
                 }
