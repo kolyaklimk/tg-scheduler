@@ -21,7 +21,8 @@ function SchedulePage({ telegramId, apiUrl }) {
                 const response = await fetch(`${apiUrl}/Schedule/GetDatesWithTimeSlots?telegramId=${telegramId}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setScheduledDates(data.map(date => new Date(date)));
+                    const parsed = data.map(date => new Date(date));
+                    setScheduledDates(parsed);
                     console.log("data");
                     console.log(data);
                     console.log(scheduledDates);
@@ -37,23 +38,20 @@ function SchedulePage({ telegramId, apiUrl }) {
         if (telegramId) {
             fetchScheduledDates();
         }
-    }, []);
+    }, [telegramId]);
 
     const dayRenderer = (date) => {
         const hasTimeSlots = scheduledDates.some(scheduledDate =>
-            scheduledDate.getFullYear() === date.getFullYear() &&
-            scheduledDate.getMonth() === date.getMonth() &&
-            scheduledDate.getDate() === date.getDate()
+            dayjs(scheduledDate).isSame(dayjs(date), 'day')
         );
-
-        const day = date.getDate();
 
         return (
             <Indicator size={6} color="red" offset={-5} disabled={!hasTimeSlots}>
-                <div>{day}</div>
+                <div>{date.getDate()}</div>
             </Indicator>
         );
     };
+
 
     useEffect(() => {
         const fetchTimeSlots = async () => {
@@ -71,8 +69,10 @@ function SchedulePage({ telegramId, apiUrl }) {
                 console.error("Error fetching specialist:", error);
             }
         };
-        fetchTimeSlots()
-    }, [selectedDate]);
+        if (telegramId) {
+            fetchTimeSlots();
+        }
+    }, [telegramId, selectedDate]);
 
     const handleCreateTimeSlot = async () => {
         try {
@@ -101,6 +101,12 @@ function SchedulePage({ telegramId, apiUrl }) {
                 setStartTime('');
                 setDescription('');
                 setStatus(true);
+
+                const dateResponse = await fetch(`${apiUrl}/Schedule/GetDatesWithTimeSlots?telegramId=${telegramId}`);
+                if (dateResponse.ok) {
+                    const dateData = await dateResponse.json();
+                    setScheduledDates(dateData.map(d => new Date(d)));
+                }
             }
             else {
                 console.error("Error CreateTimeSlot");
