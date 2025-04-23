@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { DatePicker } from '@mantine/dates';
+import { Indicator } from '@mantine/core';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 dayjs.locale('ru');
@@ -19,7 +20,8 @@ function SchedulePage({ telegramId, apiUrl }) {
                 const response = await fetch(`${apiUrl}/Schedule/GetDatesWithTimeSlots?telegramId=${telegramId}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setScheduledDates(data.map(date => new Date(date))); 
+                    setScheduledDates(data.map(date => new Date(date)));
+                    console.error(ScheduledDates);
                 } else {
                     console.error("Error fetching scheduled dates:", response.status);
                 }
@@ -33,16 +35,20 @@ function SchedulePage({ telegramId, apiUrl }) {
         }
     }, []);
 
-    const modifiers = {
-        scheduled: (date) => scheduledDates.some(scheduledDate =>
+    const dayRenderer = (date) => {
+        const hasTimeSlots = scheduledDates.some(scheduledDate =>
             scheduledDate.getFullYear() === date.getFullYear() &&
             scheduledDate.getMonth() === date.getMonth() &&
             scheduledDate.getDate() === date.getDate()
-        ),
-    };
+        );
 
-    const modifiersStyles = {
-        scheduled: { backgroundColor: '#228BE6', color: 'white' },
+        const day = date.getDate();
+
+        return (
+            <Indicator size={6} color="red" offset={-5} disabled={!hasTimeSlots}>
+                <div>{day}</div>
+            </Indicator>
+        );
     };
 
     useEffect(() => {
@@ -116,8 +122,9 @@ function SchedulePage({ telegramId, apiUrl }) {
                 }}
                 minDate={dayjs().toDate()}
                 maxDate={dayjs().add(365, 'days').toDate()}
-                modifiers={modifiers}
-                modifiersStyles={modifiersStyles}
+                renderDay={dayRenderer}
+                modifiers={{ scheduled: (date) => scheduledDates.some(d => d.toDateString() === date.toDateString()) }}
+                modifiersStyles={{ scheduled: { backgroundColor: '#228BE6', color: 'white' } }}
             />
 
             {showTimeSlotForm && (
