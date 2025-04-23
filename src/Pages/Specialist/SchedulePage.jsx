@@ -8,12 +8,37 @@ function SchedulePage({ telegramId, apiUrl }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [timeSlots, setTimeSlots] = useState([]);
     const [startTime, setStartTime] = useState('');
+    const [scheduledDates, setScheduledDates] = useState([]); 
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState(true);
     const [showTimeSlotForm, setShowTimeSlotForm] = useState(false);
 
+    useEffect(() => {
+        const fetchScheduledDates = async () => {
+            try {
+                const response = await fetch(`${apiUrl}/Schedule/GetDatesWithTimeSlots?telegramId=${telegramId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setScheduledDates(data.map(date => new Date(date))); 
+                } else {
+                    console.error("Error fetching scheduled dates:", response.status);
+                }
+            } catch (error) {
+                console.error("Error fetching scheduled dates:", error);
+            }
+        };
+
+        if (telegramId) {
+            fetchScheduledDates();
+        }
+    }, [telegramId, apiUrl]);
+
     const modifiers = {
-        scheduled: (date) => hasTimeSlots(date),
+        scheduled: (date) => scheduledDates.some(scheduledDate =>
+            scheduledDate.getFullYear() === date.getFullYear() &&
+            scheduledDate.getMonth() === date.getMonth() &&
+            scheduledDate.getDate() === date.getDate()
+        ),
     };
 
     const modifiersStyles = {
@@ -39,10 +64,6 @@ function SchedulePage({ telegramId, apiUrl }) {
         fetchTimeSlots()
     }, [selectedDate, telegramId]);
 
-    const hasTimeSlots = (date) => {
-        const formattedDate = dayjs(date).format('YYYY-MM-DD');
-        return timeSlots.some(slot => dayjs(slot.date).format('YYYY-MM-DD') === formattedDate);
-    };
 
     const handleCreateTimeSlot = async () => {
         try {
