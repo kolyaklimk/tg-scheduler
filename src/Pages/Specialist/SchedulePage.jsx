@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 dayjs.locale('ru');
 
-function SchedulePage({ telegramId, role, profileLink, apiUrl, isFetchReady, setRole }) {
+function SchedulePage({ telegramId, apiUrl }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [timeSlots, setTimeSlots] = useState([]);
     const [startTime, setStartTime] = useState('');
@@ -67,7 +67,7 @@ function SchedulePage({ telegramId, role, profileLink, apiUrl, isFetchReady, set
                 value={selectedDate}
                 onChange={setSelectedDate}
                 minDate={dayjs().toDate()}
-                maxDate={dayjs().add(365, 'days').toDate()} // 1 год вперед
+                maxDate={dayjs().add(365, 'days').toDate()} 
             />
 
             <h2>Добавить время</h2>
