@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { DatePicker } from '@mantine/dates';
 import { Indicator } from '@mantine/core';
+import { isSameDay } from '@mantine/dates';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 dayjs.locale('ru');
@@ -41,17 +42,21 @@ function SchedulePage({ telegramId, apiUrl }) {
         }
     }, [telegramId]);
 
+
     const dayRenderer = (date) => {
         const hasTimeSlots = scheduledDates.some(scheduledDate =>
-            dayjs(scheduledDate).isSame(dayjs(date), 'day')
+            isSameDay(scheduledDate, date)
         );
 
+        const day = date.getDate();
+
         return (
-            <Indicator size={6} color="red" offset={-8} disabled={!hasTimeSlots}>
-                {date.getDate()}
+            <Indicator size={6} color="red" offset={-5} disabled={!hasTimeSlots}>
+                <div>{day}</div>
             </Indicator>
         );
     };
+
 
 
     useEffect(() => {
