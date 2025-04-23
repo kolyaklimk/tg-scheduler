@@ -83,9 +83,12 @@ function SchedulePage({ telegramId, apiUrl }) {
                 onChange={(e) => setDescription(e.target.value)}
             />
             <Select
-                data={[{ value: false, label: "Свободно" }, { value: true, label: "Занято" }]}
-                value={status}
-                onChange={setStatus}
+                data={[
+                    { value: "false", label: "Свободно" },
+                    { value: "true", label: "Занято" }
+                ]}
+                value={String(status)}
+                onChange={(value) => setStatus(value === "true")}
             />
 
             <Button onClick={handleCreateTimeSlot}>Создать</Button>
