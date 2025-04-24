@@ -52,12 +52,19 @@ function SchedulePage({ telegramId, apiUrl }) {
         console.log("------");
 
         return (
-            <div style={{ position: 'relative' }}>
-                <Indicator size={6} color="red" disabled={false}>
-                    <div>{day}</div>
-                </Indicator>
-            </div>
-
+            <Indicator
+                size={6}
+                color="red"
+                disabled={false}
+                style={{
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    backgroundColor: 'red',
+                }}
+            >
+                <div>{day}</div>
+            </Indicator>
         );
     };
 
