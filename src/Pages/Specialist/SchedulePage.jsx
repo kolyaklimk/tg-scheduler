@@ -193,7 +193,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
-                    <select value={status} onChange={(e) => setStatus(e.target.value === 'false')}>
+                    <select value={status} onChange={(e) => setStatus(e.target.value === 'true')}>
                         <option value="true">Свободно</option>
                         <option value="false">Занято</option>
                     </select>
