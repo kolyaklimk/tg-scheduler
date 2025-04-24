@@ -47,6 +47,12 @@ function SchedulePage({ telegramId, apiUrl }) {
             return;
         }
 
+        const isDuplicate = timeSlots.some(slot => slot.startTime === startTime);
+        if (isDuplicate) {
+            Telegram.WebApp.showPopup({ message: "Этот временной слот уже существует!" });
+            return;
+        }
+
         try {
             const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
             const timeSlotData = {
