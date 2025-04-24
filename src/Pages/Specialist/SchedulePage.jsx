@@ -6,7 +6,7 @@ import 'dayjs/locale/ru';
 dayjs.locale('ru');
 
 function SchedulePage({ telegramId, apiUrl }) {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedDates, setSelectedDates] = useState([]);
     const [isCreatingImage, setIsCreatingImage] = useState(false);
@@ -105,9 +105,16 @@ function SchedulePage({ telegramId, apiUrl }) {
 
             <DatePicker
                 locale="ru"
-                multiple
+                multiple={isCreatingImage}
                 value={isCreatingImage ? selectedDates : selectedDate}
-                onChange={handleDateClick}
+                onChange={(value) => {
+                    if (isCreatingImage) {
+                        handleDateClick(value);
+                    } else {
+                        setSelectedDate(value);
+                        setShowTimeSlotForm(true);
+                    }
+                }}
                 minDate={dayjs().toDate()}
                 maxDate={dayjs().add(365, 'days').toDate()}
                 getDayProps={(date) => ({
