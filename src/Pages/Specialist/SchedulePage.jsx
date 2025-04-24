@@ -1,6 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { DatePicker } from '@mantine/dates';
-import { Indicator } from '@mantine/core';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 dayjs.locale('ru');
@@ -52,18 +51,7 @@ function SchedulePage({ telegramId, apiUrl }) {
         console.log("------");
 
         return (
-            <Indicator
-                style={{
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    backgroundColor: 'red',
-                    opacity: !hasTimeSlots ? 0 : 1,
-                    pointerEvents: !hasTimeSlots ? 'none' : 'auto',
-                }}
-            >
-                <div>{day}</div>
-            </Indicator>
+            <div>{day}</div>
         );
     };
 
