@@ -51,7 +51,14 @@ function SchedulePage({ telegramId, apiUrl }) {
         console.log("------");
 
         return (
-            <div>{day}</div>
+            <div
+                style={{
+                    textDecoration: hasTimeSlots ? 'underline' : 'none',
+                }}
+            >
+                {day}
+            </div>
+
         );
     };
 
