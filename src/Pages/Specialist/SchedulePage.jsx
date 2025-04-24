@@ -48,7 +48,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 startTime,
                 description,
                 status,
-                clientId: "" // Можно добавить логику для клиента
+                clientId: ""
             };
 
             const response = await fetch(`${apiUrl}/Schedule/CreateTimeSlot?telegramId=${telegramId}&date=${formattedDate}`, {
@@ -58,7 +58,11 @@ function SchedulePage({ telegramId, apiUrl }) {
             });
 
             if (response.ok) {
-                setTimeSlots(prev => [...prev, { ...timeSlotData, id: Date.now() }]); // Сюда можно добавить ID, полученное от сервера
+                const data = await response.json(); 
+                setTimeSlots(prev => [
+                    ...prev,
+                    { ...timeSlotData, id: data.id }
+                ]);
                 setStartTime('');
                 setDescription('');
                 setStatus(true);
@@ -75,7 +79,7 @@ function SchedulePage({ telegramId, apiUrl }) {
             const timeSlotData = {
                 status,
                 description,
-                clientId: "" // Можно добавить логику для клиента
+                clientId: "" 
             };
 
             const response = await fetch(`${apiUrl}/Schedule/UpdateTimeSlot?telegramId=${telegramId}&timeSlotId=${timeSlotId}`, {
@@ -86,7 +90,7 @@ function SchedulePage({ telegramId, apiUrl }) {
 
             if (response.ok) {
                 setTimeSlots(prev => prev.map(slot => (slot.id === timeSlotId ? { ...slot, ...timeSlotData } : slot)));
-                setEditingSlot(null);  // Закрыть форму редактирования
+                setEditingSlot(null);  
             } else {
                 console.error("Error updating time slot");
             }
@@ -199,7 +203,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                     <h2>Время</h2>
                     <ul>
                         {timeSlots.map((slot, index) => (
-                            <li key={slot.id}> {/* Используем slot.id вместо index */}
+                            <li key={slot.id}>
                                 {slot.startTime} - {slot.status ? 'Занято' : 'Свободно'} : {slot.description}
                                 <button onClick={() => {
                                     setEditingSlot(slot);
