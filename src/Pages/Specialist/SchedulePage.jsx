@@ -24,6 +24,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
                 if (response.ok) {
                     const data = await response.json();
+                    console.log('Fetched slots:', data);
                     setTimeSlots(sortTimeSlots(data));
                 }
             } catch (error) {
