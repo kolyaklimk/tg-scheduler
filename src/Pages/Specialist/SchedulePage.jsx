@@ -43,15 +43,16 @@ function SchedulePage({ telegramId, apiUrl }) {
         const hasTimeSlots = scheduledDates.some(scheduledDate => {
             dayjs(scheduledDate).isSame(dayjs(date), 'day');
 
-            console.log(dayjs(scheduledDates[0]));
+            console.log("||||||");
+            console.log(dayjs(scheduledDate));
             console.log(dayjs(date));
+            console.log("||||||");
         }
         );
 
 
         const day = date.getDate();
 
-        console.log("------");
         console.log(scheduledDates);
         console.log(hasTimeSlots);
         console.log(day);
