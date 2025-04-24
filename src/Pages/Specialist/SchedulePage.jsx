@@ -52,8 +52,8 @@ function SchedulePage({ telegramId, apiUrl }) {
         console.log("------");
 
         return (
-            <Indicator size={6} color="red"  disabled={false}>
-                <div>{day}</div>
+            <Indicator size={6} color="red" disabled={false}>
+                <div>{day} ы</div>
             </Indicator>
         );
 
