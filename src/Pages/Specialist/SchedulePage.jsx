@@ -24,7 +24,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setTimeSlots(data);
+                    setTimeSlots(sortTimeSlots(data));
                 }
             } catch (error) {
                 console.error("Error fetching schedule:", error);
@@ -154,6 +154,7 @@ function SchedulePage({ telegramId, apiUrl }) {
             return timeA.valueOf() - timeB.valueOf();
         });
     };
+
     return (
         <div className="schedule-page">
             <h1>Расписание</h1>
