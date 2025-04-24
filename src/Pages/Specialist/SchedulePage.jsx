@@ -184,8 +184,8 @@ function SchedulePage({ telegramId, apiUrl }) {
                     <input
                         type="time"
                         placeholder="Время начала"
-                        value={startTime} 
-                        disabled={editingSlot}  
+                        value={startTime}
+                        disabled={editingSlot}
                         onChange={(e) => setStartTime(e.target.value)}
                     />
                     <textarea
