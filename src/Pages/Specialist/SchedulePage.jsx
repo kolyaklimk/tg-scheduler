@@ -72,7 +72,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 setDescription('');
                 setStatus(true);
             } else {
-                console.error("Error CreateTimeSlot");
+                Telegram.WebApp.showPopup({ message: "Error CreateTimeSlot!" });
             }
         } catch (error) {
             console.error("Error creating time slot:", error);
@@ -97,7 +97,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 setTimeSlots(prev => prev.map(slot => (slot.id === timeSlotId ? { ...slot, ...timeSlotData } : slot)));
                 setEditingSlot(null);
             } else {
-                console.error("Error updating time slot");
+                Telegram.WebApp.showPopup({ message: "Error updating time slot!" });
             }
         } catch (error) {
             console.error("Error updating time slot:", error);
@@ -114,7 +114,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 const updatedTimeSlots = timeSlots.filter(slot => slot.id !== timeSlotId);
                 setTimeSlots(sortTimeSlots(updatedTimeSlots));
             } else {
-                console.error("Error deleting time slot");
+                Telegram.WebApp.showPopup({ message: "Error deleting time slot!" });
             }
         } catch (error) {
             console.error("Error deleting time slot:", error);
