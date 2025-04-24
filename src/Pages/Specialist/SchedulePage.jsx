@@ -49,6 +49,8 @@ function SchedulePage({ telegramId, apiUrl }) {
         console.log(scheduledDates);
         console.log(hasTimeSlots);
         console.log(day);
+        console.log(dayjs(scheduledDate));
+        console.log(dayjs(date));
         console.log("------");
 
         return (
