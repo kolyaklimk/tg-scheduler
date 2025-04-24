@@ -52,7 +52,7 @@ function App() {
     };
 
     return (
-        <MantineProvider withGlobalStyles={false} withNormalizeCSS={false}>
+        <MantineProvider withGlobalStyles withNormalizeCSS>
             <Router>
                 <div>
                     {role && <Navbar role={role} telegramId={telegramId} />}

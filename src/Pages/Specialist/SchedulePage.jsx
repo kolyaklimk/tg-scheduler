@@ -53,10 +53,9 @@ function SchedulePage({ telegramId, apiUrl }) {
 
         return (
             <Indicator size={6} color="red" disabled={false}>
-                <div>{day} ы</div>
+                <div>{day}</div>
             </Indicator>
         );
-
     };
 
 
