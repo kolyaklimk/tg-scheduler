@@ -215,7 +215,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                     <ul>
                         {timeSlots.map((slot, index) => (
                             <li key={slot.id}>
-                                {slot.startTime} - {slot.status ? 'Занято' : 'Свободно'} : {slot.description}
+                                {slot.startTime} - {slot.status ? 'Свободно' : 'Занято'} : {slot.description}
                                 <button onClick={() => {
                                     setEditingSlot(slot);
                                     setStartTime(slot.startTime);
