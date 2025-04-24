@@ -45,6 +45,7 @@ function SchedulePage({ telegramId, apiUrl }) {
 
             console.log("||||||");
             console.log(dayjs(scheduledDate));
+            console.log(scheduledDate);
             console.log(dayjs(date));
             console.log("||||||");
         }
