@@ -6,7 +6,7 @@ import 'dayjs/locale/ru';
 dayjs.locale('ru');
 
 function SchedulePage({ telegramId, apiUrl }) {
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedDates, setSelectedDates] = useState([]);
     const [isCreatingImage, setIsCreatingImage] = useState(false);
@@ -107,22 +107,25 @@ function SchedulePage({ telegramId, apiUrl }) {
                 locale="ru"
                 multiple={isCreatingImage}
                 value={isCreatingImage ? selectedDates : selectedDate}
-                onChange={(value) => {
-                    if (isCreatingImage) {
-                        handleDateClick(value);
-                    } else {
-                        setSelectedDate(value);
-                        setShowTimeSlotForm(true);
-                    }
-                }}
+                onChange={handleDateClick}
                 minDate={dayjs().toDate()}
                 maxDate={dayjs().add(365, 'days').toDate()}
-                getDayProps={(date) => ({
-                    style: {
-                        borderBottom: isCreatingImage && selectedDates.some(d => dayjs(d).isSame(date, 'day')) ? '2px solid red' : undefined,
-                    },
-                })}
+                getDayProps={(date) => {
+                    const isSelected =
+                        isCreatingImage
+                            ? selectedDates.some(d => dayjs(d).isSame(date, 'day'))
+                            : selectedDate && dayjs(date).isSame(selectedDate, 'day');
+
+                    return {
+                        style: {
+                            borderBottom: isSelected ? '2px solid red' : undefined,
+                            backgroundColor: isSelected ? '#f0f0f0' : undefined,
+                            borderRadius: isSelected ? '6px' : undefined,
+                        }
+                    };
+                }}
             />
+
 
             {!isCreatingImage && showTimeSlotForm && (
                 <div>
