@@ -6,7 +6,7 @@ import 'dayjs/locale/ru';
 dayjs.locale('ru');
 
 function SchedulePage({ telegramId, apiUrl }) {
-    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [timeSlots, setTimeSlots] = useState([]);
     const [startTime, setStartTime] = useState('');
     const [description, setDescription] = useState('');
@@ -64,7 +64,7 @@ function SchedulePage({ telegramId, apiUrl }) {
     useEffect(() => {
         const fetchTimeSlots = async () => {
             try {
-                const formattedDate = dayjs(selectedDate).format('DD-MM-YYYY');
+                const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
 
                 const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
 
@@ -84,7 +84,7 @@ function SchedulePage({ telegramId, apiUrl }) {
 
     const handleCreateTimeSlot = async () => {
         try {
-            const formattedDate = dayjs(selectedDate).format('DD-MM-YYYY');
+            const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
             const timeSlotData = {
                 startTime: startTime,
                 description: description,
