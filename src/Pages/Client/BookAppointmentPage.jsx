@@ -60,7 +60,7 @@ function BookAppointmentPage({ apiUrl }) {
                     >
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <img
-                                src={specialist.photoUrl || 'https://via.placeholder.com/80'}
+                                src={specialist.profileImageUrl || 'https://via.placeholder.com/80'}
                                 alt={specialist.name}
                                 style={{
                                     width: '80px',
