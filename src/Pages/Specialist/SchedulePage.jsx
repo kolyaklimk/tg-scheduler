@@ -41,6 +41,11 @@ function SchedulePage({ telegramId, apiUrl }) {
     };
 
     const handleCreateTimeSlot = async () => {
+        if (!startTime) {
+            Telegram.WebApp.showPopup({ message: "StartTime is required!" });
+            return; 
+        }
+
         try {
             const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
             const timeSlotData = {
