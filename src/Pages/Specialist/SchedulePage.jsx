@@ -23,11 +23,6 @@ function SchedulePage({ telegramId, apiUrl }) {
                     const data = await response.json();
                     const parsed = data.map(date => new Date(date));
                     setScheduledDates(parsed);
-                    console.log("data");
-                    console.log(data);
-                    console.log(parsed);
-                    console.log(scheduledDates);
-                    console.log("data");
                 } else {
                     console.error("Error fetching scheduled dates:", response.status);
                 }
@@ -43,10 +38,10 @@ function SchedulePage({ telegramId, apiUrl }) {
 
 
     const dayRenderer = (date) => {
-        console.log(timeSlots);
+        console.log(scheduledDates);
         const hasTimeSlots = (date) => {
             const formattedDate = dayjs(date).format('YYYY-MM-DD');
-            return timeSlots.some(slot => dayjs(slot.date).format('YYYY-MM-DD') === formattedDate);
+            return scheduledDates.some(slot => dayjs(slot.date).format('YYYY-MM-DD') === formattedDate);
         };
 
         const day = date.getDate();
