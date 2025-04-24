@@ -42,13 +42,14 @@ function SchedulePage({ telegramId, apiUrl }) {
             dayjs(scheduledDate).isSame(dayjs(date), 'day')
         );
 
-        console.log("------");
-        console.log(scheduledDates);
-        console.log(hasTimeSlots);
-        console.log("------");
 
         const day = date.getDate();
 
+        console.log("------");
+        console.log(scheduledDates);
+        console.log(hasTimeSlots);
+        console.log(day);
+        console.log("------");
         return (
             <Indicator size={6} color="red" offset={-5} disabled={!hasTimeSlots}>
                 <div>{day}</div>
