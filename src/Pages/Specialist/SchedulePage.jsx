@@ -150,9 +150,9 @@ function SchedulePage({ telegramId, apiUrl }) {
 
     const sortTimeSlots = (slots) => {
         return [...slots].sort((a, b) => {
-            const timeA = dayjs(a.startTime, 'HH:mm');
-            const timeB = dayjs(b.startTime, 'HH:mm');
-            return timeA.valueOf() - timeB.valueOf();
+            const [aH, aM] = a.startTime.split(':').map(Number);
+            const [bH, bM] = b.startTime.split(':').map(Number);
+            return aH * 60 + aM - (bH * 60 + bM);
         });
     };
 
