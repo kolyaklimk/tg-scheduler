@@ -55,7 +55,7 @@ function SchedulePage({ telegramId, apiUrl }) {
             <Indicator
                 size={6}
                 color="red"
-                disabled={false}
+                disabled={!hasTimeSlots}
                 style={{
                     width: '6px',
                     height: '6px',
