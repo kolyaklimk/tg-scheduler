@@ -6,7 +6,7 @@ import 'dayjs/locale/ru';
 dayjs.locale('ru');
 
 function SchedulePage({ telegramId, apiUrl }) {
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(null);
     const [timeSlots, setTimeSlots] = useState([]);
     const [startTime, setStartTime] = useState('');
     const [description, setDescription] = useState('');
@@ -77,7 +77,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 console.error("Error fetching specialist:", error);
             }
         };
-        if (telegramId) {
+        if (telegramId && selectedDate) {
             fetchTimeSlots();
         }
     }, [telegramId, selectedDate]);
