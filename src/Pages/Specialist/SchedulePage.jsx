@@ -24,10 +24,10 @@ function SchedulePage({ telegramId, apiUrl }) {
                 const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setTimeSlots(data); // Предполагаем, что id теперь есть в каждом временном слоте
+                    setTimeSlots(data);
                 }
             } catch (error) {
-                console.error("Error fetching specialist:", error);
+                console.error("Error fetching schedule:", error);
             }
         };
         if (telegramId && selectedDate && !isCreatingImage) {
@@ -58,7 +58,7 @@ function SchedulePage({ telegramId, apiUrl }) {
             });
 
             if (response.ok) {
-                const data = await response.json(); 
+                const data = await response.json();
                 setTimeSlots(prev => [
                     ...prev,
                     { ...timeSlotData, id: data.id }
@@ -79,7 +79,7 @@ function SchedulePage({ telegramId, apiUrl }) {
             const timeSlotData = {
                 status,
                 description,
-                clientId: "" 
+                clientId: ""
             };
 
             const response = await fetch(`${apiUrl}/Schedule/UpdateTimeSlot?telegramId=${telegramId}&timeSlotId=${timeSlotId}`, {
@@ -90,7 +90,7 @@ function SchedulePage({ telegramId, apiUrl }) {
 
             if (response.ok) {
                 setTimeSlots(prev => prev.map(slot => (slot.id === timeSlotId ? { ...slot, ...timeSlotData } : slot)));
-                setEditingSlot(null);  
+                setEditingSlot(null);
             } else {
                 console.error("Error updating time slot");
             }
@@ -135,6 +135,13 @@ function SchedulePage({ telegramId, apiUrl }) {
         }
     };
 
+    const handleCancelEdit = () => {
+        setEditingSlot(null);
+        setStartTime('');
+        setDescription('');
+        setStatus(true);
+    };
+
     return (
         <div className="schedule-page">
             <h1>Расписание</h1>
@@ -177,7 +184,8 @@ function SchedulePage({ telegramId, apiUrl }) {
                     <input
                         type="time"
                         placeholder="Время начала"
-                        value={startTime}
+                        value={startTime} 
+                        disabled={editingSlot}  
                         onChange={(e) => setStartTime(e.target.value)}
                     />
                     <textarea
@@ -191,7 +199,10 @@ function SchedulePage({ telegramId, apiUrl }) {
                     </select>
 
                     {editingSlot ? (
-                        <button onClick={() => handleUpdateTimeSlot(editingSlot.id)}>Сохранить изменения</button>
+                        <>
+                            <button onClick={() => handleUpdateTimeSlot(editingSlot.id)}>Сохранить изменения</button>
+                            <button onClick={handleCancelEdit}>Отмена</button>
+                        </>
                     ) : (
                         <button onClick={handleCreateTimeSlot}>Создать</button>
                     )}
