@@ -38,8 +38,14 @@ function SchedulePage({ telegramId, apiUrl }) {
 
 
     const dayRenderer = (date) => {
-        const hasTimeSlots = scheduledDates.some(scheduledDate =>
-            dayjs(scheduledDate).isSame(dayjs(date), 'day')
+
+        console.log("------");
+        const hasTimeSlots = scheduledDates.some(scheduledDate => {
+            dayjs(scheduledDate).isSame(dayjs(date), 'day');
+
+            console.log(dayjs(scheduledDates[0]));
+            console.log(dayjs(date));
+        }
         );
 
 
@@ -49,8 +55,6 @@ function SchedulePage({ telegramId, apiUrl }) {
         console.log(scheduledDates);
         console.log(hasTimeSlots);
         console.log(day);
-        console.log(dayjs(scheduledDate));
-        console.log(dayjs(date));
         console.log("------");
 
         return (
