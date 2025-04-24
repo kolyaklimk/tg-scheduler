@@ -13,3 +13,5 @@ function GenerateImagePage() {
         </div>
     );
 }
+
+export default GenerateImagePage;
