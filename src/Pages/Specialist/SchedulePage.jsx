@@ -43,7 +43,7 @@ function SchedulePage({ telegramId, apiUrl }) {
     const handleCreateTimeSlot = async () => {
         if (!startTime) {
             Telegram.WebApp.showPopup({ message: "StartTime is required!" });
-            return; 
+            return;
         }
 
         try {
@@ -64,16 +64,11 @@ function SchedulePage({ telegramId, apiUrl }) {
 
             if (response.ok) {
                 const data = await response.json();
-                const newTimeSlots = [
-                    ...timeSlots,
+                setTimeSlots(prev => [
+                    ...prev,
                     { ...timeSlotData, id: data.id }
-                ];
+                ]);
 
-                newTimeSlots.sort((a, b) => {
-                    return dayjs(a.startTime).isBefore(dayjs(b.startTime)) ? -1 : 1;
-                });
-
-                setTimeSlots(newTimeSlots);
                 setStartTime('');
                 setDescription('');
                 setStatus(true);
@@ -117,12 +112,7 @@ function SchedulePage({ telegramId, apiUrl }) {
             });
 
             if (response.ok) {
-                const newTimeSlots = timeSlots.filter(slot => slot.id !== timeSlotId);
-                newTimeSlots.sort((a, b) => {
-                    return dayjs(a.startTime).isBefore(dayjs(b.startTime)) ? -1 : 1;
-                });
-
-                setTimeSlots(newTimeSlots);
+                setTimeSlots(prev => prev.filter(slot => slot.id !== timeSlotId));
             } else {
                 console.error("Error deleting time slot");
             }
@@ -229,20 +219,23 @@ function SchedulePage({ telegramId, apiUrl }) {
                 <>
                     <h2>Время</h2>
                     <ul>
-                        {timeSlots.map((slot, index) => (
-                            <li key={slot.id}>
-                                {slot.startTime} - {slot.status ? 'Свободно' : 'Занято'} : {slot.description}
-                                <button onClick={() => {
-                                    setEditingSlot(slot);
-                                    setStartTime(slot.startTime);
-                                    setDescription(slot.description);
-                                    setStatus(slot.status);
-                                }}>
-                                    Редактировать
-                                </button>
-                                <button onClick={() => handleDeleteTimeSlot(slot.id)}>Удалить</button>
-                            </li>
-                        ))}
+                        {timeSlots
+                            .sort((a, b) => dayjs(a.startTime).isBefore(dayjs(b.startTime)) ? -1 : 1)
+                            .map((slot, index) => (
+                                <li key={slot.id}>
+                                    {slot.startTime} - {slot.status ? 'Свободно' : 'Занято'} : {slot.description}
+                                    <button onClick={() => {
+                                        setEditingSlot(slot);
+                                        setStartTime(slot.startTime);
+                                        setDescription(slot.description);
+                                        setStatus(slot.status);
+                                    }}>
+                                        Редактировать
+                                    </button>
+                                    <button onClick={() => handleDeleteTimeSlot(slot.id)}>Удалить</button>
+                                </li>
+                            ))}
+
                     </ul>
                 </>
             )}
