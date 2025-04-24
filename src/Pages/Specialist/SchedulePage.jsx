@@ -11,7 +11,6 @@ function SchedulePage({ telegramId, apiUrl }) {
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState(true);
     const [showTimeSlotForm, setShowTimeSlotForm] = useState(false);
-    const [scheduledDates, setScheduledDates] = useState([]);
 
 
     useEffect(() => {
@@ -39,6 +38,7 @@ function SchedulePage({ telegramId, apiUrl }) {
         try {
             const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
             const timeSlotData = {
+                date: formattedDate,
                 startTime: startTime,
                 description: description,
                 status: status,
@@ -54,11 +54,7 @@ function SchedulePage({ telegramId, apiUrl }) {
             });
 
             if (response.ok) {
-                const data = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
-                if (data.ok) {
-                    const responseData = await data.json()
-                    setTimeSlots(responseData)
-                }
+                setTimеSlots(prevTimeSlots => [...prevTimeSlots, timeSlotData])
 
                 setStartTime('');
                 setDescription('');
