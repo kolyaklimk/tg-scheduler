@@ -64,10 +64,8 @@ function SchedulePage({ telegramId, apiUrl }) {
 
             if (response.ok) {
                 const data = await response.json();
-                setTimeSlots(prev => [
-                    ...prev,
-                    { ...timeSlotData, id: data.id }
-                ]);
+                const newTimeSlot = { ...timeSlotData, id: data.id };
+                setTimeSlots(prev => sortTimeSlots([...prev, newTimeSlot]));
 
                 setStartTime('');
                 setDescription('');
@@ -112,7 +110,8 @@ function SchedulePage({ telegramId, apiUrl }) {
             });
 
             if (response.ok) {
-                setTimeSlots(prev => prev.filter(slot => slot.id !== timeSlotId));
+                const updatedTimeSlots = timeSlots.filter(slot => slot.id !== timeSlotId);
+                setTimeSlots(sortTimeSlots(updatedTimeSlots));
             } else {
                 console.error("Error deleting time slot");
             }
@@ -148,6 +147,13 @@ function SchedulePage({ telegramId, apiUrl }) {
         setStatus(true);
     };
 
+    const sortTimeSlots = (slots) => {
+        return [...slots].sort((a, b) => {
+            const timeA = dayjs(a.startTime, 'HH:mm');
+            const timeB = dayjs(b.startTime, 'HH:mm');
+            return timeA.valueOf() - timeB.valueOf();
+        });
+    };
     return (
         <div className="schedule-page">
             <h1>Расписание</h1>
@@ -219,9 +225,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 <>
                     <h2>Время</h2>
                     <ul>
-                        {timeSlots
-                            .sort((a, b) => dayjs(a.startTime).isBefore(dayjs(b.startTime)) ? -1 : 1)
-                            .map((slot, index) => (
+                        {timeSlots.map((slot, index) => (
                                 <li key={slot.id}>
                                     {slot.startTime} - {slot.status ? 'Свободно' : 'Занято'} : {slot.description}
                                     <button onClick={() => {
