@@ -79,7 +79,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 value={selectedDate}
                 onChange={(date) => {
                     setSelectedDate(date);
-                    setShowTimeSlotForm(true);
+                    setShowTimeSlotForm(date !== null); 
                 }}
                 minDate={dayjs().toDate()}
                 maxDate={dayjs().add(365, 'days').toDate()}
