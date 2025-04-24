@@ -118,7 +118,6 @@ function SchedulePage({ telegramId, apiUrl }) {
 
                     return {
                         style: {
-                            borderBottom: isSelected ? '2px solid red' : undefined,
                             backgroundColor: isSelected ? '#f0f0f0' : undefined,
                             borderRadius: isSelected ? '6px' : undefined,
                         }
