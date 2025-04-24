@@ -228,20 +228,19 @@ function SchedulePage({ telegramId, apiUrl }) {
                     <h2>Время</h2>
                     <ul>
                         {timeSlots.map((slot, index) => (
-                                <li key={slot.id}>
-                                    {slot.startTime} - {slot.status ? 'Свободно' : 'Занято'} : {slot.description}
-                                    <button onClick={() => {
-                                        setEditingSlot(slot);
-                                        setStartTime(slot.startTime);
-                                        setDescription(slot.description);
-                                        setStatus(slot.status);
-                                    }}>
-                                        Редактировать
-                                    </button>
-                                    <button onClick={() => handleDeleteTimeSlot(slot.id)}>Удалить</button>
-                                </li>
-                            ))}
-
+                            <li key={slot.id}>
+                                {slot.startTime} - {slot.status ? 'Свободно' : 'Занято'} : {slot.description}
+                                <button onClick={() => {
+                                    setEditingSlot(slot);
+                                    setStartTime(slot.startTime);
+                                    setDescription(slot.description);
+                                    setStatus(slot.status);
+                                }}>
+                                    Редактировать
+                                </button>
+                                <button onClick={() => handleDeleteTimeSlot(slot.id)}>Удалить</button>
+                            </li>
+                        ))}
                     </ul>
                 </>
             )}
