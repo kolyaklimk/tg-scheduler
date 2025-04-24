@@ -64,10 +64,16 @@ function SchedulePage({ telegramId, apiUrl }) {
 
             if (response.ok) {
                 const data = await response.json();
-                setTimeSlots(prev => [
-                    ...prev,
+                const newTimeSlots = [
+                    ...timeSlots,
                     { ...timeSlotData, id: data.id }
-                ]);
+                ];
+
+                newTimeSlots.sort((a, b) => {
+                    return dayjs(a.startTime).isBefore(dayjs(b.startTime)) ? -1 : 1;
+                });
+
+                setTimeSlots(newTimeSlots);
                 setStartTime('');
                 setDescription('');
                 setStatus(true);
@@ -111,7 +117,12 @@ function SchedulePage({ telegramId, apiUrl }) {
             });
 
             if (response.ok) {
-                setTimeSlots(prev => prev.filter(slot => slot.id !== timeSlotId));
+                const newTimeSlots = timeSlots.filter(slot => slot.id !== timeSlotId);
+                newTimeSlots.sort((a, b) => {
+                    return dayjs(a.startTime).isBefore(dayjs(b.startTime)) ? -1 : 1;
+                });
+
+                setTimeSlots(newTimeSlots);
             } else {
                 console.error("Error deleting time slot");
             }
