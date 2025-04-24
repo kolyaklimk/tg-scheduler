@@ -9,6 +9,9 @@ function BookAppointmentPage({ apiUrl }) {
     const navigate = useNavigate();
 
     const handleSearch = async () => {
+        const trimmed = searchText.trim();
+        if (trimmed === '') return;
+
         setLoading(true);
         setError(null);
         try {
