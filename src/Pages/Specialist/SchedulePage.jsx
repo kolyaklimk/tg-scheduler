@@ -53,8 +53,8 @@ function SchedulePage({ telegramId, apiUrl }) {
 
         return (
             <div style={{ position: 'relative' }}>
-                <Indicator size={6} color="red">
-                    <button>Click me</button>
+                <Indicator size={6} color="red" disabled={false}>
+                    <div>{day}</div>
                 </Indicator>
             </div>
 
