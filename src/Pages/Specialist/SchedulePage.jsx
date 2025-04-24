@@ -53,14 +53,13 @@ function SchedulePage({ telegramId, apiUrl }) {
 
         return (
             <Indicator
-                size={6}
-                color="red"
-                disabled={!hasTimeSlots}
                 style={{
                     width: '6px',
                     height: '6px',
                     borderRadius: '50%',
                     backgroundColor: 'red',
+                    opacity: !hasTimeSlots ? 0 : 1,
+                    pointerEvents: !hasTimeSlots ? 'none' : 'auto',
                 }}
             >
                 <div>{day}</div>
