@@ -50,11 +50,13 @@ function SchedulePage({ telegramId, apiUrl }) {
         console.log(hasTimeSlots);
         console.log(day);
         console.log("------");
+
         return (
             <Indicator size={6} color="red" offset={-5} disabled={false}>
-                <div>{day}</div>
+                <div style={{ position: 'relative', display: 'inline-block' }}>{day}</div>
             </Indicator>
         );
+
     };
 
 
