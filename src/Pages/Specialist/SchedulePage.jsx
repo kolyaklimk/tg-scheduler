@@ -6,7 +6,7 @@ import 'dayjs/locale/ru';
 dayjs.locale('ru');
 
 function SchedulePage({ telegramId, apiUrl }) {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedDates, setSelectedDates] = useState([]);
     const [isCreatingImage, setIsCreatingImage] = useState(false);
@@ -15,6 +15,7 @@ function SchedulePage({ telegramId, apiUrl }) {
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState(true);
     const [showTimeSlotForm, setShowTimeSlotForm] = useState(false);
+    const [editingSlot, setEditingSlot] = useState(null);
 
     useEffect(() => {
         const fetchTimeSlots = async () => {
@@ -23,7 +24,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setTimeSlots(data);
+                    setTimeSlots(data); // Предполагаем, что id теперь есть в каждом временном слоте
                 }
             } catch (error) {
                 console.error("Error fetching specialist:", error);
@@ -47,7 +48,7 @@ function SchedulePage({ telegramId, apiUrl }) {
                 startTime,
                 description,
                 status,
-                clientId: ""
+                clientId: "" // Можно добавить логику для клиента
             };
 
             const response = await fetch(`${apiUrl}/Schedule/CreateTimeSlot?telegramId=${telegramId}&date=${formattedDate}`, {
@@ -57,7 +58,7 @@ function SchedulePage({ telegramId, apiUrl }) {
             });
 
             if (response.ok) {
-                setTimeSlots(prev => [...prev, timeSlotData]);
+                setTimeSlots(prev => [...prev, { ...timeSlotData, id: Date.now() }]); // Сюда можно добавить ID, полученное от сервера
                 setStartTime('');
                 setDescription('');
                 setStatus(true);
@@ -66,6 +67,47 @@ function SchedulePage({ telegramId, apiUrl }) {
             }
         } catch (error) {
             console.error("Error creating time slot:", error);
+        }
+    };
+
+    const handleUpdateTimeSlot = async (timeSlotId) => {
+        try {
+            const timeSlotData = {
+                status,
+                description,
+                clientId: "" // Можно добавить логику для клиента
+            };
+
+            const response = await fetch(`${apiUrl}/Schedule/UpdateTimeSlot?telegramId=${telegramId}&timeSlotId=${timeSlotId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(timeSlotData)
+            });
+
+            if (response.ok) {
+                setTimeSlots(prev => prev.map(slot => (slot.id === timeSlotId ? { ...slot, ...timeSlotData } : slot)));
+                setEditingSlot(null);  // Закрыть форму редактирования
+            } else {
+                console.error("Error updating time slot");
+            }
+        } catch (error) {
+            console.error("Error updating time slot:", error);
+        }
+    };
+
+    const handleDeleteTimeSlot = async (timeSlotId) => {
+        try {
+            const response = await fetch(`${apiUrl}/Schedule/DeleteTimeSlot?telegramId=${telegramId}&timeSlotId=${timeSlotId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                setTimeSlots(prev => prev.filter(slot => slot.id !== timeSlotId));
+            } else {
+                console.error("Error deleting time slot");
+            }
+        } catch (error) {
+            console.error("Error deleting time slot:", error);
         }
     };
 
@@ -125,10 +167,9 @@ function SchedulePage({ telegramId, apiUrl }) {
                 }}
             />
 
-
             {!isCreatingImage && showTimeSlotForm && (
                 <div>
-                    <h2>Добавить время</h2>
+                    <h2>{editingSlot ? 'Редактировать время' : 'Добавить время'}</h2>
                     <input
                         type="time"
                         placeholder="Время начала"
@@ -145,7 +186,11 @@ function SchedulePage({ telegramId, apiUrl }) {
                         <option value="false">Занято</option>
                     </select>
 
-                    <button onClick={handleCreateTimeSlot}>Создать</button>
+                    {editingSlot ? (
+                        <button onClick={() => handleUpdateTimeSlot(editingSlot.id)}>Сохранить изменения</button>
+                    ) : (
+                        <button onClick={handleCreateTimeSlot}>Создать</button>
+                    )}
                 </div>
             )}
 
@@ -154,8 +199,17 @@ function SchedulePage({ telegramId, apiUrl }) {
                     <h2>Время</h2>
                     <ul>
                         {timeSlots.map((slot, index) => (
-                            <li key={index}>
+                            <li key={slot.id}> {/* Используем slot.id вместо index */}
                                 {slot.startTime} - {slot.status ? 'Занято' : 'Свободно'} : {slot.description}
+                                <button onClick={() => {
+                                    setEditingSlot(slot);
+                                    setStartTime(slot.startTime);
+                                    setDescription(slot.description);
+                                    setStatus(slot.status);
+                                }}>
+                                    Редактировать
+                                </button>
+                                <button onClick={() => handleDeleteTimeSlot(slot.id)}>Удалить</button>
                             </li>
                         ))}
                     </ul>
