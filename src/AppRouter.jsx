@@ -8,6 +8,7 @@ import SchedulePage from "./Pages/Specialist/SchedulePage";
 import AppointmentsPage from "./Pages/Specialist/AppointmentsPage";
 import SubscriptionPage from "./Pages/Specialist/SubscriptionPage";
 import ProfileLinkPage from "./Pages/Specialist/ProfileLinkPage";
+import GenerateImagePage from "./Pages/Specialist/GenerateImagePage";
 import ArchivePage from "./Pages/ArchivePage";
 import qs from 'query-string';
 
@@ -87,6 +88,7 @@ function AppRouter({ telegramId, role, profileLink, apiUrl, isFetchReady, setRol
             <Route path="/appointments" element={<AppointmentsPage />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/profile-link" element={<ProfileLinkPage profileLink={profileLink} />} />
+            <Route path="/generate-image" element={<GenerateImagePage />} />
         </Routes>
     );
 }

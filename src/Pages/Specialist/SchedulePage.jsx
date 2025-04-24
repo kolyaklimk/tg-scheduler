@@ -1,13 +1,15 @@
 ﻿import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DatePicker } from '@mantine/dates';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 dayjs.locale('ru');
 
 function SchedulePage({ telegramId, apiUrl }) {
+    const navigate = useNavigate(); 
     const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedDates, setSelectedDates] = useState([]); // для выбора нескольких дат
-    const [isCreatingImage, setIsCreatingImage] = useState(false); // режим "создания изображения"
+    const [selectedDates, setSelectedDates] = useState([]);
+    const [isCreatingImage, setIsCreatingImage] = useState(false);
     const [timeSlots, setTimeSlots] = useState([]);
     const [startTime, setStartTime] = useState('');
     const [description, setDescription] = useState('');
@@ -31,6 +33,11 @@ function SchedulePage({ telegramId, apiUrl }) {
             fetchTimeSlots();
         }
     }, [telegramId, selectedDate, isCreatingImage]);
+
+    const handleCreateImage = () => {
+        const formattedDates = selectedDates.map(d => dayjs(d).format('YYYY-MM-DD'));
+        navigate('/generate-image', { state: { dates: formattedDates } });
+    };
 
     const handleCreateTimeSlot = async () => {
         try {
@@ -64,7 +71,7 @@ function SchedulePage({ telegramId, apiUrl }) {
 
     const toggleCreateImageMode = () => {
         setIsCreatingImage(prev => !prev);
-        setSelectedDates([]); // сбрасываем выбор при включении/выключении
+        setSelectedDates([]);
     };
 
     const handleDateClick = (date) => {
@@ -91,7 +98,7 @@ function SchedulePage({ telegramId, apiUrl }) {
             </button>
 
             {isCreatingImage && (
-                <button onClick={() => console.log("Создать изображение из дат:", selectedDates)}>
+                <button onClick={handleCreateImage}>
                     Создать
                 </button>
             )}
