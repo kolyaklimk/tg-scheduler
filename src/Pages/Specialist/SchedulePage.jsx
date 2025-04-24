@@ -64,7 +64,7 @@ function SchedulePage({ telegramId, apiUrl }) {
     useEffect(() => {
         const fetchTimeSlots = async () => {
             try {
-                const formattedDate = dayjs(selectedDate).format('DD.MM.YYYY');
+                const formattedDate = dayjs(selectedDate).format('DD-MM-YYYY');
 
                 const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
 
@@ -84,7 +84,7 @@ function SchedulePage({ telegramId, apiUrl }) {
 
     const handleCreateTimeSlot = async () => {
         try {
-            const formattedDate = dayjs(selectedDate).format('DD.MM.YYYY');
+            const formattedDate = dayjs(selectedDate).format('DD-MM-YYYY');
             const timeSlotData = {
                 startTime: startTime,
                 description: description,
