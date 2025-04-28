@@ -18,12 +18,12 @@ function SchedulePage() {
     const [status, setStatus] = useState(true);
     const [showTimeSlotForm, setShowTimeSlotForm] = useState(false);
     const [editingSlot, setEditingSlot] = useState(null);
-    const [telegramId, setTelegramId] = useState(null);
+    const [userTelegramId, setUserTelegramId] = useState(null);
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
     useEffect(() => {
         const id = window.Telegram.WebApp.initDataUnsafe?.user?.id;
-        setTelegramId(id);
+        setUserTelegramId(id);
     }, []);
 
     useEffect(() => {
