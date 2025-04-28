@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { DatePicker } from '@mantine/dates';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
