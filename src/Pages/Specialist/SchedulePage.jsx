@@ -41,6 +41,8 @@ function SchedulePage() {
                         const data = await response.json();
                         setTimeSlots(sortTimeSlots(data));
 
+                        console.log(localStorage.getItem('specialistServices'));
+
                         setEditingSlot(null);
                         setStartTime('');
                         setDescription('');
@@ -322,7 +324,7 @@ function SchedulePage() {
                         <div>
                             <h2>Выберите услуги</h2>
                             <div>
-                                {specialistServices
+                                {specialistServices                                    
                                     ? Object.entries(specialistServices).map(([serviceName, serviceData]) => (
                                         <label key={serviceName}>
                                             <input
