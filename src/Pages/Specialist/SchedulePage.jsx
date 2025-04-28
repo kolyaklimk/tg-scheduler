@@ -305,47 +305,52 @@ function SchedulePage() {
                         </button>
                     ))}
 
-
                     {selectedDate && !selectedSlot && (
-                        <div style={{ marginTop: 20 }}>
+                        <div>
                             <h2>Выберите время</h2>
-                            <Group>
+                            <div>
                                 {timeSlots.map(slot => (
-                                    <Button key={slot.id} onClick={() => handleSlotClick(slot)}>
+                                    <button key={slot.id} onClick={() => handleSlotClick(slot)}>
                                         {slot.startTime}
-                                    </Button>
+                                    </button>
                                 ))}
-                            </Group>
+                            </div>
                         </div>
                     )}
 
                     {selectedSlot && (
-                        <div style={{ marginTop: 20 }}>
+                        <div>
                             <h2>Выберите услуги</h2>
-                            <Group direction="column">
-                                {specialistServices ? JSON.parse(specialistServices).map((service, index) => (
-                                    <Checkbox
-                                        key={index}
-                                        label={service}
-                                        checked={selectedServices.includes(service)}
-                                        onChange={() => handleServiceToggle(service)}
-                                    />
-                                )) : <p>Нет доступных услуг</p>}
-                            </Group>
+                            <div>
+                                {specialistServices
+                                    ? JSON.parse(specialistServices).map((service, index) => (
+                                        <label key={index}>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedServices.includes(service)}
+                                                onChange={() => handleServiceToggle(service)}
+                                            />
+                                            {service}
+                                        </label>
+                                    ))
+                                    : <p>Нет доступных услуг</p>}
+                            </div>
 
-                            <Textarea
-                                label="Комментарий"
-                                placeholder="Ваш комментарий"
-                                value={comment}
-                                onChange={(e) => setComment(e.currentTarget.value)}
-                                mt="md"
-                            />
+                            <div>
+                                <label>Комментарий</label>
+                                <textarea
+                                    placeholder="Ваш комментарий"
+                                    value={comment}
+                                    onChange={(e) => setComment(e.target.value)}
+                                />
+                            </div>
 
-                            <Button onClick={handleBookingSubmit} fullWidth mt="xl">
+                            <button onClick={handleBookingSubmit}>
                                 Записаться
-                            </Button>
+                            </button>
                         </div>
                     )}
+
                 </div>
             )}
         </div>
