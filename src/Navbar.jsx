@@ -22,7 +22,7 @@ function Navbar({ role, telegramId }) {
                 {role === 'specialist' ? (
                     <>
                         <option value={`/profile/${telegramId}`}>Профиль</option>
-                        <option value="/schedule">Расписание</option>
+                        <option value={`/schedule/${telegramId}`}>Расписание</option>
                         <option value="/appointments">Записи</option>
                         <option value="/archive">Архив</option>
                         <option value="/subscription">Подписка</option>
