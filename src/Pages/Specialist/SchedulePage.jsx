@@ -28,13 +28,23 @@ function SchedulePage() {
 
     useEffect(() => {
         const fetchTimeSlots = async () => {
+            if (!selectedDate) return;
             try {
-                const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
-                const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Fetched slots:', data);
-                    setTimeSlots(sortTimeSlots(data));
+                if (role === "specialist") {
+                    const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
+                    const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setTimeSlots(sortTimeSlots(data));
+                    }
+                }
+                else if (role === "client") {
+                    const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
+                    const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}&isClient=true`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setTimeSlots(sortTimeSlots(data));
+                    }
                 }
             } catch (error) {
                 console.error("Error fetching schedule:", error);
@@ -235,11 +245,6 @@ function SchedulePage() {
                     ) : (
                         <button onClick={handleCreateTimeSlot}>Создать</button>
                     )}
-                </div>
-            )}
-
-            {!isCreatingImage && (
-                <>
                     <h2>Время</h2>
                     <ul>
                         {timeSlots.map((slot, index) => (
@@ -257,7 +262,7 @@ function SchedulePage() {
                             </li>
                         ))}
                     </ul>
-                </>
+                </div>
             )}
         </div>
     );
