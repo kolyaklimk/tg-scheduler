@@ -323,7 +323,7 @@ function SchedulePage() {
                             <h2>Выберите услуги</h2>
                             <div>
                                 {specialistServices
-                                    ? Object.entries(JSON.parse(specialistServices)).map(([serviceName, serviceData], index) => (
+                                    ? Object.entries(specialistServices).map(([serviceName, serviceData], index) => (
                                         <label key={index}>
                                             <input
                                                 type="checkbox"
