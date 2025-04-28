@@ -35,6 +35,8 @@ function ProfilePage() {
                 setName(data.name || '');
                 setDescription(data.description || '');
                 setProfileImageUrl(data.profileImageUrl || '');
+
+                localStorage.setItem('specialistServices', data.services);
             } catch (error) {
                 console.error("Error fetching specialist:", error);
             }

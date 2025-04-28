@@ -8,6 +8,7 @@ dayjs.locale('ru');
 function SchedulePage() {
     const { telegramId } = useParams();
     const role = localStorage.getItem('userRole');
+    const specialistServices = localStorage.getItem('specialistServices');
     const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedDates, setSelectedDates] = useState([]);
@@ -19,6 +20,9 @@ function SchedulePage() {
     const [showTimeSlotForm, setShowTimeSlotForm] = useState(false);
     const [editingSlot, setEditingSlot] = useState(null);
     const [userTelegramId, setUserTelegramId] = useState(null);
+    const [selectedSlot, setSelectedSlot] = useState(null);
+    const [selectedServices, setSelectedServices] = useState([]);
+    const [comment, setComment] = useState('');
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
     useEffect(() => {
@@ -36,6 +40,11 @@ function SchedulePage() {
                     if (response.ok) {
                         const data = await response.json();
                         setTimeSlots(sortTimeSlots(data));
+
+                        setEditingSlot(null);
+                        setStartTime('');
+                        setDescription('');
+                        setStatus(true);
                     }
                 }
                 else if (role === "client") {
@@ -181,6 +190,29 @@ function SchedulePage() {
         });
     };
 
+    const handleSlotClick = (slot) => {
+        setSelectedSlot(slot);
+    };
+
+    const handleServiceToggle = (service) => {
+        setSelectedServices((prev) =>
+            prev.includes(service)
+                ? prev.filter((s) => s !== service)
+                : [...prev, service]
+        );
+    };
+
+    const handleBookingSubmit = () => {
+        console.log('Бронирование:');
+        console.log('Выбранный слот:', selectedSlot);
+        console.log('Выбранные услуги:', selectedServices);
+        console.log('Комментарий клиента:', comment);
+
+        Telegram.WebApp.showPopup({ message: "Запрос на бронирование отправлен!" });
+
+        // Здесь потом будет реальный запрос на сервер
+    };
+
     return (
         <div className="schedule-page">
             <h1>Расписание</h1>
@@ -217,7 +249,7 @@ function SchedulePage() {
                 }}
             />
 
-            {!isCreatingImage && showTimeSlotForm && (
+            {role == "specialist" && !isCreatingImage && showTimeSlotForm && (
                 <div>
                     <h2>{editingSlot ? 'Редактировать время' : 'Добавить время'}</h2>
                     <input
@@ -247,7 +279,7 @@ function SchedulePage() {
                     )}
                     <h2>Время</h2>
                     <ul>
-                        {timeSlots.map((slot, index) => (
+                        {timeSlots.map((slot) => (
                             <li key={slot.id}>
                                 {slot.startTime} - {slot.status ? 'Свободно' : 'Занято'} : {slot.description}
                                 <button onClick={() => {
@@ -262,6 +294,58 @@ function SchedulePage() {
                             </li>
                         ))}
                     </ul>
+                </div>
+            )}
+
+            {role === "client" && (
+                <div>
+                    {timeSlots.filter(slot => !slot.status).map(slot => (
+                        <button key={slot.id}>
+                            {slot.startTime}
+                        </button>
+                    ))}
+
+
+                    {selectedDate && !selectedSlot && (
+                        <div style={{ marginTop: 20 }}>
+                            <h2>Выберите время</h2>
+                            <Group>
+                                {timeSlots.map(slot => (
+                                    <Button key={slot.id} onClick={() => handleSlotClick(slot)}>
+                                        {slot.startTime}
+                                    </Button>
+                                ))}
+                            </Group>
+                        </div>
+                    )}
+
+                    {selectedSlot && (
+                        <div style={{ marginTop: 20 }}>
+                            <h2>Выберите услуги</h2>
+                            <Group direction="column">
+                                {specialistServices ? JSON.parse(specialistServices).map((service, index) => (
+                                    <Checkbox
+                                        key={index}
+                                        label={service}
+                                        checked={selectedServices.includes(service)}
+                                        onChange={() => handleServiceToggle(service)}
+                                    />
+                                )) : <p>Нет доступных услуг</p>}
+                            </Group>
+
+                            <Textarea
+                                label="Комментарий"
+                                placeholder="Ваш комментарий"
+                                value={comment}
+                                onChange={(e) => setComment(e.currentTarget.value)}
+                                mt="md"
+                            />
+
+                            <Button onClick={handleBookingSubmit} fullWidth mt="xl">
+                                Записаться
+                            </Button>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
