@@ -8,7 +8,7 @@ dayjs.locale('ru');
 function SchedulePage() {
     const { telegramId } = useParams();
     const role = localStorage.getItem('userRole');
-    const specialistServices = localStorage.getItem('specialistServices');
+    const [parsedServices, setParsedServices] = useState(null);
     const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedDates, setSelectedDates] = useState([]);
@@ -53,7 +53,11 @@ function SchedulePage() {
                     if (response.ok) {
                         const data = await response.json();
                         setTimeSlots(sortTimeSlots(data));
-                        console.log(localStorage.getItem('specialistServices'));
+
+                        const servicesFromStorage = localStorage.getItem('specialistServices');
+                        if (servicesFromStorage) {
+                            setParsedServices(JSON.parse(servicesFromStorage));
+                        }
                     }
                 }
             } catch (error) {
@@ -323,8 +327,8 @@ function SchedulePage() {
                         <div>
                             <h2>Выберите услуги</h2>
                             <div>
-                                {specialistServices                                    
-                                    ? Object.entries(specialistServices).map(([serviceName, serviceData]) => (
+                                {parsedServices
+                                    ? Object.entries(parsedServices).map(([serviceName, serviceData]) => (
                                         <label key={serviceName}>
                                             <input
                                                 type="checkbox"
