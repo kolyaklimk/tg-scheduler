@@ -19,7 +19,6 @@ function App() {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.disableVerticalSwipes();
             setIsTelegramReady(true);
-            console.log("0");
         }
     }, []);
 
@@ -27,7 +26,6 @@ function App() {
         if (isTelegramReady) {
             const id = window.Telegram.WebApp.initDataUnsafe?.user?.id;
             setTelegramId(id);
-            console.log("1");
         }
     }, [isTelegramReady]);
 
@@ -35,7 +33,6 @@ function App() {
     useEffect(() => {
         if (isTelegramReady && telegramId) {
             fetchUser();
-            console.log("2");
         }
     }, [isTelegramReady, telegramId]);
 

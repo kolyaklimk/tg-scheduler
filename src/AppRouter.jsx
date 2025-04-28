@@ -20,9 +20,6 @@ function AppRouter({ telegramId, role, profileLink, apiUrl, isFetchReady, setRol
 
     useEffect(() => {
         if (isFetchReady) {
-            console.log("3");
-            console.log(telegramId);
-            console.log("3");
             const parsedQuery = qs.parse(location.search);
             const startAppValue = parsedQuery.tgWebAppStartParam;
 
@@ -42,12 +39,8 @@ function AppRouter({ telegramId, role, profileLink, apiUrl, isFetchReady, setRol
                 const response = await fetch(`${apiUrl}/User/UpdateUserAndSetClientRole?telegramId=${userTelegramId}`, {
                     method: 'POST',
                 });
-                console.log("4");
-                console.log(telegramId);
-                console.log("4");
                 const data = await response.json();
                 setRole(data.role);
-                console.log(data.role);
                 localStorage.setItem('userRole', data.role);
                 navigate(`/profile/${specialistTelegramId}`);
             }

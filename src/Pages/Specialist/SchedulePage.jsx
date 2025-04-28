@@ -6,6 +6,7 @@ import 'dayjs/locale/ru';
 dayjs.locale('ru');
 
 function SchedulePage({ telegramId, apiUrl }) {
+    const role = localStorage.getItem('userRole');
     const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedDates, setSelectedDates] = useState([]);
