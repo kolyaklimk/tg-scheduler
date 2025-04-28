@@ -41,8 +41,6 @@ function SchedulePage() {
                         const data = await response.json();
                         setTimeSlots(sortTimeSlots(data));
 
-                        console.log(localStorage.getItem('specialistServices'));
-
                         setEditingSlot(null);
                         setStartTime('');
                         setDescription('');
@@ -55,6 +53,7 @@ function SchedulePage() {
                     if (response.ok) {
                         const data = await response.json();
                         setTimeSlots(sortTimeSlots(data));
+                        console.log(localStorage.getItem('specialistServices'));
                     }
                 }
             } catch (error) {
@@ -307,7 +306,7 @@ function SchedulePage() {
                         </button>
                     ))}
 
-                    {selectedDate && !selectedSlot && (
+                    {selectedDate && (
                         <div>
                             <h2>Выберите время</h2>
                             <div>
