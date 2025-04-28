@@ -28,6 +28,7 @@ function SchedulePage() {
     useEffect(() => {
         const id = window.Telegram.WebApp.initDataUnsafe?.user?.id;
         setUserTelegramId(id);
+        setParsedServices(JSON.parse(localStorage.getItem('specialistServices')));
     }, []);
 
     useEffect(() => {
@@ -53,13 +54,6 @@ function SchedulePage() {
                     if (response.ok) {
                         const data = await response.json();
                         setTimeSlots(sortTimeSlots(data));
-
-                        const servicesFromStorage = localStorage.getItem('specialistServices');
-                        if (servicesFromStorage) {
-                            setParsedServices(JSON.parse(servicesFromStorage));
-                        }
-                        console.log(servicesFromStorage);
-                        console.log(parsedServices);
                     }
                 }
             } catch (error) {
