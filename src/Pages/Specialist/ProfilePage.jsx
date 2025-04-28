@@ -5,6 +5,7 @@ import './ProfilePage.css';
 function ProfilePage() {
     const { telegramId } = useParams();
     const role = localStorage.getItem('userRole');
+    const navigate = useNavigate();
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
     const [contactInfo, setContactInfo] = useState('');
