@@ -39,6 +39,7 @@ function ProfilePage() {
                 localStorage.setItem('specialistServices', data.services);
                 console.log("set local");
                 console.log(data.services);
+                console.log(localStorage.getItem('specialistServices'));
                 console.log("set local");
             } catch (error) {
                 console.error("Error fetching specialist:", error);
