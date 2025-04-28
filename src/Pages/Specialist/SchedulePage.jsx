@@ -58,6 +58,8 @@ function SchedulePage() {
                         if (servicesFromStorage) {
                             setParsedServices(JSON.parse(servicesFromStorage));
                         }
+                        console.log(servicesFromStorage);
+                        console.log(parsedServices);
                     }
                 }
             } catch (error) {
