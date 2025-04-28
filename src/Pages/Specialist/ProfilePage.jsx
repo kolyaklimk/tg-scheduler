@@ -182,7 +182,7 @@ function ProfilePage() {
                     {profileImageUrl && <img src={profileImageUrl} alt="Аватарка специалиста" />}
                 </div>
                 <p>Имя: {name}</p>
-                <button onClick={() => navigate('/schedule')}>Записаться</button> 
+                <button onClick={() => navigate(`/schedule/${telegramId}`)}>Записаться</button> 
                 <p>Описание: {description}</p>
                 <p>Контакты: {contactInfo}</p>
                 <p>Портфолио: <a href={portfolioLink}>{portfolioLink}</a></p>

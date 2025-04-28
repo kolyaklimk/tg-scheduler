@@ -5,7 +5,8 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 dayjs.locale('ru');
 
-function SchedulePage({ telegramId, apiUrl }) {
+function SchedulePage() {
+    const { telegramId } = useParams();
     const role = localStorage.getItem('userRole');
     const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState(null);
@@ -17,6 +18,13 @@ function SchedulePage({ telegramId, apiUrl }) {
     const [status, setStatus] = useState(true);
     const [showTimeSlotForm, setShowTimeSlotForm] = useState(false);
     const [editingSlot, setEditingSlot] = useState(null);
+    const [telegramId, setTelegramId] = useState(null);
+    const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
+    useEffect(() => {
+        const id = window.Telegram.WebApp.initDataUnsafe?.user?.id;
+        setTelegramId(id);
+    }, []);
 
     useEffect(() => {
         const fetchTimeSlots = async () => {
