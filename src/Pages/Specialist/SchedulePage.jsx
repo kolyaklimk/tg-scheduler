@@ -323,14 +323,14 @@ function SchedulePage() {
                             <h2>Выберите услуги</h2>
                             <div>
                                 {specialistServices
-                                    ? JSON.parse(specialistServices).map((service, index) => (
+                                    ? Object.entries(JSON.parse(specialistServices)).map(([serviceName, serviceData], index) => (
                                         <label key={index}>
                                             <input
                                                 type="checkbox"
-                                                checked={selectedServices.includes(service)}
-                                                onChange={() => handleServiceToggle(service)}
+                                                checked={selectedServices.includes(serviceName)}
+                                                onChange={() => handleServiceToggle(serviceName)}
                                             />
-                                            {service}
+                                            {serviceName} — {serviceData.price} руб. / {serviceData.duration} мин
                                         </label>
                                     ))
                                     : <p>Нет доступных услуг</p>}
@@ -350,7 +350,6 @@ function SchedulePage() {
                             </button>
                         </div>
                     )}
-
                 </div>
             )}
         </div>
