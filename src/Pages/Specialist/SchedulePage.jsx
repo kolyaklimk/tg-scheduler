@@ -312,7 +312,7 @@ function SchedulePage() {
 
                     {selectedDate && (
                         <div>
-                            {timeSlots ?
+                            {timeSlots.length ?
                                 <div>
                                     <h2>Выберите время</h2>
                                     <div>
