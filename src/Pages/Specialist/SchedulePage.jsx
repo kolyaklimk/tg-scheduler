@@ -312,26 +312,30 @@ function SchedulePage() {
 
                     {selectedDate && (
                         <div>
-                            <h2>Выберите время</h2>
-                            <div>
-                                {timeSlots.map(slot => (
-                                    <button
-                                        key={slot.id}
-                                        onClick={() => handleSlotClick(slot)}
-                                        style={{
-                                            backgroundColor: selectedSlot?.id === slot.id ? '#4caf50' : '#e0e0e0',
-                                            color: selectedSlot?.id === slot.id ? 'white' : 'black',
-                                            margin: '5px',
-                                            padding: '10px 20px',
-                                            border: 'none',
-                                            borderRadius: '5px',
-                                            cursor: 'pointer'
-                                        }}
-                                    >
-                                        {slot.startTime}
-                                    </button>
-                                ))}
-                            </div>
+                            {timeSlots ? 
+                                <div>
+                                    <h2>Выберите время</h2>
+                                    <div>
+                                        {timeSlots.map(slot => (
+                                            <button
+                                                key={slot.id}
+                                                onClick={() => handleSlotClick(slot)}
+                                                style={{
+                                                    backgroundColor: selectedSlot?.id === slot.id ? '#4caf50' : '#e0e0e0',
+                                                    color: selectedSlot?.id === slot.id ? 'white' : 'black',
+                                                    margin: '5px',
+                                                    padding: '10px 20px',
+                                                    border: 'none',
+                                                    borderRadius: '5px',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                {slot.startTime}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                : <p>В этот день нет свободного времени</p>}
                         </div>
                     )}
 
