@@ -8,8 +8,8 @@ dayjs.locale('ru');
 function SchedulePage() {
     const { telegramId } = useParams();
     const role = localStorage.getItem('userRole');
-    const [parsedServices, setParsedServices] = useState(null);
     const navigate = useNavigate();
+    const [parsedServices, setParsedServices] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedDates, setSelectedDates] = useState([]);
     const [isCreatingImage, setIsCreatingImage] = useState(false);
@@ -165,6 +165,10 @@ function SchedulePage() {
         if (!isCreatingImage) {
             setSelectedDate(date);
             setShowTimeSlotForm(date !== null);
+
+            setSelectedSlot(null);
+            setSelectedServices([]);
+            setComment('');
             return;
         }
 
