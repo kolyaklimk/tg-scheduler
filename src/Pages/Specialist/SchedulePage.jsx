@@ -27,7 +27,7 @@ function SchedulePage() {
 
     useEffect(() => {
         const id = window.Telegram.WebApp.initDataUnsafe?.user?.id;
-        setUserTelegramId(id);
+        setUserTelegramId(str(id));
         setParsedServices(JSON.parse(localStorage.getItem('specialistServices')));
     }, []);
 
@@ -238,7 +238,7 @@ function SchedulePage() {
         };
 
         try {
-            const response = await fetch(`${apiUrl}/Appointments/BookAppointment?timeSlotId=${selectedSlot?.id}`, {
+            const response = await fetch(`${apiUrl}/Appointments/BookAppointment?timeSlotId=${selectedSlot.id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
