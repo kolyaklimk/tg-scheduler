@@ -213,15 +213,18 @@ function SchedulePage() {
 
         const desiredStart = dayjs(`${selectedDate}T${selectedSlot.startTime}`);
         const desiredEnd = desiredStart.add(totalDuration, 'minute');
-        console.log(desiredStart);
-        console.log(desiredEnd);
+        console.log('selectedDate:', selectedDate);
+        console.log('selectedSlot:', selectedSlot);
+
+        console.log('desiredStart:', desiredStart);
+        console.log('desiredEnd:', desiredEnd);
         const hasConflict = timeSlots.some(slot => {
             
             if (slot.status === true || slot.id === selectedSlot.id) return false;
 
             const slotStart = dayjs(`${selectedDate}T${slot.startTime}`);
 
-            console.log(slotStart);
+            console.log('slotStart:', slotStart);
             return desiredStart.isBefore(slotStart) && desiredEnd.isAfter(slotStart);
         });
 
