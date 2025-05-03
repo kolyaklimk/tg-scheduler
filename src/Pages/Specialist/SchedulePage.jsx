@@ -16,7 +16,6 @@ function SchedulePage() {
     const [timeSlots, setTimeSlots] = useState([]);
     const [startTime, setStartTime] = useState('');
     const [description, setDescription] = useState('');
-    const [status, setStatus] = useState(true);
     const [showTimeSlotForm, setShowTimeSlotForm] = useState(false);
     const [editingSlot, setEditingSlot] = useState(null);
     const [userTelegramId, setUserTelegramId] = useState(null);
@@ -44,7 +43,6 @@ function SchedulePage() {
                         setEditingSlot(null);
                         setStartTime('');
                         setDescription('');
-                        setStatus(true);
                     }
                 }
             } catch (error) {
@@ -79,7 +77,7 @@ function SchedulePage() {
                 date: formattedDate,
                 startTime,
                 description,
-                status,
+                status: true,
                 clientId: ""
             };
 
@@ -96,7 +94,6 @@ function SchedulePage() {
 
                 setStartTime('');
                 setDescription('');
-                setStatus(true);
             } else {
                 Telegram.WebApp.showPopup({ message: "Error CreateTimeSlot!" });
             }
@@ -108,7 +105,6 @@ function SchedulePage() {
     const handleUpdateTimeSlot = async (timeSlotId) => {
         try {
             const timeSlotData = {
-                status,
                 description,
                 clientId: ""
             };
@@ -175,7 +171,6 @@ function SchedulePage() {
         setEditingSlot(null);
         setStartTime('');
         setDescription('');
-        setStatus(true);
     };
 
     const sortTimeSlots = (slots) => {
@@ -314,10 +309,6 @@ function SchedulePage() {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
-                    <select value={status} onChange={(e) => setStatus(e.target.value === 'true')}>
-                        <option value="true">Свободно</option>
-                        <option value="false">Занято</option>
-                    </select>
 
                     {editingSlot ? (
                         <>
@@ -350,7 +341,6 @@ function SchedulePage() {
                                             setEditingSlot(slot);
                                             setStartTime(slot.startTime);
                                             setDescription(slot.description);
-                                            setStatus(slot.status);
                                         }}>
                                             Редактировать
                                         </button>
