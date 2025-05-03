@@ -190,13 +190,17 @@ function SchedulePage() {
         setSelectedSlot(slot);
     };
 
-    const handleServiceToggle = (service) => {
-        setSelectedServices((prev) =>
-            prev.includes(service)
-                ? prev.filter((s) => s !== service)
-                : [...prev, service]
-        );
+    const handleServiceToggle = (serviceName) => {
+        const serviceData = parsedServices[serviceName];
+
+        setSelectedServices((prev) => {
+            const exists = prev.find(s => s.name === serviceName);
+            return exists
+                ? prev.filter(s => s.name !== serviceName)
+                : [...prev, { name: serviceName, price: serviceData.price, duration: serviceData.duration }];
+        });
     };
+
 
     const handleBookingSubmit = async () => {
         if (!selectedSlot || selectedServices.length === 0) {
@@ -234,7 +238,7 @@ function SchedulePage() {
         };
 
         try {
-            const response = await fetch(`${apiUrl}/BookAppointment?timeSlotId=${selectedSlot?.id}`, {
+            const response = await fetch(`${apiUrl}/Appointments/BookAppointment?timeSlotId=${selectedSlot?.id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -242,11 +246,10 @@ function SchedulePage() {
                 body: JSON.stringify(appointmentData),
             });
 
-            const result = await response.json();
-            if (result.success) {
+            if (response.ok) {
                 Telegram.WebApp.showPopup({ message: "Бронирование успешно!" });
             } else {
-                Telegram.WebApp.showPopup({ message: result.error || "Ошибка бронирования." });
+                Telegram.WebApp.showPopup({ message: response.json().error || "Ошибка бронирования." });
             }
         } catch (err) {
             console.error(err);
@@ -387,7 +390,7 @@ function SchedulePage() {
                                         <label key={serviceName}>
                                             <input
                                                 type="checkbox"
-                                                checked={selectedServices.includes(serviceName)}
+                                                checked={selectedServices.some(s => s.name === serviceName)}
                                                 onChange={() => handleServiceToggle(serviceName)}
                                             />
                                             {serviceName} — {serviceData.price} руб. / {serviceData.duration} мин
