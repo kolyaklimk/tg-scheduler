@@ -35,25 +35,16 @@ function SchedulePage() {
         const fetchTimeSlots = async () => {
             if (!selectedDate) return;
             try {
-                if (role === "specialist") {
-                    const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
-                    const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        setTimeSlots(sortTimeSlots(data));
-
+                const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
+                const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setTimeSlots(sortTimeSlots(data));
+                    if (role === "specialist") {
                         setEditingSlot(null);
                         setStartTime('');
                         setDescription('');
                         setStatus(true);
-                    }
-                }
-                else if (role === "client") {
-                    const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
-                    const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}&isClient=true`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        setTimeSlots(sortTimeSlots(data));
                     }
                 }
             } catch (error) {
@@ -217,7 +208,7 @@ function SchedulePage() {
         const totalDuration = selectedServices.reduce((sum, service) => sum + service.duration, 0);
 
         const appointmentData = {
-            clientId: userTelegramId, 
+            clientId: userTelegramId,
             masterId: telegramId,
             comment: comment,
             services: selectedServices.map(s => s.name).join(", "),
