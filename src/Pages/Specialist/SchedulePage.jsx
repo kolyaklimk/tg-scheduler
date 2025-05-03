@@ -353,16 +353,24 @@ function SchedulePage() {
                                 {slot.startTime} - {slot.status ? 'Свободно' : 'Занято'} : {slot.description}
 
                                 {slot.status === false && slot.isConfirmed === false ? (
-                                    <button onClick={() => navigate('/')}>
-                                        Ответить на заявку
-                                    </button>
+                                    <div>
+                                        <p><strong>Комментарий:</strong> {slot.comment}</p>
+                                        <p><strong>Услуги:</strong> {slot.services}</p>
+                                        <p><strong>Сумма:</strong> {slot.totalPrice}</p>
+                                            <p><strong>Длительность:</strong> {slot.totalDuration} мин.</p>
+                                        {slot.parent === slot.id && (
+                                            <button onClick={() => navigate('/')}>
+                                                Ответить на заявку
+                                            </button>
+                                        )}
+                                    </div>
+                                    
                                 ) : slot.status === false && slot.isConfirmed === true ? (
                                     <div>
                                         <p><strong>Комментарий:</strong> {slot.comment}</p>
                                         <p><strong>Услуги:</strong> {slot.services}</p>
                                         <p><strong>Сумма:</strong> {slot.totalPrice}</p>
                                             <p><strong>Длительность:</strong> {slot.totalDuration} мин.</p>
-                                            {console.log("slot.parent", slot.parent)} , {console.log("slot.id", slot.id) }
                                         {slot.parent === slot.id && (
                                             <button onClick={() => handleCancelAppointment(slot.id)}>Отменить запись</button>
                                         )}
