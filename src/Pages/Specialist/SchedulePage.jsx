@@ -143,6 +143,34 @@ function SchedulePage() {
         }
     };
 
+
+    const handleCancelAppointment = async (timeSlotId) => {
+        const confirmCancel = window.confirm("Вы уверены, что хотите отменить запись?");
+        if (!confirmCancel) return;
+
+        try {
+            const response = await fetch(`${apiUrl}/Appointments/CancelAppointment?timeSlotId=${timeSlotId}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
+                const updatedResponse = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
+                if (updatedResponse.ok) {
+                    const updatedData = await updatedResponse.json();
+                    setTimeSlots(sortTimeSlots(updatedData));
+                }
+                Telegram.WebApp.showPopup({ message: "Запись успешно отменена." });
+            } else {
+                Telegram.WebApp.showPopup({ message: "Ошибка при отмене записи!" });
+            }
+        } catch (error) {
+            console.error("Ошибка при отмене записи:", error);
+            Telegram.WebApp.showPopup({ message: "Ошибка сети при отмене записи!" });
+        }
+    };
+
+
     const toggleCreateImageMode = () => {
         setIsCreatingImage(prev => !prev);
         setSelectedDates([]);
@@ -209,7 +237,7 @@ function SchedulePage() {
         const desiredStart = dayjs(`${dayjs(selectedDate).format('YYYY-MM-DD')}T${selectedSlot.startTime}`);
         const desiredEnd = desiredStart.add(totalDuration, 'minute');
         const hasConflict = timeSlots.some(slot => {
-            
+
             if (slot.status === true || slot.id === selectedSlot.id) return false;
 
             const slotStart = dayjs(`${dayjs(selectedDate).format('YYYY-MM-DD')}T${slot.startTime}`);
@@ -254,7 +282,7 @@ function SchedulePage() {
             }
         } catch (err) {
             console.error(err);
-            Telegram.WebApp.showPopup({ message: "Ошибка при отправке запроса."});
+            Telegram.WebApp.showPopup({ message: "Ошибка при отправке запроса." });
         }
     };
 
@@ -334,24 +362,26 @@ function SchedulePage() {
                                         <p><strong>Услуги:</strong> {slot.services}</p>
                                         <p><strong>Сумма:</strong> {slot.totalPrice}</p>
                                         <p><strong>Длительность:</strong> {slot.totalDuration} мин.</p>
+                                        {slot.parent === slot.id && (
+                                            <button onClick={() => handleCancelAppointment(slot.id)}>Отменить запись</button>
+                                        )}
                                     </div>
                                 ) : (
                                     <>
-                                        <button onClick={() => {
-                                            setEditingSlot(slot);
-                                            setStartTime(slot.startTime);
-                                            setDescription(slot.description);
-                                        }}>
-                                            Редактировать
-                                        </button>
                                         <button onClick={() => handleDeleteTimeSlot(slot.id)}>Удалить</button>
                                     </>
                                 )}
+
+                                <button onClick={() => {
+                                    setEditingSlot(slot);
+                                    setStartTime(slot.startTime);
+                                    setDescription(slot.description);
+                                }}>
+                                    Редактировать
+                                </button>
                             </li>
                         ))}
                     </ul>
-
-
                 </div>
             )}
 
