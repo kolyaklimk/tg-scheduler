@@ -122,7 +122,7 @@ function SchedulePage() {
                 clientId: ""
             };
 
-            const response = await fetch(`${apiUrl}/Schedule/UpdateTimeSlot?telegramId=${telegramId}&timeSlotId=${timeSlotId}`, {
+            const response = await fetch(`${apiUrl}/Schedule/UpdateTimeSlot?timeSlotId=${timeSlotId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(timeSlotData)
@@ -141,7 +141,7 @@ function SchedulePage() {
 
     const handleDeleteTimeSlot = async (timeSlotId) => {
         try {
-            const response = await fetch(`${apiUrl}/Schedule/DeleteTimeSlot?telegramId=${telegramId}&timeSlotId=${timeSlotId}`, {
+            const response = await fetch(`${apiUrl}/Schedule/DeleteTimeSlot?timeSlotId=${timeSlotId}`, {
                 method: 'DELETE',
             });
 
@@ -207,15 +207,46 @@ function SchedulePage() {
         );
     };
 
-    const handleBookingSubmit = () => {
-        console.log('Бронирование:');
-        console.log('Выбранный слот:', selectedSlot);
-        console.log('Выбранные услуги:', selectedServices);
-        console.log('Комментарий клиента:', comment);
+    const handleBookingSubmit = async () => {
+        if (!selectedSlot || selectedServices.length === 0) {
+            Telegram.WebApp.showPopup({ message: "Выберите слот и хотя бы одну услугу!" });
+            return;
+        }
 
-        Telegram.WebApp.showPopup({ message: "Запрос на бронирование отправлен!" });
+        const totalPrice = selectedServices.reduce((sum, service) => sum + service.price, 0);
+        const totalDuration = selectedServices.reduce((sum, service) => sum + service.duration, 0); // в минутах
 
-        // Здесь потом будет реальный запрос на сервер
+        const appointmentData = {
+            clientId: userTelegramId, 
+            masterId: telegramId,
+            comment: comment,
+            services: selectedServices.map(s => s.name).join(", "),
+            totalPrice,
+            totalDuration,
+            startTime: selectedSlot.startTime,
+            date: dayjs(selectedDate).format('YYYY-MM-DD'),
+            slotId: selectedSlot.id,
+        };
+
+        try {
+            const response = await fetch(`${apiUrl}/BookAppointment`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(appointmentData),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                Telegram.WebApp.showPopup({ message: "Бронирование успешно!" });
+            } else {
+                Telegram.WebApp.showPopup({ message: result.error || "Ошибка бронирования." });
+            }
+        } catch (err) {
+            console.error(err);
+            Telegram.WebApp.showPopup({ message: "Ошибка при отправке запроса." });
+        }
     };
 
     return (
