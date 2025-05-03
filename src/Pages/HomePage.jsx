@@ -1,5 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ru';
 
 function HomePage({ role, telegramId }) {
     const [activeAppointments, setActiveAppointments] = useState([]);
