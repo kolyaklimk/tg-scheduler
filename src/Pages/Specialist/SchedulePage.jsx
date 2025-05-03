@@ -222,7 +222,7 @@ function SchedulePage() {
 
         const appointmentData = {
             clientId: userTelegramId,
-            masterId: telegramId,
+            specialistId: telegramId,
             comment: comment,
             services: selectedServices.map(s => s.name).join(", "),
             totalPrice,
