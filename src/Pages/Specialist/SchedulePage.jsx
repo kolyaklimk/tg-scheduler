@@ -234,7 +234,7 @@ function SchedulePage() {
         };
 
         try {
-            const response = await fetch(`${apiUrl}/BookAppointment?timeSlotId=${timeSlotId}`, {
+            const response = await fetch(`${apiUrl}/BookAppointment?timeSlotId=${selectedSlot?.id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
