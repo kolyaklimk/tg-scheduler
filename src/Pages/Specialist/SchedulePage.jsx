@@ -333,11 +333,17 @@ function SchedulePage() {
                             <li key={slot.id}>
                                 {slot.startTime} - {slot.status ? 'Свободно' : 'Занято'} : {slot.description}
 
-                                {(slot.status === false && slot.isConfirmed === false) ? (
-                                    
+                                {slot.status === false && slot.isConfirmed === false ? (
                                     <button onClick={() => navigate('/')}>
                                         Ответить на заявку
                                     </button>
+                                ) : slot.status === false && slot.isConfirmed === true ? (
+                                    <div>
+                                        <p><strong>Комментарий:</strong> {slot.comment}</p>
+                                        <p><strong>Услуги:</strong> {slot.services}</p>
+                                        <p><strong>Сумма:</strong> {slot.totalPrice}</p>
+                                        <p><strong>Длительность:</strong> {slot.totalDuration} мин.</p>
+                                    </div>
                                 ) : (
                                     <>
                                         <button onClick={() => {
@@ -354,6 +360,7 @@ function SchedulePage() {
                             </li>
                         ))}
                     </ul>
+
 
                 </div>
             )}
