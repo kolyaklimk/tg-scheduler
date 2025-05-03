@@ -171,6 +171,33 @@ function SchedulePage() {
     };
 
 
+    const handleConfirmAppointment = async (timeSlotId) => {
+        const confirmAction = window.confirm("Вы уверены, что хотите подтвердить запись?");
+        if (!confirmAction) return;
+
+        try {
+            const response = await fetch(`${apiUrl}/Appointments/ConfirmAppointment?timeSlotId=${timeSlotId}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
+                const updatedResponse = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
+                if (updatedResponse.ok) {
+                    const updatedData = await updatedResponse.json();
+                    setTimeSlots(sortTimeSlots(updatedData));
+                }
+                Telegram.WebApp.showPopup({ message: "Запись успешно подтверждена." });
+            } else {
+                Telegram.WebApp.showPopup({ message: "Ошибка при подтверждении записи!" });
+            }
+        } catch (error) {
+            console.error("Ошибка при подтверждении записи:", error);
+            Telegram.WebApp.showPopup({ message: "Ошибка сети при подтверждении записи!" });
+        }
+    };
+
+
     const toggleCreateImageMode = () => {
         setIsCreatingImage(prev => !prev);
         setSelectedDates([]);
@@ -357,20 +384,21 @@ function SchedulePage() {
                                         <p><strong>Комментарий:</strong> {slot.comment}</p>
                                         <p><strong>Услуги:</strong> {slot.services}</p>
                                         <p><strong>Сумма:</strong> {slot.totalPrice}</p>
-                                            <p><strong>Длительность:</strong> {slot.totalDuration} мин.</p>
+                                        <p><strong>Длительность:</strong> {slot.totalDuration} мин.</p>
                                         {slot.parent === slot.id && (
-                                            <button onClick={() => navigate('/')}>
-                                                Ответить на заявку
-                                            </button>
+                                            <div>
+                                                <button onClick={() => handleConfirmAppointment(slot.id)}>Подтвердить</button>
+                                                <button onClick={() => handleCancelAppointment(slot.id)}>Отменить</button>
+                                            </div>
                                         )}
                                     </div>
-                                    
+
                                 ) : slot.status === false && slot.isConfirmed === true ? (
                                     <div>
                                         <p><strong>Комментарий:</strong> {slot.comment}</p>
                                         <p><strong>Услуги:</strong> {slot.services}</p>
                                         <p><strong>Сумма:</strong> {slot.totalPrice}</p>
-                                            <p><strong>Длительность:</strong> {slot.totalDuration} мин.</p>
+                                        <p><strong>Длительность:</strong> {slot.totalDuration} мин.</p>
                                         {slot.parent === slot.id && (
                                             <button onClick={() => handleCancelAppointment(slot.id)}>Отменить запись</button>
                                         )}
