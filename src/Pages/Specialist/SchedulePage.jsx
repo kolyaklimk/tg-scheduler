@@ -207,6 +207,19 @@ function SchedulePage() {
         const totalPrice = selectedServices.reduce((sum, service) => sum + service.price, 0);
         const totalDuration = selectedServices.reduce((sum, service) => sum + service.duration, 0);
 
+        const desiredStart = dayjs(`${selectedDate}T${selectedSlot.startTime}`);
+        const desiredEnd = desiredStart.add(totalDuration, 'minute');
+
+        const hasConflict = timeSlots.some(slot => {
+            const slotStart = dayjs(`${selectedDate}T${slot.startTime}`);
+            return desiredStart.isBefore(slotStart) && desiredEnd.isAfter(slotStart) && slot.status === false;
+        });
+
+        if (hasConflict) {
+            Telegram.WebApp.showPopup({ message: "Во время желаемой услуги уже есть записи" });
+            return;
+        }
+
         const appointmentData = {
             clientId: userTelegramId,
             masterId: telegramId,
@@ -333,23 +346,31 @@ function SchedulePage() {
                                 <div>
                                     <h2>Выберите время</h2>
                                     <div>
-                                        {timeSlots.filter(slot => slot.status).map(slot => (
-                                            <button
-                                                key={slot.id}
-                                                onClick={() => handleSlotClick(slot)}
-                                                style={{
-                                                    backgroundColor: selectedSlot?.id === slot.id ? '#4caf50' : '#e0e0e0',
-                                                    color: selectedSlot?.id === slot.id ? 'white' : 'black',
-                                                    margin: '5px',
-                                                    padding: '10px 20px',
-                                                    border: 'none',
-                                                    borderRadius: '5px',
-                                                    cursor: 'pointer'
-                                                }}
-                                            >
-                                                {slot.startTime}
-                                            </button>
-                                        ))}
+                                        {timeSlots.map(slot => {
+                                            const isSelected = selectedSlot?.id === slot.id;
+                                            const isDisabled = slot.status === false;
+
+                                            return (
+                                                <button
+                                                    key={slot.id}
+                                                    onClick={() => handleSlotClick(slot)}
+                                                    disabled={isDisabled}
+                                                    style={{
+                                                        backgroundColor: isSelected ? '#4caf50' : '#e0e0e0',
+                                                        color: isSelected ? 'white' : 'black',
+                                                        margin: '5px',
+                                                        padding: '10px 20px',
+                                                        border: 'none',
+                                                        borderRadius: '5px',
+                                                        cursor: isDisabled ? 'not-allowed' : 'pointer',
+                                                        textDecoration: isDisabled ? 'line-through' : 'none',
+                                                        opacity: isDisabled ? 0.5 : 1,
+                                                    }}
+                                                >
+                                                    {slot.startTime}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                                 : <p>В этот день нет свободного времени</p>}
