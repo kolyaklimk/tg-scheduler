@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 
-function HomePage({ role, telegramId }) {
+function HomePage({ role, telegramId, apiUrl }) {
     const [activeAppointments, setActiveAppointments] = useState([]);
     const currentDate = dayjs().format('YYYY-MM-DD');
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ function HomePage({ role, telegramId }) {
                 <div>
                     <h2>Ваши активные записи</h2>
                     {activeAppointments.length === 0 ? (
-                        <p>Нет активных записей на выбранную дату.</p>
+                        <p>Нет активных записей</p>
                     ) : (
                         activeAppointments.map((appointment, index) => (
                             <div key={index}>
