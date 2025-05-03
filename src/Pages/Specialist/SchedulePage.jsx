@@ -335,7 +335,7 @@ function SchedulePage() {
 
                                 {(slot.status === false && slot.isConfirmed === false) ? (
                                     
-                                    <button onClick={() => window.location.href = '/'}>
+                                    <button onClick={() => navigate('/')}>
                                         Ответить на заявку
                                     </button>
                                 ) : (
