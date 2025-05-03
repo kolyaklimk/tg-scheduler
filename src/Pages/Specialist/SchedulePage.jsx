@@ -332,18 +332,29 @@ function SchedulePage() {
                         {timeSlots.map((slot) => (
                             <li key={slot.id}>
                                 {slot.startTime} - {slot.status ? 'Свободно' : 'Занято'} : {slot.description}
-                                <button onClick={() => {
-                                    setEditingSlot(slot);
-                                    setStartTime(slot.startTime);
-                                    setDescription(slot.description);
-                                    setStatus(slot.status);
-                                }}>
-                                    Редактировать
-                                </button>
-                                <button onClick={() => handleDeleteTimeSlot(slot.id)}>Удалить</button>
+
+                                {(slot.status === false && slot.isConfirmed === false) ? (
+                                    
+                                    <button onClick={() => window.location.href = '/'}>
+                                        Ответить на заявку
+                                    </button>
+                                ) : (
+                                    <>
+                                        <button onClick={() => {
+                                            setEditingSlot(slot);
+                                            setStartTime(slot.startTime);
+                                            setDescription(slot.description);
+                                            setStatus(slot.status);
+                                        }}>
+                                            Редактировать
+                                        </button>
+                                        <button onClick={() => handleDeleteTimeSlot(slot.id)}>Удалить</button>
+                                    </>
+                                )}
                             </li>
                         ))}
                     </ul>
+
                 </div>
             )}
 
