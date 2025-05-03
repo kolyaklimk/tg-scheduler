@@ -35,7 +35,7 @@ function HomePage({ role, telegramId }) {
 
             {role === 'client' ? (
                 <div>
-                    <h2>Ваши активные записи на {selectedDate}</h2>
+                    <h2>Ваши активные записи</h2>
                     {activeAppointments.length === 0 ? (
                         <p>Нет активных записей на выбранную дату.</p>
                     ) : (
