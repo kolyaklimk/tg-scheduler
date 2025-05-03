@@ -27,7 +27,7 @@ function SchedulePage() {
 
     useEffect(() => {
         const id = window.Telegram.WebApp.initDataUnsafe?.user?.id;
-        setUserTelegramId(str(id));
+        setUserTelegramId(String(id));
         setParsedServices(JSON.parse(localStorage.getItem('specialistServices')));
     }, []);
 
