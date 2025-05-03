@@ -327,12 +327,6 @@ function SchedulePage() {
 
             {role === "client" && (
                 <div>
-                    {timeSlots.filter(slot => !slot.status).map(slot => (
-                        <button key={slot.id}>
-                            {slot.startTime}
-                        </button>
-                    ))}
-
                     {selectedDate && (
                         <div>
                             {timeSlots.length ?
