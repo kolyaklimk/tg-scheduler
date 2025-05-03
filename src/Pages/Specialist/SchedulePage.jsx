@@ -333,7 +333,7 @@ function SchedulePage() {
                                 <div>
                                     <h2>Выберите время</h2>
                                     <div>
-                                        {timeSlots.map(slot => (
+                                        {timeSlots.filter(slot => slot.status).map(slot => (
                                             <button
                                                 key={slot.id}
                                                 onClick={() => handleSlotClick(slot)}
