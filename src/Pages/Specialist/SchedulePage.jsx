@@ -213,11 +213,19 @@ function SchedulePage() {
 
         const desiredStart = dayjs(`${selectedDate}T${selectedSlot.startTime}`);
         const desiredEnd = desiredStart.add(totalDuration, 'minute');
-
+        console.log(desiredStart);
+        console.log(desiredEnd);
         const hasConflict = timeSlots.some(slot => {
+            
+            if (slot.status === true || slot.id === selectedSlot.id) return false;
+
             const slotStart = dayjs(`${selectedDate}T${slot.startTime}`);
-            return desiredStart.isBefore(slotStart) && desiredEnd.isAfter(slotStart) && slot.status === false;
+
+            console.log(slotStart);
+            return desiredStart.isBefore(slotStart) && desiredEnd.isAfter(slotStart);
         });
+
+
 
         if (hasConflict) {
             Telegram.WebApp.showPopup({ message: "Во время желаемой услуги уже есть записи" });
@@ -249,11 +257,11 @@ function SchedulePage() {
             if (response.ok) {
                 Telegram.WebApp.showPopup({ message: "Бронирование успешно!" });
             } else {
-                Telegram.WebApp.showPopup({ message: response.json().error || "Ошибка бронирования." });
+                Telegram.WebApp.showPopup({ message: "Ошибка бронирования." });
             }
         } catch (err) {
             console.error(err);
-            Telegram.WebApp.showPopup({ message: "Ошибка при отправке запроса." });
+            Telegram.WebApp.showPopup({ message: "Ошибка при отправке запроса."});
         }
     };
 
