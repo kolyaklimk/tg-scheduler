@@ -222,7 +222,7 @@ function SchedulePage() {
             
             if (slot.status === true || slot.id === selectedSlot.id) return false;
 
-            const slotStart = dayjs(`${selectedDate}T${slot.startTime}`);
+            const slotStart = dayjs(`${dayjs(selectedDate).format('YYYY-MM-DD')}T${slot.startTime}`);
 
             console.log('slotStart:', slotStart);
             return desiredStart.isBefore(slotStart) && desiredEnd.isAfter(slotStart);
