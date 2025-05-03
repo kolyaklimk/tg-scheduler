@@ -361,7 +361,8 @@ function SchedulePage() {
                                         <p><strong>Комментарий:</strong> {slot.comment}</p>
                                         <p><strong>Услуги:</strong> {slot.services}</p>
                                         <p><strong>Сумма:</strong> {slot.totalPrice}</p>
-                                        <p><strong>Длительность:</strong> {slot.totalDuration} мин.</p>
+                                            <p><strong>Длительность:</strong> {slot.totalDuration} мин.</p>
+                                            {console.log("slot.parent", slot.parent)} , {console.log("slot.id", slot.id) }
                                         {slot.parent === slot.id && (
                                             <button onClick={() => handleCancelAppointment(slot.id)}>Отменить запись</button>
                                         )}
