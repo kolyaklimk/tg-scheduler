@@ -211,7 +211,7 @@ function SchedulePage() {
         const totalPrice = selectedServices.reduce((sum, service) => sum + service.price, 0);
         const totalDuration = selectedServices.reduce((sum, service) => sum + service.duration, 0);
 
-        const desiredStart = dayjs(`${selectedDate}T${selectedSlot.startTime}`);
+        const desiredStart = dayjs(`${dayjs(selectedDate).format('YYYY-MM-DD')}T${selectedSlot.startTime}`);
         const desiredEnd = desiredStart.add(totalDuration, 'minute');
         console.log('selectedDate:', selectedDate);
         console.log('selectedSlot:', selectedSlot);
