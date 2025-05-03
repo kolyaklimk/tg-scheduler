@@ -214,7 +214,7 @@ function SchedulePage() {
         }
 
         const totalPrice = selectedServices.reduce((sum, service) => sum + service.price, 0);
-        const totalDuration = selectedServices.reduce((sum, service) => sum + service.duration, 0); // в минутах
+        const totalDuration = selectedServices.reduce((sum, service) => sum + service.duration, 0);
 
         const appointmentData = {
             clientId: userTelegramId, 
@@ -225,11 +225,12 @@ function SchedulePage() {
             totalDuration,
             startTime: selectedSlot.startTime,
             date: dayjs(selectedDate).format('YYYY-MM-DD'),
-            slotId: selectedSlot.id,
+            status: false,
+            isConfirmed: false,
         };
 
         try {
-            const response = await fetch(`${apiUrl}/BookAppointment`, {
+            const response = await fetch(`${apiUrl}/BookAppointment?timeSlotId=${timeSlotId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
