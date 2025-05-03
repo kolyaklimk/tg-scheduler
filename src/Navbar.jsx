@@ -23,7 +23,6 @@ function Navbar({ role, telegramId }) {
                     <>
                         <option value={`/profile/${telegramId}`}>Профиль</option>
                         <option value={`/schedule/${telegramId}`}>Расписание</option>
-                        <option value="/appointments">Записи</option>
                         <option value="/archive">Архив</option>
                         <option value="/subscription">Подписка</option>
                         <option value="/profile-link">Ссылка на профиль</option>

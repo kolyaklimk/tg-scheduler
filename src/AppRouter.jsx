@@ -5,7 +5,6 @@ import HomePage from "./Pages/HomePage";
 import BookAppointmentPage from "./Pages/Client/BookAppointmentPage";
 import ProfilePage from "./Pages/Specialist/ProfilePage";
 import SchedulePage from "./Pages/Specialist/SchedulePage";
-import AppointmentsPage from "./Pages/Specialist/AppointmentsPage";
 import SubscriptionPage from "./Pages/Specialist/SubscriptionPage";
 import ProfileLinkPage from "./Pages/Specialist/ProfileLinkPage";
 import GenerateImagePage from "./Pages/Specialist/GenerateImagePage";
@@ -70,7 +69,7 @@ function AppRouter({ telegramId, role, profileLink, apiUrl, isFetchReady, setRol
             {role === null || role === "" ? (
                 <Route path="/" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
             ) : (
-                <Route path="/" element={<HomePage role={role} />} />
+                    <Route path="/" element={<HomePage role={role} apiUrl={apiUrl} telegramId={telegramId} />} />
             )}
 
             <Route path="/change-role" element={<RoleSelectionPage onRoleChange={handleRoleChange} />} />
@@ -78,7 +77,6 @@ function AppRouter({ telegramId, role, profileLink, apiUrl, isFetchReady, setRol
             <Route path="/book-appointment" element={<BookAppointmentPage telegramId={telegramId} apiUrl={apiUrl} />} />
             <Route path="/profile/:telegramId" element={<ProfilePage />} />
             <Route path="/schedule/:telegramId" element={<SchedulePage />} />
-            <Route path="/appointments" element={<AppointmentsPage />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/profile-link" element={<ProfileLinkPage profileLink={profileLink} />} />
             <Route path="/generate-image" element={<GenerateImagePage />} />
