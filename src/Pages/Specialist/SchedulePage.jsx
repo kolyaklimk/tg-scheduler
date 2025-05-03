@@ -213,18 +213,12 @@ function SchedulePage() {
 
         const desiredStart = dayjs(`${dayjs(selectedDate).format('YYYY-MM-DD')}T${selectedSlot.startTime}`);
         const desiredEnd = desiredStart.add(totalDuration, 'minute');
-        console.log('selectedDate:', selectedDate);
-        console.log('selectedSlot:', selectedSlot);
-
-        console.log('desiredStart:', desiredStart);
-        console.log('desiredEnd:', desiredEnd);
         const hasConflict = timeSlots.some(slot => {
             
             if (slot.status === true || slot.id === selectedSlot.id) return false;
 
             const slotStart = dayjs(`${dayjs(selectedDate).format('YYYY-MM-DD')}T${slot.startTime}`);
 
-            console.log('slotStart:', slotStart);
             return desiredStart.isBefore(slotStart) && desiredEnd.isAfter(slotStart);
         });
 
@@ -259,6 +253,7 @@ function SchedulePage() {
 
             if (response.ok) {
                 Telegram.WebApp.showPopup({ message: "Бронирование успешно!" });
+                navigate('/');
             } else {
                 Telegram.WebApp.showPopup({ message: "Ошибка бронирования." });
             }
