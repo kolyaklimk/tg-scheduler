@@ -134,7 +134,7 @@ function SchedulePage() {
 
             if (response.ok) {
                 const updatedTimeSlots = timeSlots.filter(slot => slot.id !== timeSlotId);
-                setTimeSlots(sortTimeSlots(updatedTimeSlots));
+                setTimeSlots(updatedTimeSlots);
             } else {
                 Telegram.WebApp.showPopup({ message: "Error deleting time slot!" });
             }
