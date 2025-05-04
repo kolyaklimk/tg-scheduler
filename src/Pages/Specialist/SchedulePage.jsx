@@ -280,6 +280,7 @@ function SchedulePage() {
         }
 
         const appointmentData = {
+            usernameClient: window.Telegram.WebApp.initDataUnsafe?.user?.username,
             clientId: userTelegramId,
             specialistId: telegramId,
             comment: comment,

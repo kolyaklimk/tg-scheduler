@@ -62,6 +62,15 @@ function ArchivePage({ telegramId, role, apiUrl }) {
                         <p><strong>Комментарий:</strong> {appointment.comment}</p>
                         <p><strong>Сумма:</strong> {appointment.totalPrice}</p>
                         <p><strong>Длительность:</strong> {appointment.totalDuration} мин.</p>
+                        {role === "specialist" && (
+                            <div>
+                                <p><strong>Описание:</strong> {appointment.description}</p>
+                                <button onClick={() => window.open(`https://t.me/${appointment.usernameClient}`, '_blank')}
+                                >
+                                    Клиент
+                                </button>
+                            </div>
+                        )}
                         {role === "client" && (
                             <button
                                 onClick={() => navigate(`/profile/${appointment.specialistId}`)}
