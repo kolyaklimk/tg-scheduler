@@ -58,7 +58,7 @@ function ArchivePage({ telegramId, role, apiUrl }) {
             ) : (
                 archive.map((appointment, index) => (
                     <div key={index}>
-                        <h3>Дата: {appointment.date}</h3>
+                        <h3>Дата: {appointment.date}, {appointment.startTime}</h3>
                         <p><strong>Услуга:</strong> {appointment.services}</p>
                         <p><strong>Комментарий:</strong> {appointment.comment}</p>
                         <p><strong>Сумма:</strong> {appointment.totalPrice}</p>
