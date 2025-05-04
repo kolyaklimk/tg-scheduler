@@ -23,7 +23,7 @@ function ArchivePage({ telegramId, role, apiUrl }) {
                 lastDocId: lastDocId || ''
             });
 
-            const response = await fetch(`${apiUrl}/Appointment/GetArchiveAppointments?${params.toString()}`);
+            const response = await fetch(`${apiUrl}/Appointments/GetArchiveAppointments?${params.toString()}`);
 
             if (response.ok) {
                 const data = await response.json();
