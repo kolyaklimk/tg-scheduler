@@ -11,12 +11,17 @@ function HomePage({ role, telegramId, apiUrl }) {
     useEffect(() => {
         const fetchActiveAppointments = async () => {
             try {
-                const response = await fetch(`${apiUrl}/Appointments/GetActiveAppointments?telegramId=${telegramId}&date=${currentDate}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setActiveAppointments(data);
-                } else {
-                    console.error("Ошибка при получении активных записей");
+                if (role === "client") {
+                    const response = await fetch(`${apiUrl}/Appointments/GetActiveAppointments?telegramId=${telegramId}&date=${currentDate}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setActiveAppointments(data);
+                    } else {
+                        console.error("Ошибка при получении активных записей");
+                    }
+                }
+                if (role === "specialist") {
+
                 }
             } catch (error) {
                 console.error("Ошибка сети при получении активных записей:", error);
