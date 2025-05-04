@@ -19,7 +19,7 @@ function ArchivePage({ telegramId, role, apiUrl }) {
                 telegramId,
                 isSpecialist: role === "specialist",
                 currentDate: dayjs().format('YYYY-MM-DD'),
-                pageSize: 20,
+                pageSize: 2,
                 lastDocId: lastDocId || ''
             });
 
