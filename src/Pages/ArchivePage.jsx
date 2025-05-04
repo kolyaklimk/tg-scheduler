@@ -81,10 +81,14 @@ function ArchivePage({ telegramId, role, apiUrl }) {
                     </div>
                 ))
             )}
-            {hasMore && (
+            {hasMore ? (
                 <button onClick={fetchArchive} disabled={loading}>
                     {loading ? 'Загрузка...' : 'Загрузить ещё'}
                 </button>
+            ) : (
+                    <div>
+                        <p>Больше записей нет</p>
+                    </div>
             )}
         </div>
     );
