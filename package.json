@@ -13,6 +13,7 @@
     "@mantine/core": "^7.17.4",
     "@mantine/dates": "^7.17.4",
     "@mantine/hooks": "^7.17.4",
+    "@tabler/icons-react": "^3.31.0",
     "dayjs": "^1.11.13",
     "query-string": "^9.1.1",
     "react": "^19.0.0",
