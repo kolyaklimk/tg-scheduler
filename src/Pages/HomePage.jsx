@@ -123,12 +123,8 @@ function HomePage({ role, telegramId, apiUrl }) {
                                 <button onClick={() => window.open(`https://t.me/${slot.usernameClient}`, '_blank')} >
                                     Клиент
                                 </button>
-                                {slot.parent === slot.id && (
-                                    <div>
-                                        <button onClick={() => handleConfirmAppointment(slot.id)}>Подтвердить</button>
-                                        <button onClick={() => handleCancelAppointment(slot.id)}>Отменить</button>
-                                    </div>
-                                )}
+                                <button onClick={() => handleConfirmAppointment(slot.id)}>Подтвердить</button>
+                                <button onClick={() => handleCancelAppointment(slot.id)}>Отменить</button>
                             </div>
                         ))
                     )}
