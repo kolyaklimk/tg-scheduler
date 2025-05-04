@@ -1,5 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ru';
 
 function ArchivePage({ telegramId, role, apiUrl }) {
     const [archive, setArchive] = useState([]);
@@ -16,7 +18,7 @@ function ArchivePage({ telegramId, role, apiUrl }) {
             const params = new URLSearchParams({
                 telegramId,
                 isSpecialist: role === "specialist",
-                currentDate: new Date().toISOString(),
+                currentDate: dayjs().format('YYYY-MM-DD'),
                 pageSize: 20,
                 lastDocId: lastDocId || ''
             });
