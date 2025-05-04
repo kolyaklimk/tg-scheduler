@@ -38,7 +38,7 @@ function SchedulePage() {
                 const response = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setTimeSlots(sortTimeSlots(data));
+                    setTimeSlots(data);
                     if (role === "specialist") {
                         setEditingSlot(null);
                         setStartTime('');
@@ -158,7 +158,7 @@ function SchedulePage() {
                 const updatedResponse = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
                 if (updatedResponse.ok) {
                     const updatedData = await updatedResponse.json();
-                    setTimeSlots(sortTimeSlots(updatedData));
+                    setTimeSlots(updatedData);
                 }
                 Telegram.WebApp.showPopup({ message: "Запись успешно отменена." });
             } else {
@@ -185,7 +185,7 @@ function SchedulePage() {
                 const updatedResponse = await fetch(`${apiUrl}/Schedule/GetSchedule?telegramId=${telegramId}&date=${formattedDate}`);
                 if (updatedResponse.ok) {
                     const updatedData = await updatedResponse.json();
-                    setTimeSlots(sortTimeSlots(updatedData));
+                    setTimeSlots(updatedData);
                 }
                 Telegram.WebApp.showPopup({ message: "Запись успешно подтверждена." });
             } else {
