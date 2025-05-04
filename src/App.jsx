@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 // import './Navbar.css'; // Remove this import
 import AppRouter from "./AppRouter";
 import '@mantine/core/styles.css'; // Ensure Mantine base styles are imported
+import '@mantine/dates/styles.css';
 
 function App() {
     const [role, setRole] = useState(localStorage.getItem('userRole') || null);
