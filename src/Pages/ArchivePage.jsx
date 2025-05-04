@@ -30,10 +30,9 @@ function ArchivePage({ telegramId, role, apiUrl }) {
 
                 if (data.length < pageSize) {
                     setHasMore(false);
-                } else {
-                    setArchive(prev => [...prev, ...data]);
-                    setLastDocId(data[data.length - 1].id);
                 }
+                setArchive(prev => [...prev, ...data]);
+                setLastDocId(data[data.length - 1].id);
             } else {
                 console.error("Ошибка при получении архива записей");
             }
