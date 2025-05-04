@@ -347,49 +347,37 @@ function SchedulePage() {
                 )}
 
 
-                {/* Date Picker - Full Width using 'styles' prop */}
-                <DatePicker
-                    locale="ru"
-                    multiple={isCreatingImage}
-                    value={isCreatingImage ? selectedDates : selectedDate}
-                    onChange={handleDateClick}
-                    minDate={dayjs().startOf('day').toDate()}
-                    maxDate={dayjs().add(1, 'year').toDate()}
-                    getDayProps={(date) => {
-                        const isSelected = isCreatingImage
-                            ? selectedDates.some(d => dayjs(d).isSame(date, 'day'))
-                            : selectedDate && dayjs(date).isSame(selectedDate, 'day');
-                        return {
-                            style: {
-                                backgroundColor: isSelected ? theme.colors.blue[1] : undefined,
-                                border: isSelected ? `1px solid ${theme.colors.blue[5]}` : '1px solid transparent',
-                                borderRadius: '4px',
-                            },
-                        };
-                    }}
-                    renderDay={(date) => {
-                        const day = date.getDate();
-                        return <div>{day}</div>;
-                    }}
-                    // --- Используем styles для воздействия на внутренние части ---
-                    styles={{
-                        // Применяем стиль к корневому элементу DatePicker
-                        root: {
-                            width: '100%',
-                        },
-                        // Важно: Применяем стиль к самой сетке календаря
-                        calendar: {
-                            // Заставляем саму таблицу календаря использовать всю ширину
-                            // Это может растянуть ячейки дней, если контейнер широкий
-                            width: '100%',
-                        },
-                        // Дополнительно можно попробовать повлиять на месяц, если calendar не сработает
-                        // month: {
-                        //     width: '100%',
-                        // }
-                    }}
-                // --- Конец блока styles ---
-                />
+                {/* Date Picker */}
+                <Center>
+                    <DatePicker
+                        locale="ru"
+                        multiple={isCreatingImage}
+                        value={isCreatingImage ? selectedDates : selectedDate}
+                        onChange={handleDateClick}
+                        minDate={dayjs().startOf('day').toDate()} // Start from today
+                        maxDate={dayjs().add(1, 'year').toDate()} // Limit to 1 year ahead
+                        getDayProps={(date) => {
+                            const isSelected = isCreatingImage
+                                ? selectedDates.some(d => dayjs(d).isSame(date, 'day'))
+                                : selectedDate && dayjs(date).isSame(selectedDate, 'day');
+                            return {
+                                style: {
+                                    backgroundColor: isSelected ? theme.colors.blue[1] : undefined,
+                                    // borderRadius: isSelected ? '50%' : undefined, // Make selection circular
+                                    border: isSelected ? `1px solid ${theme.colors.blue[5]}` : '1px solid transparent', // Highlight border
+                                },
+                            };
+                        }}
+                        renderDay={(date) => { // Optional: Custom rendering (e.g., dots for available days - needs backend logic)
+                            const day = date.getDate();
+                            // Add logic here to check if day has slots (would require fetching availability overview)
+                            // const hasSlots = checkAvailabilityFor(date);
+                            return (
+                                <div>{day}</div> // Placeholder
+                            );
+                        }}
+                    />
+                </Center>
 
                 {/* Divider */}
                 {selectedDate && !isCreatingImage && <Divider my="md" />}
