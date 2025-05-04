@@ -347,8 +347,7 @@ function SchedulePage() {
                 )}
 
 
-                {/* Date Picker - Full Width */}
-                {/* Убрали <Center> */}
+                {/* Date Picker - Full Width using 'styles' prop */}
                 <DatePicker
                     locale="ru"
                     multiple={isCreatingImage}
@@ -364,7 +363,7 @@ function SchedulePage() {
                             style: {
                                 backgroundColor: isSelected ? theme.colors.blue[1] : undefined,
                                 border: isSelected ? `1px solid ${theme.colors.blue[5]}` : '1px solid transparent',
-                                borderRadius: '4px', // Optional: consistent rounding
+                                borderRadius: '4px',
                             },
                         };
                     }}
@@ -372,12 +371,25 @@ function SchedulePage() {
                         const day = date.getDate();
                         return <div>{day}</div>;
                     }}
-                    // Добавляем стиль для растягивания на всю ширину
-                    style={{ width: '100%' }}
-                // Альтернатива с использованием Mantine style prop (если работает):
-                // w="100%"
+                    // --- Используем styles для воздействия на внутренние части ---
+                    styles={{
+                        // Применяем стиль к корневому элементу DatePicker
+                        root: {
+                            width: '100%',
+                        },
+                        // Важно: Применяем стиль к самой сетке календаря
+                        calendar: {
+                            // Заставляем саму таблицу календаря использовать всю ширину
+                            // Это может растянуть ячейки дней, если контейнер широкий
+                            width: '100%',
+                        },
+                        // Дополнительно можно попробовать повлиять на месяц, если calendar не сработает
+                        // month: {
+                        //     width: '100%',
+                        // }
+                    }}
+                // --- Конец блока styles ---
                 />
-                {/* </Center> */}
 
                 {/* Divider */}
                 {selectedDate && !isCreatingImage && <Divider my="md" />}
