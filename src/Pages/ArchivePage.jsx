@@ -10,42 +10,41 @@ function ArchivePage({ telegramId, role, apiUrl }) {
     const [hasMore, setHasMore] = useState(true);
     const navigate = useNavigate();
 
+    const fetchArchive = async () => {
+        if (loading || !hasMore) return;
+
+        setLoading(true);
+        try {
+            const params = new URLSearchParams({
+                telegramId,
+                isSpecialist: role === "specialist",
+                currentDate: dayjs().format('YYYY-MM-DD'),
+                pageSize: 20,
+                lastDocId: lastDocId || ''
+            });
+
+            const response = await fetch(`${apiUrl}/Appointment/GetArchiveAppointments?${params.toString()}`);
+
+            if (response.ok) {
+                const data = await response.json();
+
+                if (data.length === 0) {
+                    setHasMore(false);
+                } else {
+                    setArchive(prev => [...prev, ...data]);
+                    setLastDocId(data[data.length - 1].id);
+                }
+            } else {
+                console.error("Ошибка при получении архива записей");
+            }
+        } catch (error) {
+            console.error("Ошибка при загрузке архива:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchArchive = async () => {
-            if (loading || !hasMore) return;
-
-            setLoading(true);
-            try {
-                const params = new URLSearchParams({
-                    telegramId,
-                    isSpecialist: role === "specialist",
-                    currentDate: dayjs().format('YYYY-MM-DD'),
-                    pageSize: 20,
-                    lastDocId: lastDocId || ''
-                });
-
-                const response = await fetch(`${apiUrl}/Appointment/GetArchiveAppointments?${params.toString()}`);
-
-                if (response.ok) {
-                    const data = await response.json();
-
-                    if (data.length === 0) {
-                        setHasMore(false);
-                    } else {
-                        setArchive(prev => [...prev, ...data]);
-                        setLastDocId(data[data.length - 1].id);
-                    }
-                } else {
-                    console.error("Ошибка при получении архива записей");
-                }
-            } catch (error) {
-                console.error("Ошибка при загрузке архива:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         if (telegramId) {
             fetchArchive();
         }
