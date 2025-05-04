@@ -347,37 +347,37 @@ function SchedulePage() {
                 )}
 
 
-                {/* Date Picker */}
-                <Center>
-                    <DatePicker
-                        locale="ru"
-                        multiple={isCreatingImage}
-                        value={isCreatingImage ? selectedDates : selectedDate}
-                        onChange={handleDateClick}
-                        minDate={dayjs().startOf('day').toDate()} // Start from today
-                        maxDate={dayjs().add(1, 'year').toDate()} // Limit to 1 year ahead
-                        getDayProps={(date) => {
-                            const isSelected = isCreatingImage
-                                ? selectedDates.some(d => dayjs(d).isSame(date, 'day'))
-                                : selectedDate && dayjs(date).isSame(selectedDate, 'day');
-                            return {
-                                style: {
-                                    backgroundColor: isSelected ? theme.colors.blue[1] : undefined,
-                                    // borderRadius: isSelected ? '50%' : undefined, // Make selection circular
-                                    border: isSelected ? `1px solid ${theme.colors.blue[5]}` : '1px solid transparent', // Highlight border
-                                },
-                            };
-                        }}
-                        renderDay={(date) => { // Optional: Custom rendering (e.g., dots for available days - needs backend logic)
-                            const day = date.getDate();
-                            // Add logic here to check if day has slots (would require fetching availability overview)
-                            // const hasSlots = checkAvailabilityFor(date);
-                            return (
-                                <div>{day}</div> // Placeholder
-                            );
-                        }}
-                    />
-                </Center>
+                {/* Date Picker - Full Width */}
+                {/* Убрали <Center> */}
+                <DatePicker
+                    locale="ru"
+                    multiple={isCreatingImage}
+                    value={isCreatingImage ? selectedDates : selectedDate}
+                    onChange={handleDateClick}
+                    minDate={dayjs().startOf('day').toDate()}
+                    maxDate={dayjs().add(1, 'year').toDate()}
+                    getDayProps={(date) => {
+                        const isSelected = isCreatingImage
+                            ? selectedDates.some(d => dayjs(d).isSame(date, 'day'))
+                            : selectedDate && dayjs(date).isSame(selectedDate, 'day');
+                        return {
+                            style: {
+                                backgroundColor: isSelected ? theme.colors.blue[1] : undefined,
+                                border: isSelected ? `1px solid ${theme.colors.blue[5]}` : '1px solid transparent',
+                                borderRadius: '4px', // Optional: consistent rounding
+                            },
+                        };
+                    }}
+                    renderDay={(date) => {
+                        const day = date.getDate();
+                        return <div>{day}</div>;
+                    }}
+                    // Добавляем стиль для растягивания на всю ширину
+                    style={{ width: '100%' }}
+                // Альтернатива с использованием Mantine style prop (если работает):
+                // w="100%"
+                />
+                {/* </Center> */}
 
                 {/* Divider */}
                 {selectedDate && !isCreatingImage && <Divider my="md" />}
