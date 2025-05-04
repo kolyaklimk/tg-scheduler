@@ -12,14 +12,14 @@ function ArchivePage({ telegramId, role, apiUrl }) {
 
     const fetchArchive = async () => {
         if (loading || !hasMore) return;
-
+        const pageSize = 2;
         setLoading(true);
         try {
             const params = new URLSearchParams({
                 telegramId,
                 isSpecialist: role === "specialist",
                 currentDate: dayjs().format('YYYY-MM-DD'),
-                pageSize: 2,
+                pageSize,
                 lastDocId: lastDocId || ''
             });
 
@@ -28,7 +28,7 @@ function ArchivePage({ telegramId, role, apiUrl }) {
             if (response.ok) {
                 const data = await response.json();
 
-                if (data.length === 0) {
+                if (data.length < pageSize) {
                     setHasMore(false);
                 } else {
                     setArchive(prev => [...prev, ...data]);
