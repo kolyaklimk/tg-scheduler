@@ -203,6 +203,19 @@ function ProfilePage() {
             return { ...prev, services: updatedServices };
         });
     };
+    
+    const handleWorkingToggle = (checked) => {
+        const hasServices = Object.keys(profileData.services).length > 0;
+
+        if (checked && !hasServices) {
+            // User is trying to turn ON 'working' but has NO services
+            window.Telegram?.WebApp?.showPopup?.({ message: "Добавьте хотя бы одну услугу, чтобы начать принимать записи." });
+            // Do NOT update the state, effectively preventing the switch from turning on
+        } else {
+            // Allow turning OFF, or turning ON if services exist
+            handleFieldChange('working', checked);
+        }
+    };
 
     const handleImageUpload = async (file) => {
         if (!file) return;
@@ -247,18 +260,23 @@ function ProfilePage() {
         setIsSaving(true);
         setError(null);
 
-        // Frontend Validation before sending
         let validationError = null;
         if (!profileData.name?.trim()) {
             validationError = "Имя не может быть пустым.";
         }
-        for (const name in profileData.services) {
-            const service = profileData.services[name];
-            if (isNaN(service.price) || service.price < 0) {
-                validationError = `Некорректная цена для услуги "${name}".`; break;
-            }
-            if (isNaN(service.duration) || service.duration <= 0) {
-                validationError = `Некорректная длительность для услуги "${name}".`; break;
+
+        else if (profileData.working && Object.keys(profileData.services).length === 0) {
+            validationError = "Нельзя установить статус 'Работаю' без добавленных услуг.";
+        }
+        else { /
+            for (const name in profileData.services) {
+                const service = profileData.services[name];
+                if (isNaN(service.price) || service.price < 0) {
+                    validationError = `Некорректная цена для услуги "${name}".`; break;
+                }
+                if (isNaN(service.duration) || service.duration <= 0) {
+                    validationError = `Некорректная длительность для услуги "${name}".`; break;
+                }
             }
         }
 
@@ -266,21 +284,19 @@ function ProfilePage() {
             setError(validationError);
             window.Telegram?.WebApp?.showPopup?.({ message: validationError });
             setIsSaving(false);
-            return;
+            return; 
         }
 
-
         try {
-            // Construct payload (ensure services are correctly formatted if needed)
             const payload = {
-                telegramId: profileTelegramId, // The ID of the profile being edited
+                telegramId: profileTelegramId,
                 name: profileData.name,
-                working: profileData.working,
+                working: profileData.working, 
                 contactInfo: profileData.contactInfo,
                 portfolioLink: profileData.portfolioLink,
                 location: profileData.location,
                 description: profileData.description,
-                services: profileData.services, // Send the whole object
+                services: profileData.services,
                 profileImageUrl: profileData.profileImageUrl,
             };
 
@@ -297,10 +313,8 @@ function ProfilePage() {
             }
 
             console.log("Specialist data saved successfully!");
-            // Update cached services after successful save
             localStorage.setItem(`specialistServices-${profileTelegramId}`, JSON.stringify(profileData.services));
             window.Telegram?.WebApp?.showPopup?.({ message: "Профиль успешно сохранён!" });
-            // Optionally navigate away or show a persistent success message
 
         } catch (err) {
             console.error("Error saving specialist data:", err);
@@ -310,7 +324,6 @@ function ProfilePage() {
             setIsSaving(false);
         }
     };
-
 
     // --- Render Logic ---
 
@@ -444,8 +457,10 @@ function ProfilePage() {
                         <Switch
                             label="Принимаю записи (виден клиентам)"
                             checked={profileData.working}
-                            onChange={(e) => handleFieldChange('working', e.currentTarget.checked)}
+                            onChange={(e) => handleWorkingToggle(e.currentTarget.checked)}
                             thumbIcon={profileData.working ? <IconCheck size={12} /> : <IconX size={12} />}
+                            // Optional: Visually disable toggling ON if no services?
+                            // disabled={!profileData.working && Object.keys(profileData.services).length === 0} // This would disable the whole switch if off and no services
                         />
                         <Box pos="relative">
                             <LoadingOverlay visible={isImageUploading} zIndex={1} overlayProps={{ radius: "sm", blur: 2 }} />
