@@ -7,33 +7,34 @@ import {
     Text,
     Card,
     Button,
-    Badge,
     Loader,
     Center,
     Group,
-    Divider, // Optional visual separator
-    useMantineTheme, // For colors etc.
-    Alert, // For displaying errors
-    Box
+    Badge,
+    Divider,
+    useMantineTheme,
+    Alert,
+    Box // Keep Box for the intersection target
 } from '@mantine/core';
-import { IconInfoCircle, IconUser, IconUserCircle, IconCalendar, IconClock, IconMessageCircle, IconReceipt, IconHourglass, IconExternalLink, IconChevronLeft, IconDownload } from '@tabler/icons-react';
-import { useWindowScroll } from '@mantine/hooks'; // Can be used for scroll detection
+import { IconInfoCircle, IconUserCircle, IconCalendar, IconClock, IconMessageCircle, IconReceipt, IconHourglass, IconExternalLink, IconDownload } from '@tabler/icons-react';
+// Import useIntersection
+import { useIntersection } from '@mantine/hooks';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-dayjs.locale('ru'); // Ensure locale is set
+dayjs.locale('ru');
 
 function ArchivePage({ telegramId, role, apiUrl }) {
     const [archive, setArchive] = useState([]);
     const [lastDocId, setLastDocId] = useState(null);
-    const [isLoading, setIsLoading] = useState(false); // Renamed for clarity
+    const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [initialLoadComplete, setInitialLoadComplete] = useState(false);
-    const [error, setError] = useState(null); // State for errors
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
     const theme = useMantineTheme();
-    const loadingRef = useRef(false); // Ref to prevent multiple fetches
+    const loadingRef = useRef(false); // Prevent multiple simultaneous fetches
 
-    // Memoize fetch function to prevent recreation on every render
+    // --- fetchArchive (Memoized) ---
     const fetchArchive = useCallback(async (isInitial = false) => {
         // Prevent fetching if already loading, no more items, or no telegramId
         if (loadingRef.current || !hasMore || !telegramId) {
@@ -43,17 +44,16 @@ function ArchivePage({ telegramId, role, apiUrl }) {
 
         loadingRef.current = true;
         setIsLoading(true);
-        setError(null); // Clear previous errors
-        const pageSize = 5; // Increased page size for better UX
+        if (isInitial) setError(null); // Clear previous errors only on initial load
+        const pageSize = 5; // Keep page size
 
         try {
             const params = new URLSearchParams({
                 telegramId,
                 isSpecialist: role === "specialist",
-                currentDate: dayjs().format('YYYY-MM-DD'), // Or maybe just pass isArchive=true? Depends on API
+                // currentDate: dayjs().format('YYYY-MM-DD'), // Removed, assuming API handles archive logic
                 pageSize,
             });
-            // Only add lastDocId if it exists (for subsequent pages)
             if (lastDocId && !isInitial) {
                 params.append('lastDocId', lastDocId);
             }
@@ -68,28 +68,26 @@ function ArchivePage({ telegramId, role, apiUrl }) {
             const data = await response.json();
             console.log("Received data:", data);
 
-            // Ensure data is an array
             if (!Array.isArray(data)) {
                 console.error("Received non-array data:", data);
                 throw new Error("Некорректный ответ от сервера.");
             }
 
-
             setArchive(prev => isInitial ? data : [...prev, ...data]);
 
             if (data.length > 0) {
-                setLastDocId(data[data.length - 1].id); // Update lastDocId from the last item received
+                setLastDocId(data[data.length - 1].id);
             }
 
             if (data.length < pageSize) {
-                setHasMore(false); // No more items to fetch
+                setHasMore(false);
                 console.log("No more data to fetch.");
             }
 
         } catch (err) {
             console.error("Ошибка при загрузке архива:", err);
             setError(err.message || "Произошла ошибка при загрузке архива.");
-            // Optionally stop trying if there's an error
+            // Consider stopping further fetches on error?
             // setHasMore(false);
         } finally {
             setIsLoading(false);
@@ -100,10 +98,9 @@ function ArchivePage({ telegramId, role, apiUrl }) {
         }
     }, [apiUrl, hasMore, lastDocId, role, telegramId]); // Dependencies for useCallback
 
-
-    // Effect for Telegram Back Button
+    // --- Telegram Back Button Effect ---
     useEffect(() => {
-        const handleBack = () => navigate(-1); // Navigate back
+        const handleBack = () => navigate(-1);
         if (window.Telegram?.WebApp?.BackButton) {
             window.Telegram.WebApp.BackButton.onClick(handleBack);
             window.Telegram.WebApp.BackButton.show();
@@ -116,44 +113,53 @@ function ArchivePage({ telegramId, role, apiUrl }) {
         };
     }, [navigate]);
 
-    // Initial fetch effect
+    // --- Initial Fetch Effect ---
     useEffect(() => {
         if (telegramId) {
-            // Reset state for initial load if telegramId changes (though unlikely in SPA context)
-            setArchive([]);
-            setLastDocId(null);
-            setHasMore(true);
-            setInitialLoadComplete(false);
-            loadingRef.current = false; // Reset ref
-            fetchArchive(true); // Pass true for initial load
+            setArchive([]); setLastDocId(null); setHasMore(true);
+            setInitialLoadComplete(false); loadingRef.current = false; setError(null); // Reset error on new ID load
+            fetchArchive(true);
         } else {
-            // Handle case where telegramId is not available
-            setInitialLoadComplete(true); // Consider load complete if no ID
+            setInitialLoadComplete(true);
             setError("Не удалось определить пользователя Telegram.");
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [telegramId]); // Dependency on telegramId only for initial load trigger
+    }, [telegramId]); // Only depends on telegramId for initial load trigger
 
 
-    // Optional: Basic scroll-to-load more functionality (can be replaced with useIntersection hook)
-    const [scroll] = useWindowScroll();
+    // --- Intersection Observer Logic ---
+    const lastCardRef = useRef(null); // Ref for the intersection target element
+    const { ref: intersectionRef, entry } = useIntersection({
+        root: null, // Use viewport as root
+        threshold: 0.5, // Trigger when 50% of the target is visible
+    });
+
+    // Assign the ref to the correct element using a callback ref pattern
+    // This is needed because the element might not exist on initial render
+    // and we need to ensure the ref passed to useIntersection is updated
+    const setRefs = useCallback(
+        (node) => {
+            lastCardRef.current = node; // Keep track of the DOM node
+            intersectionRef(node);    // Pass the node to Mantine's intersection hook ref setter
+        },
+        [intersectionRef] // Dependency ensures this callback updates if intersectionRef changes
+    );
+
+
+    // Effect to fetch more data when the intersection target becomes visible
     useEffect(() => {
-        if (!isLoading && hasMore && initialLoadComplete) {
-            const { y } = scroll;
-            const scrollHeight = document.documentElement.scrollHeight;
-            const clientHeight = document.documentElement.clientHeight;
-            // Trigger fetch when user is near the bottom (e.g., 300px away)
-            if (scrollHeight - (y + clientHeight) < 300) {
-                fetchArchive();
-            }
+        // Check if the target element is intersecting, we have more data, aren't loading, and initial load is done
+        if (entry?.isIntersecting && hasMore && !isLoading && initialLoadComplete) {
+            console.log("Intersection observer triggered fetch.");
+            fetchArchive(); // Fetch next page
         }
-    }, [scroll, isLoading, hasMore, fetchArchive, initialLoadComplete]);
+    }, [entry?.isIntersecting, hasMore, isLoading, initialLoadComplete, fetchArchive]);
+    // --- End of Intersection Observer Logic ---
 
 
     return (
-        <Container size="sm" py="lg"> {/* Added padding */}
+        <Container size="sm" py="lg">
             <Stack gap="lg">
-                {/* Back button handled by Telegram integration */}
                 <Title order={2} ta="center">Архив записей</Title>
 
                 {!initialLoadComplete && !error && (
@@ -166,7 +172,6 @@ function ArchivePage({ telegramId, role, apiUrl }) {
                     </Alert>
                 )}
 
-
                 {initialLoadComplete && !error && archive.length === 0 && (
                     <Center mt="xl">
                         <Text c="dimmed">Архивных записей пока нет.</Text>
@@ -175,8 +180,16 @@ function ArchivePage({ telegramId, role, apiUrl }) {
 
                 {archive.length > 0 && (
                     <Stack gap="md">
-                        {archive.map((appointment) => (
-                            <Card shadow="sm" p="lg" radius="md" withBorder key={appointment.id}>
+                        {archive.map((appointment, index) => (
+                            <Card
+                                shadow="sm"
+                                p="lg"
+                                radius="md"
+                                withBorder
+                                key={appointment.id || index}
+                                // Attach the callback ref to the LAST element in the list
+                                ref={index === archive.length - 1 ? setRefs : null}
+                            >
                                 <Stack gap="sm">
                                     <Group justify="space-between">
                                         <Text fw={500} size="lg">
@@ -186,66 +199,17 @@ function ArchivePage({ telegramId, role, apiUrl }) {
                                             <IconClock size={14} style={{ marginRight: 4 }} /> {appointment.startTime}
                                         </Badge>
                                     </Group>
-
                                     <Divider />
-
                                     <Stack gap="xs" mt="sm">
-                                        <Group gap="xs">
-                                            <IconReceipt size={16} color={theme.colors.gray[6]} />
-                                            <Text size="sm"><strong>Услуги:</strong> {appointment.services || '-'}</Text>
-                                        </Group>
-                                        <Group gap="xs">
-                                            <IconMessageCircle size={16} color={theme.colors.gray[6]} />
-                                            <Text size="sm"><strong>Комментарий:</strong> {appointment.comment || '-'}</Text>
-                                        </Group>
-                                        <Group gap="xs">
-                                            <IconHourglass size={16} color={theme.colors.gray[6]} />
-                                            <Text size="sm"><strong>Длительность:</strong> {appointment.totalDuration != null ? `${appointment.totalDuration} мин.` : '-'}</Text>
-                                        </Group>
-                                        <Group gap="xs">
-                                            <Text size="sm" fw={500}><strong>Сумма:</strong> {appointment.totalPrice != null ? `${appointment.totalPrice} руб.` : '-'}</Text>
-                                        </Group>
-
-                                        {/* Specialist specific info */}
+                                        <Group gap="xs"><IconReceipt size={16} color={theme.colors.gray[6]} /> <Text size="sm"><strong>Услуги:</strong> {appointment.services || '-'}</Text></Group>
+                                        <Group gap="xs"><IconMessageCircle size={16} color={theme.colors.gray[6]} /> <Text size="sm"><strong>Комментарий:</strong> {appointment.comment || '-'}</Text></Group>
+                                        <Group gap="xs"><IconHourglass size={16} color={theme.colors.gray[6]} /><Text size="sm"><strong>Длительность:</strong> {appointment.totalDuration != null ? `${appointment.totalDuration} мин.` : '-'}</Text></Group>
+                                        <Group gap="xs"><Text size="sm" fw={500}><strong>Сумма:</strong> {appointment.totalPrice != null ? `${appointment.totalPrice} руб.` : '-'}</Text></Group>
                                         {role === "specialist" && (
-                                            <>
-                                                {/* Maybe description is part of the slot, not the appointment? Check data structure */}
-                                                {/* <Text size="sm"><strong>Описание слота:</strong> {appointment.description || '-'}</Text> */}
-                                                <Button
-                                                    mt="sm"
-                                                    variant="light"
-                                                    size="sm"
-                                                    leftSection={<IconExternalLink size={16} />}
-                                                    onClick={(e) => {
-                                                        e.preventDefault(); // Prevent potential card click issues
-                                                        if (appointment.usernameClient) {
-                                                            window.Telegram?.WebApp?.openTelegramLink(`https://t.me/${appointment.usernameClient}`);
-                                                        } else {
-                                                            // Maybe show a popup if username is missing?
-                                                            window.Telegram?.WebApp?.showPopup?.({ message: "Имя пользователя клиента не найдено." });
-                                                        }
-                                                    }}
-                                                    disabled={!appointment.usernameClient} // Disable if no username
-                                                >
-                                                    Профиль клиента @{appointment.usernameClient || '???'}
-                                                </Button>
-                                            </>
+                                            <Button mt="sm" variant="light" size="sm" leftSection={<IconExternalLink size={16} />} onClick={(e) => { e.preventDefault(); if (appointment.usernameClient) { window.Telegram?.WebApp?.openTelegramLink(`https://t.me/${appointment.usernameClient}`); } else { window.Telegram?.WebApp?.showPopup?.({ message: "Имя пользователя клиента не найдено." }); } }} disabled={!appointment.usernameClient}> Профиль клиента @{appointment.usernameClient || '???'} </Button>
                                         )}
-
-                                        {/* Client specific info */}
                                         {role === "client" && (
-                                            <Button
-                                                mt="sm"
-                                                variant="light"
-                                                size="sm"
-                                                leftSection={<IconUserCircle size={16} />}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    navigate(`/profile/${appointment.specialistId}`)
-                                                }}
-                                            >
-                                                Профиль специалиста
-                                            </Button>
+                                            <Button mt="sm" variant="light" size="sm" leftSection={<IconUserCircle size={16} />} onClick={(e) => { e.preventDefault(); navigate(`/profile/${appointment.specialistId}`) }} > Профиль специалиста </Button>
                                         )}
                                     </Stack>
                                 </Stack>
@@ -254,20 +218,10 @@ function ArchivePage({ telegramId, role, apiUrl }) {
                     </Stack>
                 )}
 
-                {/* Load More Button or End Message */}
-                <Center mt="lg">
-                    {isLoading && initialLoadComplete && <Loader size="sm" />} {/* Show loader only during subsequent loads */}
-                    {!isLoading && hasMore && initialLoadComplete && archive.length > 0 && (
-                        <Button
-                            variant="outline"
-                            onClick={() => fetchArchive()}
-                            disabled={isLoading}
-                            leftSection={<IconDownload size={16} />}
-                        >
-                            Загрузить ещё
-                        </Button>
-                    )}
-                    {!hasMore && initialLoadComplete && archive.length > 0 && (
+                {/* Loading indicator at the bottom */}
+                <Center mt="lg" style={{ minHeight: 40 }}>
+                    {isLoading && initialLoadComplete && <Loader size="sm" />} {/* Show only during subsequent loads */}
+                    {!isLoading && !hasMore && initialLoadComplete && archive.length > 0 && (
                         <Text c="dimmed" size="sm">Больше записей нет</Text>
                     )}
                 </Center>
