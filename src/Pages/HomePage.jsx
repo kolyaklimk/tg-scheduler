@@ -321,7 +321,7 @@ function HomePage({ role, telegramId, apiUrl }) {
                                     )}
                                 </Stack>
 
-                                <Group justify="flex-end" mt="md" gap="xs"> 
+                                <Group justify="center" mt="md" gap="xs"> 
                                     <Button
                                         variant="outline"
                                         color="red"

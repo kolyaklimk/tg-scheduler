@@ -487,7 +487,7 @@ function SchedulePage() {
 
                                                         {/* Actions only for the PARENT slot of a multi-slot booking */}
                                                         {slot.parent === slot.id && ( // Show actions only on the primary booking slot
-                                                            <Group justify="flex-end" mt="xs">
+                                                            <Group justify="center" mt="xs">
                                                                 {!slot.isConfirmed ? (
                                                                     <>
                                                                         <Button
