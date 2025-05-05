@@ -316,10 +316,9 @@ function HomePage({ role, telegramId, apiUrl }) {
                                     <Group gap="xs">
                                         <Text size="sm" fw={500}><strong>Сумма:</strong> {slot.totalPrice != null ? `${slot.totalPrice} руб.` : '-'}</Text>
                                     </Group>
-                                    {/* Optional: Show slot description if relevant */}
-                                    {/* {slot.description && (
+                                    {slot.description && (
                                         <Text size="xs" c="dimmed">Описание слота: {slot.description}</Text>
-                                    )} */}
+                                    )}
                                 </Stack>
 
                                 <Group justify="flex-end" mt="md" gap="sm">
@@ -327,7 +326,7 @@ function HomePage({ role, telegramId, apiUrl }) {
                                         variant="outline"
                                         color="red"
                                         size="sm"
-                                        leftSection={<IconX size={16} />}
+                                        leftSection={<IconX size={14} />}
                                         onClick={() => handleCancelAppointment(slot.timeSlotId, slot.id)}
                                     >
                                         Отклонить
@@ -336,7 +335,7 @@ function HomePage({ role, telegramId, apiUrl }) {
                                         variant="filled"
                                         color="green"
                                         size="sm"
-                                        leftSection={<IconCheck size={16} />}
+                                        leftSection={<IconCheck size={14} />}
                                         onClick={() => handleConfirmAppointment(slot.timeSlotId, slot.id)}
                                     >
                                         Подтвердить
