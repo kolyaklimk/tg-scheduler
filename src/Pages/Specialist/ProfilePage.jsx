@@ -15,6 +15,7 @@ import {
     Avatar,
     FileInput,
     Loader,
+    Badge,
     Center,
     Alert,
     Divider,
