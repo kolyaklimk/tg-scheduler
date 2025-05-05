@@ -80,7 +80,8 @@ function ArchivePage({ telegramId, role, apiUrl }) {
             if (data.length > 0) {
                 setLastDocId(data[data.length - 1].id); // Update lastDocId from the last item received
             }
-            else {
+
+            if (data.length < pageSize) {
                 setHasMore(false); // No more items to fetch
                 console.log("No more data to fetch.");
             }
