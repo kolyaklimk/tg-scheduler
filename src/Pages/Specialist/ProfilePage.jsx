@@ -345,6 +345,20 @@ function ProfilePage() {
                         </Stack>
                     </Paper>
 
+                    {/* Only show "Book Appointment" if the profile belongs to a specialist and they are working */}
+                    {profileData.working && (
+                        <Button
+                            fullWidth
+                            size="lg"
+                            onClick={() => navigate(`/schedule/${profileTelegramId}`)}
+                            leftSection={<IconCalendarPlus size={20} />}
+                            disabled={Object.keys(profileData.services).length === 0} // Disable if no services
+                            title={Object.keys(profileData.services).length === 0 ? "Специалист не добавил услуги" : ""}
+                        >
+                            Записаться к специалисту
+                        </Button>
+                    )}
+
                     {profileData.description && (
                         <Paper shadow="xs" p="lg" radius="md" withBorder>
                             <Title order={4} mb="xs">Описание</Title>
@@ -388,21 +402,7 @@ function ProfilePage() {
                         ) : (
                             <Text c="dimmed" size="sm">Специалист пока не добавил услуги.</Text>
                         )}
-                    </Paper>
-
-                    {/* Only show "Book Appointment" if the profile belongs to a specialist and they are working */}
-                    {profileData.working && (
-                        <Button
-                            fullWidth
-                            size="lg"
-                            onClick={() => navigate(`/schedule/${profileTelegramId}`)}
-                            leftSection={<IconCalendarPlus size={20} />}
-                            disabled={Object.keys(profileData.services).length === 0} // Disable if no services
-                            title={Object.keys(profileData.services).length === 0 ? "Специалист не добавил услуги" : ""}
-                        >
-                            Записаться к специалисту
-                        </Button>
-                    )}
+                    </Paper>                                        
                 </Stack>
             </Container>
         );
