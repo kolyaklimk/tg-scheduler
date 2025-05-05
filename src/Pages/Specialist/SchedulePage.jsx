@@ -246,7 +246,7 @@ function SchedulePage() {
             if (response.ok) {
                 window.Telegram?.WebApp?.showPopup?.({ message: "Бронирование успешно! Ожидайте подтверждения." });
                 // Maybe navigate away or show success state
-                navigate(`/client-appointments/${userTelegramId}`); // Example redirect
+                navigate(`/`); // Example redirect
             } else {
                 const errorData = await response.text(); // Get more details on failure
                 console.error("Booking failed:", errorData);
