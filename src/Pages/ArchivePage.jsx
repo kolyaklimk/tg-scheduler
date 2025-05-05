@@ -51,7 +51,7 @@ function ArchivePage({ telegramId, role, apiUrl }) {
             const params = new URLSearchParams({
                 telegramId,
                 isSpecialist: role === "specialist",
-                // currentDate: dayjs().format('YYYY-MM-DD'), // Removed, assuming API handles archive logic
+                currentDate: dayjs().format('YYYY-MM-DD'), // Removed, assuming API handles archive logic
                 pageSize,
             });
             if (lastDocId && !isInitial) {
