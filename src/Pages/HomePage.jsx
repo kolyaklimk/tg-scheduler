@@ -325,7 +325,7 @@ function HomePage({ role, telegramId, apiUrl }) {
                                     <Button
                                         variant="outline"
                                         color="red"
-                                        size="xs" {/* Changed size */}
+                                        size="xs"
                                         leftSection={<IconX size={14} />} // Icon size might need adjustment too
                                         onClick={() => handleCancelAppointment(slot.timeSlotId, slot.id)}
                                     >
@@ -334,7 +334,7 @@ function HomePage({ role, telegramId, apiUrl }) {
                                     <Button
                                         variant="filled"
                                         color="green"
-                                        size="xs" {/* Changed size */}
+                                        size="xs"
                                         leftSection={<IconCheck size={14} />} // Icon size might need adjustment too
                                         onClick={() => handleConfirmAppointment(slot.timeSlotId, slot.id)}
                                     >
