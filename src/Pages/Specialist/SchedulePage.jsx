@@ -321,8 +321,7 @@ function SchedulePage() {
         <Container size="sm" p="md">
             <Stack gap="lg"> {/* Vertical spacing */}
                 {/* Back Button handled by Telegram.WebApp.BackButton */}
-                <Title order={2} ta="center">Расписание</Title>
-
+                
                 {/* Image Generation Toggle */}
                 {role === "specialist" && (
                     <Group justify="flex-end">
