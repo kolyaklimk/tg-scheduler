@@ -268,7 +268,7 @@ function ProfilePage() {
         else if (profileData.working && Object.keys(profileData.services).length === 0) {
             validationError = "Нельзя установить статус 'Работаю' без добавленных услуг.";
         }
-        else { /
+        else { 
             for (const name in profileData.services) {
                 const service = profileData.services[name];
                 if (isNaN(service.price) || service.price < 0) {
