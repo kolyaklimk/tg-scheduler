@@ -321,12 +321,12 @@ function HomePage({ role, telegramId, apiUrl }) {
                                     )}
                                 </Stack>
 
-                                <Group justify="flex-end" mt="md" gap="sm">
+                                <Group justify="flex-end" mt="md" gap="xs"> 
                                     <Button
                                         variant="outline"
                                         color="red"
-                                        size="sm"
-                                        leftSection={<IconX size={14} />}
+                                        size="xs" {/* Changed size */}
+                                        leftSection={<IconX size={14} />} // Icon size might need adjustment too
                                         onClick={() => handleCancelAppointment(slot.timeSlotId, slot.id)}
                                     >
                                         Отклонить
@@ -334,8 +334,8 @@ function HomePage({ role, telegramId, apiUrl }) {
                                     <Button
                                         variant="filled"
                                         color="green"
-                                        size="sm"
-                                        leftSection={<IconCheck size={14} />}
+                                        size="xs" {/* Changed size */}
+                                        leftSection={<IconCheck size={14} />} // Icon size might need adjustment too
                                         onClick={() => handleConfirmAppointment(slot.timeSlotId, slot.id)}
                                     >
                                         Подтвердить
