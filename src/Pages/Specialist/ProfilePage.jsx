@@ -549,48 +549,46 @@ function ProfilePage() {
                         {/* Existing Services List */}
                         {Object.keys(profileData.services).length > 0 ? (
                             <Stack gap="sm" mt="md">
-                                // Inside the .map function for existing services:
                                 {Object.entries(profileData.services).map(([name, details]) => (
                                     <Paper p="sm" shadow="xs" radius="sm" withBorder key={name}>
-                                        <Stack gap="xs">
+                                        {/* Use Stack for overall vertical layout */}
+                                        <Stack gap="sm">
                                             <Text fw={500}>{name}</Text>
 
-                                            {/* Group for Price, Duration, Delete Button */}
-                                            <Group justify="flex-end" gap="sm"> {/* Align controls to the right */}
-                                                <NumberInput
-                                                    label="Цена" // Add labels for clarity
-                                                    aria-label={`Цена для ${name}`}
-                                                    value={details.price}
-                                                    onChange={(value) => handleServiceChange(name, 'price', value)}
-                                                    min={0}
-                                                    step={50}
-                                                    hideControls
-                                                    styles={{ root: { maxWidth: '110px' }, input: { textAlign: 'right' } }} // Control width via root
-                                                    rightSection="₽"
-                                                    rightSectionWidth={20}
-                                                />
-                                                <NumberInput
-                                                    label="Длит." // Add labels
-                                                    aria-label={`Длительность для ${name}`}
-                                                    value={details.duration}
-                                                    onChange={(value) => handleServiceChange(name, 'duration', value)}
-                                                    min={1}
-                                                    step={15}
-                                                    hideControls
-                                                    styles={{ root: { maxWidth: '100px' }, input: { textAlign: 'right' } }} // Control width via root
-                                                    rightSection="мин"
-                                                    rightSectionWidth={35} // Adjust for "мин"
-                                                />
-                                                <ActionIcon
-                                                    variant="subtle" color="red"
+                                            <Center>
+                                                <Group gap="sm">
+                                                    <NumberInput
+                                                        label="Цена"
+                                                        aria-label={`Цена для ${name}`}
+                                                        value={details.price}
+                                                        onChange={(value) => handleServiceChange(name, 'price', value)}
+                                                        min={0} step={50} hideControls
+                                                        styles={{ root: { maxWidth: '110px' }, input: { textAlign: 'right' } }}
+                                                        rightSection="₽" rightSectionWidth={20}
+                                                    />
+                                                    <NumberInput
+                                                        label="Длит."
+                                                        aria-label={`Длительность для ${name}`}
+                                                        value={details.duration}
+                                                        onChange={(value) => handleServiceChange(name, 'duration', value)}
+                                                        min={1} step={15} hideControls
+                                                        styles={{ root: { maxWidth: '100px' }, input: { textAlign: 'right' } }}
+                                                        rightSection="мин" rightSectionWidth={35}
+                                                    />
+                                                </Group>
+                                            </Center>
+
+                                            <Center>
+                                                <Button
+                                                    variant="outline" // Or "light"
+                                                    color="red"
+                                                    size="xs" // Keep it relatively small? Or use "sm"
+                                                    leftSection={<IconTrash size={14} />}
                                                     onClick={() => handleRemoveService(name)}
-                                                    title={`Удалить ${name}`}
-                                                    mt="auto" // Align icon vertically with bottom of inputs if labels cause height difference
-                                                // Alternatively, apply mt to the group or use align="flex-end" on the Stack if needed
                                                 >
-                                                    <IconTrash size={18} />
-                                                </ActionIcon>
-                                            </Group>
+                                                    Удалить
+                                                </Button>
+                                            </Center>
                                         </Stack>
                                     </Paper>
                                 ))}
