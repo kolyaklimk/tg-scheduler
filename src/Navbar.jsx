@@ -26,7 +26,7 @@ function Navbar({ role, telegramId }) {
     const specialistMenuItems = [
         { path: `/profile/${telegramId}`, label: 'Профиль', icon: <IconUserCircle size={14} /> },
         { path: `/schedule/${telegramId}`, label: 'Расписание', icon: <IconCalendarEvent size={14} /> },
-        { path: `/specialist-appointments/${telegramId}`, label: 'Записи клиентов', icon: <IconListCheck size={14} /> }, // Changed from Archive
+        { path: `/`, label: 'Записи клиентов', icon: <IconListCheck size={14} /> }, // Changed from Archive
         { path: '/archive', label: 'Архив', icon: <IconArchive size={14} /> },
         { path: '/subscription', label: 'Подписка', icon: <IconCreditCard size={14} /> },
         { path: '/profile-link', label: 'Ссылка на профиль', icon: <IconLink size={14} /> },
@@ -35,7 +35,7 @@ function Navbar({ role, telegramId }) {
 
     const clientMenuItems = [
         { path: '/book-appointment', label: 'Найти специалиста', icon: <IconLogin size={14} /> }, // Changed label
-        { path: `/client-appointments/${telegramId}`, label: 'Мои записи', icon: <IconListCheck size={14} /> }, // Changed from Archive
+        { path: `/`, label: 'Мои записи', icon: <IconListCheck size={14} /> }, // Changed from Archive
         { path: '/archive', label: 'Архив', icon: <IconArchive size={14} /> },
         { path: '/change-role', label: 'Сменить роль', icon: <IconSwitchHorizontal size={14} />, isCommon: true },
     ];
