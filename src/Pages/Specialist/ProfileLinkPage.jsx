@@ -1,6 +1,6 @@
-﻿import React, { useEffect } from 'react';
+﻿import React, { useEffect, useRef } from 'react'; // Added useRef
 import { useNavigate } from 'react-router-dom';
-import { QRCodeCanvas } from 'qrcode.react'; 
+import { QRCodeCanvas } from 'qrcode.react'; // Correct named import
 import {
     Container,
     Stack,
@@ -9,19 +9,21 @@ import {
     TextInput,
     Button,
     Group,
-    Paper, // To visually group the link and button
-    CopyButton, // Mantine's built-in copy functionality
-    Tooltip, // To show feedback on copy
-    ActionIcon // For a copy icon button
+    Paper,
+    CopyButton,
+    Tooltip,
+    ActionIcon,
+    Center // For centering QR code and button
 } from '@mantine/core';
-import { IconLink, IconCopy, IconCheck, IconChevronLeft } from '@tabler/icons-react';
+import { IconLink, IconCopy, IconCheck, IconChevronLeft, IconQrcode, IconDownload } from '@tabler/icons-react';
 
 function ProfileLinkPage({ profileLink }) {
     const navigate = useNavigate();
+    const qrCodeRef = useRef(null); // Ref to access the QR code canvas
 
     // Effect for Telegram Back Button
     useEffect(() => {
-        const handleBack = () => navigate(-1); // Navigate back
+        const handleBack = () => navigate(-1);
         if (window.Telegram?.WebApp?.BackButton) {
             window.Telegram.WebApp.BackButton.onClick(handleBack);
             window.Telegram.WebApp.BackButton.show();
@@ -34,10 +36,34 @@ function ProfileLinkPage({ profileLink }) {
         };
     }, [navigate]);
 
+    const handleDownloadQR = () => {
+        if (qrCodeRef.current) {
+            // The qrcode.react library renders the QRCodeCanvas component which contains a canvas element.
+            // We need to find that inner canvas element.
+            const canvasElement = qrCodeRef.current.querySelector('canvas');
+            if (canvasElement) {
+                const pngUrl = canvasElement
+                    .toDataURL("image/png")
+                    .replace("image/png", "image/octet-stream"); // Prompt for download
+
+                let downloadLink = document.createElement("a");
+                downloadLink.href = pngUrl;
+                downloadLink.download = "profile_qr_code.png"; // Filename for download
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            } else {
+                console.error("QR Code canvas element not found.");
+                // Optionally show a user-facing error
+                window.Telegram?.WebApp?.showPopup?.({ message: "Не удалось найти QR-код для скачивания." });
+            }
+        }
+    };
+
+
     return (
         <Container size="sm" py="lg">
             <Stack gap="lg">
-                {/* Back button handled by Telegram integration */}
                 <Title order={2} ta="center">
                     <Group justify="center" gap="xs">
                         <IconLink size={28} />
@@ -56,8 +82,8 @@ function ProfileLinkPage({ profileLink }) {
                             <TextInput
                                 value={profileLink}
                                 readOnly
-                                styles={{ input: { overflow: 'hidden', textOverflow: 'ellipsis' } }} // Handle long links
-                                style={{ flexGrow: 1, minWidth: 0 }} // Ensure input grows and shrinks
+                                styles={{ input: { overflow: 'hidden', textOverflow: 'ellipsis' } }}
+                                style={{ flexGrow: 1, minWidth: 0 }}
                                 aria-label="Ссылка на профиль"
                             />
                             <CopyButton value={profileLink} timeout={2000}>
@@ -65,9 +91,9 @@ function ProfileLinkPage({ profileLink }) {
                                     <Tooltip label={copied ? 'Скопировано!' : 'Копировать'} withArrow position="right">
                                         <ActionIcon
                                             color={copied ? 'teal' : 'gray'}
-                                            variant="filled" // Or "light" or "outline"
+                                            variant="filled"
                                             onClick={copy}
-                                            size="lg" // Match TextInput size
+                                            size="lg"
                                         >
                                             {copied ? <IconCheck size={20} /> : <IconCopy size={20} />}
                                         </ActionIcon>
@@ -81,17 +107,50 @@ function ProfileLinkPage({ profileLink }) {
                     </Stack>
                 </Paper>
 
-                {/* Optional: QR Code display */}
-                <Paper shadow="xs" p="md" radius="md" withBorder mt="lg">
-                    <Stack align="center" gap="xs">
-                        <Text fw={500}>QR-код для быстрой ссылки:</Text>
-                        <QRCodeCanvas value={profileLink} size={128} level="H" />
-                        <Text size="xs" c="dimmed">Клиенты могут отсканировать этот код камерой телефона.</Text>
-                    </Stack>
-                </Paper>
+                {/* QR Code display and download */}
+                {profileLink && ( // Only show QR if profileLink exists
+                    <Paper shadow="xs" p="lg" radius="md" withBorder mt="lg">
+                        <Stack align="center" gap="md">
+                            <Group gap="xs">
+                                <IconQrcode size={20} />
+                                <Text fw={500}>QR-код для быстрой ссылки:</Text>
+                            </Group>
+                            {/*
+                                The QRCodeCanvas component itself is a div wrapper.
+                                We give this wrapper a ref to find the inner canvas.
+                            */}
+                            <div ref={qrCodeRef} style={{ display: 'inline-block', background: 'white', padding: '10px', borderRadius: '4px' }}>
+                                <QRCodeCanvas
+                                    value={profileLink}
+                                    size={160} // Increased size for better scannability/download quality
+                                    level="H" // High error correction
+                                    bgColor="#ffffff"
+                                    fgColor="#000000"
+                                    imageSettings={{ // Optional: Add a small logo in the center
+                                        // src: "url_to_your_logo.png",
+                                        // height: 30,
+                                        // width: 30,
+                                        // excavate: true, // Clears out space for the logo
+                                    }}
+                                />
+                            </div>
+                            <Text size="sm" c="dimmed" ta="center">
+                                Клиенты могут отсканировать этот код камерой телефона.
+                            </Text>
+                            <Button
+                                onClick={handleDownloadQR}
+                                leftSection={<IconDownload size={16} />}
+                                variant="light"
+                                mt="xs"
+                            >
+                                Скачать QR-код
+                            </Button>
+                        </Stack>
+                    </Paper>
+                )}
 
-                {/* Optional: Share button */}
-                {window.Telegram?.WebApp?.isVersionAtLeast('6.1') && ( // Check for Telegram WebApp version for share API
+
+                {window.Telegram?.WebApp?.isVersionAtLeast('6.1') && (
                     <Button
                         mt="lg"
                         fullWidth
@@ -101,8 +160,6 @@ function ProfileLinkPage({ profileLink }) {
                             window.Telegram.WebApp.openTelegramLink(
                                 `https://t.me/share/url?url=${encodeURIComponent(profileLink)}&text=${encodeURIComponent("Записывайтесь ко мне на услуги!")}`
                             );
-                            // Or use Telegram's built-in share if appropriate for the Mini App context
-                            // window.Telegram.WebApp.showShareDialog({ url: profileLink, text: "Check out my profile!" });
                         }}
                     >
                         Поделиться в Telegram
