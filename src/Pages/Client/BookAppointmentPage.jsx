@@ -190,7 +190,7 @@ function BookAppointmentPage({ apiUrl, telegramId }) { // Added telegramId for B
                 {!isLoading && !hasSearched && !error && (
                     <Center mt="xl" p="md">
                         <Text c="dimmed" ta="center">
-                            Введите имя специалиста, его специализацию или город, чтобы найти подходящего мастера и записаться на услугу.
+                            Введите имя специалиста, чтобы найти подходящего мастера и записаться на услугу.
                         </Text>
                     </Center>
                 )}
