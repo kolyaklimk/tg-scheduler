@@ -1,6 +1,6 @@
 ﻿import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { QRCode } from 'qrcode.react'; 
+import { QRCodeCanvas } from 'qrcode.react'; 
 import {
     Container,
     Stack,
@@ -85,7 +85,7 @@ function ProfileLinkPage({ profileLink }) {
                 <Paper shadow="xs" p="md" radius="md" withBorder mt="lg">
                     <Stack align="center" gap="xs">
                         <Text fw={500}>QR-код для быстрой ссылки:</Text>
-                        <QRCode value={profileLink} size={128} level="H" />
+                        <QRCodeCanvas value={profileLink} size={128} level="H" />
                         <Text size="xs" c="dimmed">Клиенты могут отсканировать этот код камерой телефона.</Text>
                     </Stack>
                 </Paper>
