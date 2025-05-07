@@ -23,7 +23,7 @@ function App() {
             console.log("Telegram WebApp found, calling ready().");
             window.Telegram.WebApp.ready();
             // Optionally disable vertical swipes if needed, but test usability
-            // window.Telegram.WebApp.disableVerticalSwipes();
+            window.Telegram.WebApp.disableVerticalSwipes();
 
             // Expand the app to full height
             window.Telegram.WebApp.expand();
