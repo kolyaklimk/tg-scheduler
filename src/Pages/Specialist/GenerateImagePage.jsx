@@ -186,7 +186,7 @@ function GenerateImagePage({ telegramId, apiUrl }) {
             // const response = await fetch(`${apiUrl}/ImageGenerator/Generate`, {
             //     method: 'POST',
             //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(generationData)
+            //     body: JSON.stringify(generationDaЫa)
             // });
             // if (!response.ok) throw new Error('Image generation failed');
             // const result = await response.json(); // e.g., { imageUrl: '...' }
@@ -313,7 +313,7 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                                     onChange={setDateFormatStyles}
                                 >
                                     <Group mt="xs">
-                                        <Checkbox value="bold" label="Жирный" />
+                                        <Checkbox value="bold" label="Жирный" isActive="true" />
                                         <Checkbox value="italic" label="Курсив" />
                                         <Checkbox value="underline" label="Подчеркнутый" />
                                     </Group>
