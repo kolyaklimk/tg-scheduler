@@ -116,6 +116,7 @@ function SchedulePage() {
     // --- LOGIC FUNCTIONS (UNCHANGED) ---
     const handleCreateImage = () => {
         const formattedDates = selectedDates.map(d => dayjs(d).format('YYYY-MM-DD'));
+        console.log(formattedDates);
         navigate('/generate-image', { state: { dates: formattedDates } });
     };
 
