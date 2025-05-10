@@ -35,12 +35,14 @@ function AppRouter({ telegramId, role, profileLink, apiUrl, isFetchReady, setRol
             const data = await response.json();
 
             if (data) {
-                const response = await fetch(`${apiUrl}/User/UpdateUserAndSetClientRole?telegramId=${userTelegramId}`, {
-                    method: 'POST',
-                });
-                const data = await response.json();
-                setRole(data.role);
-                localStorage.setItem('userRole', data.role);
+                if (role !== "client") {
+                    const response = await fetch(`${apiUrl}/User/UpdateUserAndSetClientRole?telegramId=${userTelegramId}`, {
+                        method: 'POST',
+                    });
+                    const data = await response.json();
+                    setRole(data.role);
+                    localStorage.setItem('userRole', data.role);
+                }
                 navigate(`/profile/${specialistTelegramId}`);
             }
             else {
