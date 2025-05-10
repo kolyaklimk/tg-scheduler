@@ -305,8 +305,32 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                                     <ColorInput label="Цвет шрифта" value={fontColor} onChange={setFontColor} icon={<IconTextColor size={16} />} swatches={[theme.white, theme.black, ...theme.colors.gray]} />
                                     <TextInput label="Текст над расписанием" placeholder="Свободные окошки" value={customHeaderText} onChange={(e) => setCustomHeaderText(e.currentTarget.value)} icon={<IconTextPlus size={16} />} />
                                     <Divider label="Стилизация текста" labelPosition="center" />
-                                    <Box><Text size="sm" fw={500} mb={4}>Стиль для ДАТ</Text><Checkbox.Group value={dateFormatStyles} onChange={setDateFormatStyles}><Group mt="xs" grow><Checkbox value="bold" label="Жирный" /><Checkbox value="italic" label="Курсив" /><Checkbox value="underline" label="Подчеркнутый" /></Group></Checkbox.Group></Box>
-                                    <Box><Text size="sm" fw={500} mb={4}>Стиль для ВРЕМЕНИ</Text><Checkbox.Group value={timeFormatStyles} onChange={setTimeFormatStyles}><Group mt="xs" grow><Checkbox value="bold" label="Жирный" /><Checkbox value="italic" label="Курсив" /><Checkbox value="underline" label="Подчеркнутый" /></Group></Checkbox.Group></Box>
+                                    <Box>
+                                        <Text size="sm" fw={500} mb={4}>Стиль шрифта для ДАТ</Text>
+                                        <Checkbox.Group
+                                            value={dateFormatStyles}
+                                            onChange={setDateFormatStyles}
+                                        >
+                                            <Group mt="xs">
+                                                <Checkbox value="bold" label="Жирный" isActive="true" />
+                                                <Checkbox value="italic" label="Курсив" />
+                                                <Checkbox value="underline" label="Подчеркнутый" />
+                                            </Group>
+                                        </Checkbox.Group>
+                                    </Box>
+                                    <Box>
+                                        <Text size="sm" fw={500} mb={4}>Стиль шрифта для ВРЕМЕНИ</Text>
+                                        <Checkbox.Group
+                                            value={timeFormatStyles}
+                                            onChange={setTimeFormatStyles}
+                                        >
+                                            <Group mt="xs">
+                                                <Checkbox value="bold" label="Жирный" />
+                                                <Checkbox value="italic" label="Курсив" />
+                                                <Checkbox value="underline" label="Подчеркнутый" />
+                                            </Group>
+                                        </Checkbox.Group>
+                                    </Box>
                                     <Divider />
                                     <Checkbox label="Случайный фон" checked={useRandomBackground} onChange={(e) => setUseRandomBackground(e.currentTarget.checked)} icon={IconWand} mt="xs" />
                                 </Stack>
