@@ -11,6 +11,7 @@ function App() {
     const [role, setRole] = useState(localStorage.getItem('userRole') || null);
     const [isTelegramReady, setIsTelegramReady] = useState(false);
     const [isLoadingUser, setIsLoadingUser] = useState(true); // Combined fetch ready state
+    const [isFetchReady, setIsFetchReady] = useState(false);
     const [telegramId, setTelegramId] = useState(null);
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -81,6 +82,7 @@ function App() {
                 console.log("User data received:", data);
                 setRole(data.role);
                 localStorage.setItem('userRole', data.role);
+                setIsFetchReady(true);
             } else {
                 console.error("Error fetching user:", response.status, await response.text());
                 // Handle fetch error (e.g., show message)
@@ -138,7 +140,7 @@ function App() {
                                 role={role}
                                 profileLink={profileLink}
                                 apiUrl={apiUrl}
-                                isFetchReady={isLoadingUser} // Pass loading state if needed
+                                isFetchReady={isFetchReady} // Pass loading state if needed
                                 setRole={setRole} // Pass setRole if needed for role change page
                             />
                         </AppShell.Main>
