@@ -62,8 +62,8 @@ function GenerateImagePage({ telegramId, apiUrl }) {
     const [fontColor, setFontColor] = useState(theme.black);
     const [customHeaderText, setCustomHeaderText] = useState('');
     const [useRandomBackground, setUseRandomBackground] = useState(false);
-    const [dateFormatStyles, setDateFormatStyles] = useState([]); 
-    const [timeFormatStyles, setTimeFormatStyles] = useState([]); 
+    const [dateFormatStyles, setDateFormatStyles] = useState([]);
+    const [timeFormatStyles, setTimeFormatStyles] = useState([]);
 
     // Effect for Telegram Back Button
     useEffect(() => {
@@ -306,6 +306,7 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                                 onChange={(e) => setCustomHeaderText(e.currentTarget.value)}
                                 icon={<IconTextPlus size={16} />}
                             />
+                            <Divider label="Стилизация текста" labelPosition="center" />
                             <Box>
                                 <Text size="sm" fw={500} mb={4}>Стиль шрифта для ДАТ</Text>
                                 <Checkbox.Group
@@ -332,6 +333,9 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                                     </Group>
                                 </Checkbox.Group>
                             </Box>
+
+                            <Divider />
+
                             <Checkbox
                                 label="Использовать случайный фон"
                                 checked={useRandomBackground}
