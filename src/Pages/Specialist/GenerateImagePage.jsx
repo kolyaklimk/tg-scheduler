@@ -62,6 +62,8 @@ function GenerateImagePage({ telegramId, apiUrl }) {
     const [fontColor, setFontColor] = useState(theme.black);
     const [customHeaderText, setCustomHeaderText] = useState('');
     const [useRandomBackground, setUseRandomBackground] = useState(false);
+    const [dateFormatStyles, setDateFormatStyles] = useState([]); 
+    const [timeFormatStyles, setTimeFormatStyles] = useState([]); 
 
     // Effect for Telegram Back Button
     useEffect(() => {
@@ -171,6 +173,8 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                 fontColor,
                 customHeaderText,
                 useRandomBackground,
+                dateFormatStyles, // <-- ADDED
+                timeFormatStyles, // <-- ADDED
             })
         };
 
@@ -302,6 +306,32 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                                 onChange={(e) => setCustomHeaderText(e.currentTarget.value)}
                                 icon={<IconTextPlus size={16} />}
                             />
+                            <Box>
+                                <Text size="sm" fw={500} mb={4}>Стиль шрифта для ДАТ</Text>
+                                <Checkbox.Group
+                                    value={dateFormatStyles}
+                                    onChange={setDateFormatStyles}
+                                >
+                                    <Group mt="xs">
+                                        <Checkbox value="bold" label="Жирный" />
+                                        <Checkbox value="italic" label="Курсив" />
+                                        <Checkbox value="underline" label="Подчеркнутый" />
+                                    </Group>
+                                </Checkbox.Group>
+                            </Box>
+                            <Box>
+                                <Text size="sm" fw={500} mb={4}>Стиль шрифта для ВРЕМЕНИ</Text>
+                                <Checkbox.Group
+                                    value={timeFormatStyles}
+                                    onChange={setTimeFormatStyles}
+                                >
+                                    <Group mt="xs">
+                                        <Checkbox value="bold" label="Жирный" />
+                                        <Checkbox value="italic" label="Курсив" />
+                                        <Checkbox value="underline" label="Подчеркнутый" />
+                                    </Group>
+                                </Checkbox.Group>
+                            </Box>
                             <Checkbox
                                 label="Использовать случайный фон"
                                 checked={useRandomBackground}
