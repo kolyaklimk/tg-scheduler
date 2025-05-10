@@ -309,7 +309,7 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                                         <Text size="sm" fw={500} mb={4}>Стиль для ДАТ</Text>
                                         <Checkbox.Group value={dateFormatStyles} onChange={setDateFormatStyles}>
                                             <Group mt="xs">
-                                                <Checkbox value="bold" label="Жирный" />
+                                                <Checkbox value="bold" label="Жирный" isActive="true" />
                                                 <Checkbox value="italic" label="Курсив" />
                                                 <Checkbox value="underline" label="Подчеркнутый" />
                                             </Group>
