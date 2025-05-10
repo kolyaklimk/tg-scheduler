@@ -58,8 +58,8 @@ function GenerateImagePage({ telegramId, apiUrl }) {
     const [isGenerating, setIsGenerating] = useState(false); // For the generate button
 
     // Premium features state
-    const [panelColor, setPanelColor] = useState(theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white);
-    const [fontColor, setFontColor] = useState(theme.colorScheme === 'dark' ? theme.white : theme.black);
+    const [panelColor, setPanelColor] = useState(theme.white);
+    const [fontColor, setFontColor] = useState(theme.black);
     const [customHeaderText, setCustomHeaderText] = useState('');
     const [useRandomBackground, setUseRandomBackground] = useState(false);
 
@@ -303,7 +303,7 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                                 icon={<IconTextPlus size={16} />}
                             />
                             <Checkbox
-                                label="Использовать случайный фон для изображения"
+                                label="Использовать случайный фон"
                                 checked={useRandomBackground}
                                 onChange={(event) => setUseRandomBackground(event.currentTarget.checked)}
                                 icon={IconWand}
