@@ -306,25 +306,18 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                                     <TextInput label="Текст над расписанием" placeholder="Свободные окошки" value={customHeaderText} onChange={(e) => setCustomHeaderText(e.currentTarget.value)} icon={<IconTextPlus size={16} />} />
                                     <Divider label="Стилизация текста" labelPosition="center" />
                                     <Box>
-                                        <Text size="sm" fw={500} mb={4}>Стиль шрифта для ДАТ</Text>
-                                        <Checkbox.Group
-                                            value={dateFormatStyles}
-                                            onChange={setDateFormatStyles}
-                                        >
+                                        <Text size="sm" fw={500} mb={4}>Стиль для ДАТ</Text>
+                                        <Checkbox.Group value={dateFormatStyles} onChange={setDateFormatStyles}>
                                             <Group mt="xs">
-                                                <Checkbox value="bold" label="Жирный" isActive="true" />
+                                                <Checkbox value="bold" label="Жирный" />
                                                 <Checkbox value="italic" label="Курсив" />
                                                 <Checkbox value="underline" label="Подчеркнутый" />
                                             </Group>
                                         </Checkbox.Group>
                                     </Box>
-                                    <Box>
-                                        <Text size="sm" fw={500} mb={4}>Стиль шрифта для ВРЕМЕНИ</Text>
-                                        <Checkbox.Group
-                                            value={timeFormatStyles}
-                                            onChange={setTimeFormatStyles}
-                                        >
-                                            <Group mt="xs">
+                                    <Box><Text size="sm" fw={500} mb={4}>Стиль для ВРЕМЕНИ</Text>
+                                        <Checkbox.Group value={timeFormatStyles} onChange={setTimeFormatStyles}>
+                                            <Group mt="xs" >
                                                 <Checkbox value="bold" label="Жирный" />
                                                 <Checkbox value="italic" label="Курсив" />
                                                 <Checkbox value="underline" label="Подчеркнутый" />
