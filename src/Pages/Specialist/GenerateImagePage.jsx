@@ -79,7 +79,7 @@ function GenerateImagePage({ telegramId, apiUrl }) {
     const [fontColor, setFontColor] = useState(theme.colorScheme === 'dark' ? theme.white : theme.black);
     const [customHeaderText, setCustomHeaderText] = useState('');
     const [useRandomBackground, setUseRandomBackground] = useState(false);
-    const [dateFormatStyles, setDateFormatStyles] = useState([]);
+    const [dateFormatStyles, setDateFormatStyles] = useState(['bold']);
     const [timeFormatStyles, setTimeFormatStyles] = useState([]);
 
     const [generatedImageUrl, setGeneratedImageUrl] = useState(null); // For the latest generated image
@@ -309,7 +309,7 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                                         <Text size="sm" fw={500} mb={4}>Стиль для ДАТ</Text>
                                         <Checkbox.Group value={dateFormatStyles} onChange={setDateFormatStyles}>
                                             <Group mt="xs">
-                                                <Checkbox value="bold" label="Жирный" isActive="true" />
+                                                <Checkbox value="bold" label="Жирный" />
                                                 <Checkbox value="italic" label="Курсив" />
                                                 <Checkbox value="underline" label="Подчеркнутый" />
                                             </Group>
