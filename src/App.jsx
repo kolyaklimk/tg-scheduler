@@ -138,7 +138,7 @@ function App() {
                                 role={role}
                                 profileLink={profileLink}
                                 apiUrl={apiUrl}
-                                isLoadingUser={isLoadingUser} // Pass loading state if needed
+                                isFetchReady={isLoadingUser} // Pass loading state if needed
                                 setRole={setRole} // Pass setRole if needed for role change page
                             />
                         </AppShell.Main>
