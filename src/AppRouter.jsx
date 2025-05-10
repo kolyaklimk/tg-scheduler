@@ -79,7 +79,7 @@ function AppRouter({ telegramId, role, profileLink, apiUrl, isFetchReady, setRol
             <Route path="/schedule/:telegramId" element={<SchedulePage />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/profile-link" element={<ProfileLinkPage profileLink={profileLink} />} />
-            <Route path="/generate-image" element={<GenerateImagePage />} />
+            <Route path="/generate-image" element={<GenerateImagePage apiUrl={apiUrl} telegramId={telegramId} />} />
         </Routes>
     );
 }
