@@ -43,6 +43,10 @@ import {
     IconCopy,
     IconCheck,
     IconExternalLink,
+    IconBold,
+    IconItalic,
+    IconUnderline, // For style checkboxes if you want icons there
+    IconTypography // For the custom header text style section
     IconHistory // For recent images
 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
@@ -109,6 +113,8 @@ function GenerateImagePage({ telegramId, apiUrl }) {
     const [useRandomBackground, setUseRandomBackground] = useState(false);
     const [dateFormatStyles, setDateFormatStyles] = useState(['bold']);
     const [timeFormatStyles, setTimeFormatStyles] = useState([]);
+
+    const [customHeaderTextFormatStyles, setCustomHeaderTextFormatStyles] = useState(['bold']);
 
     const [generatedImageUrl, setGeneratedImageUrl] = useState(null); // For the latest generated image
     const [recentImages, setRecentImages] = useState([]);
@@ -225,7 +231,8 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                 panelColor: panelColor || (theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white), // Default if somehow null
                 fontColor: fontColor || (theme.colorScheme === 'dark' ? theme.white : theme.black), // Default if somehow null
                 customHeaderText: customHeaderText || "",
-                useRandomBackground: useRandomBackground === true, // Ensure boolean
+                customHeaderTextFormatStyles: customHeaderTextFormatStyles || [], // Pass the selected styles
+                useRandomBackground: useRandomBackground === true,
                 dateFormatStyles: dateFormatStyles || [],
                 timeFormatStyles: timeFormatStyles || [],
             })
@@ -332,6 +339,21 @@ function GenerateImagePage({ telegramId, apiUrl }) {
                                     <ColorInput label="Цвет панели" value={panelColor} onChange={setPanelColor} icon={<IconPalette size={16} />} swatches={[...theme.colors.gray, ...theme.colors.blue, ...theme.colors.teal, theme.white, theme.black]} />
                                     <ColorInput label="Цвет шрифта" value={fontColor} onChange={setFontColor} icon={<IconTextColor size={16} />} swatches={[theme.white, theme.black, ...theme.colors.gray]} />
                                     <TextInput label="Текст над расписанием" placeholder="Свободные окошки" value={customHeaderText} onChange={(e) => setCustomHeaderText(e.currentTarget.value)} icon={<IconTextPlus size={16} />} />
+                                    {customHeaderText && ( // Only show style options if there's header text
+                                        <Box pl="xs" ml="xs" style={{ borderLeft: `2px solid ${theme.colors.gray[3]}` }}>
+                                            <Text size="sm" fw={500} mb={4}>Стиль для "Текста над расписанием"</Text>
+                                            <Checkbox.Group
+                                                value={customHeaderTextFormatStyles}
+                                                onChange={setCustomHeaderTextFormatStyles}
+                                            >
+                                                <Group mt="xs">
+                                                    <Checkbox value="bold" label="Жирный" icon={IconBold} />
+                                                    <Checkbox value="italic" label="Курсив" icon={IconItalic} />
+                                                    <Checkbox value="underline" label="Подчеркнутый" icon={IconUnderline} />
+                                                </Group>
+                                            </Checkbox.Group>
+                                        </Box>
+                                    )}
                                     <Divider label="Стилизация текста" labelPosition="center" />
                                     <Box>
                                         <Text size="sm" fw={500} mb={4}>Стиль для ДАТ</Text>
