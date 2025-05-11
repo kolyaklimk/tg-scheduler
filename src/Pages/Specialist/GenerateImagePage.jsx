@@ -103,8 +103,8 @@ function GenerateImagePage({ telegramId, apiUrl }) {
     const [pageError, setPageError] = useState(null);
     const [isGenerating, setIsGenerating] = useState(false);
 
-    const [panelColor, setPanelColor] = useState(theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white);
-    const [fontColor, setFontColor] = useState(theme.colorScheme === 'dark' ? theme.white : theme.black);
+    const [panelColor, setPanelColor] = useState(theme.white);
+    const [fontColor, setFontColor] = useState(theme.black);
     const [customHeaderText, setCustomHeaderText] = useState('');
     const [useRandomBackground, setUseRandomBackground] = useState(false);
     const [dateFormatStyles, setDateFormatStyles] = useState(['bold']);
