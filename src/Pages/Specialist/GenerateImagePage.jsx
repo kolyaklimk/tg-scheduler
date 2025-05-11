@@ -51,13 +51,40 @@ dayjs.locale('ru');
 
 const formatDateForDisplay = (dateString) => dayjs(dateString).format('D MMMM YYYY');
 const formatTimestampForDisplay = (timestamp) => {
-    // Assuming timestamp is Firestore-like { _seconds: number, _nanoseconds: number } or ISO string
-    if (timestamp && timestamp._seconds) {
+    if (!timestamp) {
+        return 'Неизвестно';
+    }
+
+    // 1. Check for Firebase JS SDK-like Timestamp object structure
+    if (typeof timestamp === 'object' && timestamp !== null && typeof timestamp.toDate === 'function') {
+        // This handles Timestamps from the Firebase JS SDK directly
+        return dayjs(timestamp.toDate()).format('DD.MM.YYYY HH:mm');
+    }
+
+    // 2. Check for the structure you might get from some C# serializers if not converted to string
+    // (e.g., if it was manually constructed or from a library that outputs this)
+    if (typeof timestamp === 'object' && timestamp !== null && typeof timestamp._seconds === 'number') {
         return dayjs.unix(timestamp._seconds).format('DD.MM.YYYY HH:mm');
     }
+
+    // 3. Check if it's already a parseable string (ideally ISO 8601)
     if (typeof timestamp === 'string') {
-        return dayjs(timestamp).format('DD.MM.YYYY HH:mm');
+        const parsedDate = dayjs(timestamp);
+        if (parsedDate.isValid()) {
+            return parsedDate.format('DD.MM.YYYY HH:mm');
+        }
     }
+
+    // 4. If it's a number, assume it's Unix milliseconds (less common for Firestore Timestamps directly)
+    if (typeof timestamp === 'number') {
+         const parsedDate = dayjs(timestamp);
+         if (parsedDate.isValid()) {
+             return parsedDate.format('DD.MM.YYYY HH:mm');
+         }
+    }
+
+
+    console.warn("Unrecognized timestamp format:", timestamp);
     return 'Неизвестно';
 };
 
