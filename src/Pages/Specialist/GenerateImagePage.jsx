@@ -46,7 +46,7 @@ import {
     IconBold,
     IconItalic,
     IconUnderline, // For style checkboxes if you want icons there
-    IconTypography // For the custom header text style section
+    IconTypography, // For the custom header text style section
     IconHistory // For recent images
 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
