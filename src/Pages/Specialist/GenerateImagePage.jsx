@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import {
     Container,
     Stack,
+    Center,
     Title,
     Text,
     Button,
