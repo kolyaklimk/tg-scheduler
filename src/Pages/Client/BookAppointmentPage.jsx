@@ -108,7 +108,7 @@ function BookAppointmentPage({ apiUrl, telegramId }) { // Added telegramId for B
                 <form onSubmit={handleSearch}>
                     <Group align="flex-end" grow>
                         <TextInput
-                            placeholder="Имя, специализация или город..."
+                            placeholder="Имя специалиста"
                             value={searchText}
                             onChange={(event) => setSearchText(event.currentTarget.value)}
                             icon={<IconSearch size={16} />}
