@@ -155,6 +155,11 @@ function ArchivePage({ telegramId, role, apiUrl }) {
             <Stack gap="lg">
                 {/* Back button handled by Telegram integration */}
 
+                <Title order={2} ta="center" >
+                    <IconCalendar size={28} style={{ marginRight: 8, verticalAlign: 'middle' }} />
+                    Ваш архив записей
+                </Title>
+
                 {!initialLoadComplete && !error && (
                     <Center mt="xl"><Loader /></Center>
                 )}
