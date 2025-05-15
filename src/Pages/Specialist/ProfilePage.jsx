@@ -93,7 +93,7 @@ function ProfilePage() {
             });
 
             // Cache services if viewing a specialist profile (for booking later)
-            if (data.role === 'specialist') {
+            if (data.role === 'client') {
                 localStorage.setItem(`specialistServices-${profileTelegramId}`, JSON.stringify(data.services || {}));
             }
 
