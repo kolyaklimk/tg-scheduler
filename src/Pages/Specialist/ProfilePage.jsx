@@ -92,10 +92,9 @@ function ProfilePage() {
                 profileImageUrl: data.profileImageUrl || '',
             });
 
-            // Cache services if viewing a specialist profile (for booking later)
-            if (data.role === 'client') {
-                localStorage.setItem(`specialistServices-${profileTelegramId}`, JSON.stringify(data.services || {}));
-            }
+
+            localStorage.setItem(`specialistServices`, JSON.stringify(data.services || {}));
+
 
         } catch (err) {
             console.error("Error fetching profile:", err);
@@ -203,7 +202,7 @@ function ProfilePage() {
             return { ...prev, services: updatedServices };
         });
     };
-    
+
     const handleWorkingToggle = (checked) => {
         const hasServices = Object.keys(profileData.services).length > 0;
 
@@ -268,7 +267,7 @@ function ProfilePage() {
         else if (profileData.working && Object.keys(profileData.services).length === 0) {
             validationError = "Нельзя установить статус 'Работаю' без добавленных услуг.";
         }
-        else { 
+        else {
             for (const name in profileData.services) {
                 const service = profileData.services[name];
                 if (isNaN(service.price) || service.price < 0) {
@@ -284,14 +283,14 @@ function ProfilePage() {
             setError(validationError);
             window.Telegram?.WebApp?.showPopup?.({ message: validationError });
             setIsSaving(false);
-            return; 
+            return;
         }
 
         try {
             const payload = {
                 telegramId: profileTelegramId,
                 name: profileData.name,
-                working: profileData.working, 
+                working: profileData.working,
                 contactInfo: profileData.contactInfo,
                 portfolioLink: profileData.portfolioLink,
                 location: profileData.location,
@@ -313,7 +312,6 @@ function ProfilePage() {
             }
 
             console.log("Specialist data saved successfully!");
-            localStorage.setItem(`specialistServices-${profileTelegramId}`, JSON.stringify(profileData.services));
             window.Telegram?.WebApp?.showPopup?.({ message: "Профиль успешно сохранён!" });
 
         } catch (err) {
@@ -415,7 +413,7 @@ function ProfilePage() {
                         ) : (
                             <Text c="dimmed" size="sm">Специалист пока не добавил услуги.</Text>
                         )}
-                    </Paper>                                        
+                    </Paper>
                 </Stack>
             </Container>
         );
@@ -459,8 +457,8 @@ function ProfilePage() {
                             checked={profileData.working}
                             onChange={(e) => handleWorkingToggle(e.currentTarget.checked)}
                             thumbIcon={profileData.working ? <IconCheck size={12} /> : <IconX size={12} />}
-                            // Optional: Visually disable toggling ON if no services?
-                            // disabled={!profileData.working && Object.keys(profileData.services).length === 0} // This would disable the whole switch if off and no services
+                        // Optional: Visually disable toggling ON if no services?
+                        // disabled={!profileData.working && Object.keys(profileData.services).length === 0} // This would disable the whole switch if off and no services
                         />
                         <Box pos="relative">
                             <LoadingOverlay visible={isImageUploading} zIndex={1} overlayProps={{ radius: "sm", blur: 2 }} />
