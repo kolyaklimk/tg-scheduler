@@ -28,7 +28,7 @@ function Navbar({ role, telegramId }) {
         { path: `/schedule/${telegramId}`, label: 'Расписание', icon: <IconCalendarEvent size={14} /> },
         { path: `/`, label: 'Записи клиентов', icon: <IconListCheck size={14} /> }, // Changed from Archive
         { path: '/archive', label: 'Архив', icon: <IconArchive size={14} /> },
-        { path: '/subscription', label: 'Подписка', icon: <IconCreditCard size={14} /> },
+        // { path: '/subscription', label: 'Подписка', icon: <IconCreditCard size={14} /> },
         { path: '/profile-link', label: 'Ссылка на профиль', icon: <IconLink size={14} /> },
         { path: '/change-role', label: 'Сменить роль', icon: <IconSwitchHorizontal size={14} />, isCommon: true },
     ];
